@@ -6,7 +6,13 @@ using System.Threading.Tasks;
 
 namespace ContractClient
 {
-    public class Class1
+   public enum NetworkStatus
     {
+        Unknown,
+        Off,
+        OnLine,
+        Busy,
+        NotHere,
+        Hidden
     }
 }

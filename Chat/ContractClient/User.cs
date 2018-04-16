@@ -4,20 +4,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ServiceModel;
-
+using System.Runtime.Serialization;
 namespace ContractClient
 {
-    [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Multiple)]
-   public class User
+    [DataContract]
+    public class User
     {
-        public long Id { get; set; }
+        [DataMember]
         public String Login { get; set; }
-        public String Name { get; set; }
-        public int FriendsCount { get; set; }
-        public String Sity { get; set; }
-        public DateTime BirthDate { get; set; }
+
+        [DataMember]
+        public String Name { get; set; }       
+
+        [DataMember]
         public byte[] Icon { get; set; }
-        public String Country { get; set; }
-        public String Phone { get; set; }
+
+        [DataMember]
+        public long ConversationId { get; set; }
+
+        [DataMember]
+        public RelationStatus RelationStatus { get; set; }
+
+        [DataMember]
+        public NetworkStatus NetworkStatus { get; set; }
+
+        [DataMember]
+        public DateTime LastDialogChange { get; set; }
     }
 }
