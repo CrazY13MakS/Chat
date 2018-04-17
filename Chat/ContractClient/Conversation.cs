@@ -12,6 +12,10 @@ namespace ContractClient
         public String Name { get; set; }
         public String Descriptiom { get; set; }
         public byte[] Icon { get; set; }
+        public User Partner { get; set; }
+        public bool IsConversation { get; set; }
         public List<String> ParticipantsLogin { get; set; }
+        public ConversationMemberStatus MyStatus { get; set; }
+        public DateTime LastChange { get; set; }
     }
 }

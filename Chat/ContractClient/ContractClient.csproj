@@ -43,10 +43,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Contract\IAuthService.cs" />
-    <Compile Include="Contract\IChatService.cs" />
-    <Compile Include="Contract\IChatClient.cs" />
+    <Compile Include="Contracts\IAccountUpdate.cs" />
+    <Compile Include="Contracts\IAuthService.cs" />
+    <Compile Include="Contracts\IChatService.cs" />
+    <Compile Include="Contracts\IChatClient.cs" />
     <Compile Include="Conversation.cs" />
+    <Compile Include="ConversationMemberStatus.cs" />
+    <Compile Include="ConversationReply.cs" />
     <Compile Include="NetworkStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RelationStatus.cs" />

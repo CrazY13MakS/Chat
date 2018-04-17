@@ -28,7 +28,7 @@ namespace ContractClient
         [DataMember]
         public NetworkStatus NetworkStatus { get; set; }
 
-        [DataMember]
-        public DateTime LastDialogChange { get; set; }
+      // [DataMember]
+      // public DateTime LastDialogChange { get; set; }
     }
 }
