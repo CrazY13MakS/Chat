@@ -27,10 +27,13 @@ namespace ContractClient.Contracts
         [OperationContract]
         String UpdateProfile(UserExt user);
 
+        [OperationContract]
         bool FrienshipResponse(String login, bool isConfirmed);
 
+        [OperationContract]
         bool BlockedUser(String login);
 
+        [OperationContract]
         bool UnBlockedUser(String login);
     }
 }
