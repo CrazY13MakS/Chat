@@ -27,7 +27,7 @@ namespace ClientContractImplement
 
         public void Dispose()
         {
-            factory.Close();
+            factory?.Close();
         }
         private async void UpdateCanSendCode()
         {
@@ -55,6 +55,10 @@ namespace ClientContractImplement
             {
                 return new OperationResult<bool>(result, false, ex.Message);
             }
+            catch(CommunicationException ex)
+            {
+                return new OperationResult<bool>(result, false, ex.Message);
+            }
         }
 
         public OperationResult<String> LogIn(string login, string password)
@@ -73,7 +77,10 @@ namespace ClientContractImplement
             {
                 return new OperationResult<string>(result, false, ex.Message);
             }
-
+            catch (CommunicationException ex)
+            {
+                return new OperationResult<String>(result, false, ex.Message);
+            }
         }
 
         public OperationResult<bool> LogOut()
@@ -87,6 +94,10 @@ namespace ClientContractImplement
             catch (FaultException ex)
             {
                 return new OperationResult<bool>(result, result, ex.Message);
+            }
+            catch (CommunicationException ex)
+            {
+                return new OperationResult<bool>(result, false, ex.Message);
             }
         }
 
@@ -105,6 +116,10 @@ namespace ClientContractImplement
             catch (FaultException ex)
             {
                 return new OperationResult<string>(result, false, ex.Message);
+            }
+            catch (CommunicationException ex)
+            {
+                return new OperationResult<String>(result, false, ex.Message);
             }
         }
         public bool IsValidMail(string emailaddress)

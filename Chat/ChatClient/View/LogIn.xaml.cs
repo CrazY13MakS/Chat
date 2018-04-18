@@ -22,14 +22,29 @@ namespace ChatClient
     /// </summary>
     public partial class MainWindow : Window,ChatClient.Infrastructure.ISecurePassword
     {
-        public SecureString Password => this.container.Children.OfType<PasswordBox>().FirstOrDefault(x=>x.Name=="PassBox").SecurePassword ;
+        public SecureString Password => GetSecureString("PassBox");
 
-        public SecureString ConfirmedPassword => this.container.Children.OfType<PasswordBox>().FirstOrDefault(x => x.Name == "PassBoxConf").SecurePassword;
+        public SecureString ConfirmedPassword => GetSecureString("PassBoxConf");
 
         public MainWindow()
         {
-            InitializeComponent();            
+            InitializeComponent();  
+       
         }
-        
+
+        SecureString GetSecureString(String name)
+        {
+           var control=ContPresenter.ContentTemplate.FindName(name, ContPresenter);
+            if(control is PasswordBox)
+            {
+                return (control as PasswordBox).SecurePassword;
+            }
+            return new SecureString();
+        }
+
+        private void Aaa_Click(object sender, RoutedEventArgs e)
+        {
+           var a = this.ContPresenter.ContentTemplate.FindName("PassBox", ContPresenter);
+        }
     }
 }

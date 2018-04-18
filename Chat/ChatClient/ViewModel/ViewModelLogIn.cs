@@ -8,6 +8,8 @@ using ChatClient.Infrastructure;
 using System.Windows.Input;
 using System.Net.Mail;
 using System.Security;
+using System.Runtime.InteropServices;
+using System.Windows.Controls;
 
 namespace ChatClient.ViewModel
 {
@@ -97,8 +99,8 @@ namespace ChatClient.ViewModel
 
         private void ExecuteSendVerifCodeCommand(object parametr)
         {
-           var res= authSercive.SendVerificationCode(Email);
-            if(!res.IsOk)
+            var res = authSercive.SendVerificationCode(Email);
+            if (!res.IsOk)
             {
                 Message = res.ErrorMessage;
             }
@@ -125,15 +127,72 @@ namespace ChatClient.ViewModel
 
         private void ExecuteLogInCommand(object parametr)
         {
+
             var window = App.Current.Windows.OfType<ISecurePassword>().FirstOrDefault();
             String pass = ConvertToUnsecureString(window.Password);
+           var res= authSercive.LogIn(Email, pass);
 
         }
         private bool CanExecuteLogInCommand(object parametr)
         {
+            return true;// authSercive.IsValidMail(Email);
+        }
+
+        RelayCommand _registrationCommand;
+        public ICommand RegistrationCommand
+        {
+            get
+            {
+                if (_registrationCommand == null)
+                {
+                    _registrationCommand = new RelayCommand(ExecuteRegistrationCommand, CanExecuteRegistrationCommand);
+                }
+                return _registrationCommand;
+            }
+        }
+
+        private void ExecuteRegistrationCommand(object parametr)
+        {
+            // var a = ConvertToUnsecureString((parametr as PasswordBox).SecurePassword);
+            var window = App.Current.Windows.OfType<ISecurePassword>().FirstOrDefault();
+            String pass = ConvertToUnsecureString(window.Password);
+            String confPass = ConvertToUnsecureString(window.ConfirmedPassword);
+            var res = authSercive.Registration(Email, Login, pass, confPass);
+        }
+        private bool CanExecuteRegistrationCommand(object parametr)
+        {
             return authSercive.IsValidMail(Email);
         }
 
+
+
+
+        RelayCommand _closeCommand;
+        public ICommand CloseCommand
+        {
+            get
+            {
+                if (_closeCommand == null)
+                {
+                    _closeCommand = new RelayCommand(ExecuteCloseCommand);
+                }
+                return _closeCommand;
+            }
+        }
+
+        private void ExecuteCloseCommand(object parametr)
+        {
+            OnDispose();
+            App.Current.Shutdown();
+        }
+        protected override void OnDispose()
+        {
+            base.OnDispose();
+            if (authSercive != null)
+            {
+                authSercive.Dispose();
+            }
+        }
 
         private string ConvertToUnsecureString(SecureString securePassword)
         {
@@ -153,5 +212,6 @@ namespace ChatClient.ViewModel
                 Marshal.ZeroFreeGlobalAllocUnicode(unmanagedString);
             }
         }
+
     }
 }
