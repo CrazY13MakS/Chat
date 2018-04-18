@@ -4,8 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ChatClient"
+        xmlns:vm="clr-namespace:ChatClient.ViewModel"
         mc:Ignorable="d"
         Title="MainWindow" Height="auto" Width="auto" SizeToContent="WidthAndHeight">
+    <Window.DataContext>
+        <vm:ViewModelLogIn></vm:ViewModelLogIn>
+    </Window.DataContext>
     <Window.Resources>
         
         <Style x:Key="AuthTextBlock">
@@ -59,7 +63,7 @@
                     <TextBox Grid.Row="1" Grid.ColumnSpan="2" Style="{StaticResource ResourceKey=AuthTextBox}"/>
 
                     <TextBlock Text="Password:" Grid.Row="2"  Grid.ColumnSpan="2" Style="{StaticResource ResourceKey=AuthTextBlock}"></TextBlock>
-                    <PasswordBox Grid.Row="3" Grid.ColumnSpan="2"  Style="{StaticResource ResourceKey=AuthTextBox}"/>
+                    <PasswordBox Grid.Row="3" x:Name="PassBox" Grid.ColumnSpan="2"  Style="{StaticResource ResourceKey=AuthTextBox}"/>
 
                     <Button Content="Log In" Grid.Row="4" Style="{StaticResource ResourceKey=AuthButton}"/>
                     <Button Content="Cancel" Grid.Row="4" Grid.Column="1" Style="{StaticResource ResourceKey=AuthButton}"/>
@@ -96,10 +100,10 @@
                     <TextBox Grid.Row="3" Grid.ColumnSpan="2" Style="{StaticResource ResourceKey=AuthTextBox}"/>
 
                     <TextBlock Text="Password:" Grid.Row="4"  Grid.ColumnSpan="2" Style="{StaticResource ResourceKey=AuthTextBlock}"></TextBlock>
-                    <PasswordBox Grid.Row="5" Grid.ColumnSpan="2"  Style="{StaticResource ResourceKey=AuthTextBox}"/>
+                    <PasswordBox x:Name="PassBox" Grid.Row="5" Grid.ColumnSpan="2"  Style="{StaticResource ResourceKey=AuthTextBox}"/>
 
                     <TextBlock Text="Confirmed Password:" Grid.Row="6"  Grid.ColumnSpan="2" Style="{StaticResource ResourceKey=AuthTextBlock}"></TextBlock>
-                    <PasswordBox Grid.Row="7" Grid.ColumnSpan="2"  Style="{StaticResource ResourceKey=AuthTextBox}"/>
+                    <PasswordBox x:Name="PassBoxConf" Grid.Row="7" Grid.ColumnSpan="2"  Style="{StaticResource ResourceKey=AuthTextBox}"/>
 
                     <Button Content="Registration" Grid.Row="8" Style="{StaticResource ResourceKey=AuthButton}"/>
                     <Button Content="Cancel" Grid.Row="8" Grid.Column="1" Style="{StaticResource ResourceKey=AuthButton}"/>
@@ -119,7 +123,7 @@
     </Style>
         
     </Window.Resources>
-    <Grid>
+    <Grid x:Name="container">
         <ToggleButton x:Name="TglBtnReg" Style="{StaticResource ResourceKey=ChangeToRegButton}" IsThreeState="False"  Panel.ZIndex="10" Width="125"></ToggleButton>
         <ContentPresenter Style="{StaticResource MyContentStyle}" x:Name="ContPresenter"  Grid.Row="0" Content="{Binding}"  />
     </Grid>   

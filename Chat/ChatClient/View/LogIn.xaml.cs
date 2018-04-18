@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -18,25 +20,16 @@ namespace ChatClient
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window,ChatClient.Infrastructure.ISecurePassword
     {
+        public SecureString Password => this.container.Children.OfType<PasswordBox>().FirstOrDefault(x=>x.Name=="PassBox").SecurePassword ;
 
-
-        public bool JobeDone
-        {
-            get { return (bool)GetValue(JobeDoneProperty); }
-            set { SetValue(JobeDoneProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for JobeDone.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty JobeDoneProperty =
-            DependencyProperty.Register("JobeDone", typeof(bool), typeof(MainWindow), new PropertyMetadata(false));
-
+        public SecureString ConfirmedPassword => this.container.Children.OfType<PasswordBox>().FirstOrDefault(x => x.Name == "PassBoxConf").SecurePassword;
 
         public MainWindow()
         {
-            InitializeComponent();
-            DataContext = this;
+            InitializeComponent();            
         }
+        
     }
 }

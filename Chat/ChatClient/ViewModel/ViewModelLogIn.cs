@@ -7,6 +7,7 @@ using ClientContractImplement;
 using ChatClient.Infrastructure;
 using System.Windows.Input;
 using System.Net.Mail;
+using System.Security;
 
 namespace ChatClient.ViewModel
 {
@@ -109,31 +110,48 @@ namespace ChatClient.ViewModel
 
 
 
-        RelayCommand _cogInCommand;
+        RelayCommand _logInCommand;
         public ICommand LogInCommand
         {
             get
             {
-                if (_sendVerifCode == null)
+                if (_logInCommand == null)
                 {
-                    _sendVerifCode = new RelayCommand(ExecuteSendVerifCodeCommand, CanExecuteSendVerifCodeCommand);
+                    _logInCommand = new RelayCommand(ExecuteLogInCommand, CanExecuteLogInCommand);
                 }
-                return _sendVerifCode;
+                return _logInCommand;
             }
         }
 
         private void ExecuteLogInCommand(object parametr)
         {
-            var res = authSercive.SendVerificationCode(Email);
-            if (!res.IsOk)
-            {
-                Message = res.ErrorMessage;
-            }
+            var window = App.Current.Windows.OfType<ISecurePassword>().FirstOrDefault();
+            String pass = ConvertToUnsecureString(window.Password);
+
         }
         private bool CanExecuteLogInCommand(object parametr)
         {
-            return authSercive.CanSendCode && authSercive.IsValidMail(Email);
+            return authSercive.IsValidMail(Email);
         }
 
+
+        private string ConvertToUnsecureString(SecureString securePassword)
+        {
+            if (securePassword == null)
+            {
+                return string.Empty;
+            }
+
+            IntPtr unmanagedString = IntPtr.Zero;
+            try
+            {
+                unmanagedString = Marshal.SecureStringToGlobalAllocUnicode(securePassword);
+                return Marshal.PtrToStringUni(unmanagedString);
+            }
+            finally
+            {
+                Marshal.ZeroFreeGlobalAllocUnicode(unmanagedString);
+            }
+        }
     }
 }
