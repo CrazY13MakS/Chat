@@ -62,6 +62,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Infrastructure\RelayCommand.cs" />
+    <Compile Include="ViewModel\ViewModelBase.cs" />
+    <Compile Include="ViewModel\ViewModelLogIn.cs" />
     <Compile Include="View\LogIn.xaml.cs">
       <DependentUpon>LogIn.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -94,9 +97,17 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Infrastructure\" />
     <Folder Include="Model\" />
-    <Folder Include="ViewModel\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ClientContractImplement\ClientContractImplement.csproj">
+      <Project>{638f6f57-d655-4243-bb10-1f1216c596c5}</Project>
+      <Name>ClientContractImplement</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ContractClient\ContractClient.csproj">
+      <Project>{3b8b9d05-2930-4d47-9a3e-b1be49361d55}</Project>
+      <Name>ContractClient</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

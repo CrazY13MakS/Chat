@@ -7,12 +7,15 @@ using System.Threading.Tasks;
 
 namespace ContractClient.Contracts
 {
-    [ServiceContract(ProtectionLevel = System.Net.Security.ProtectionLevel.EncryptAndSign)]
+    [ServiceContract(ProtectionLevel = System.Net.Security.ProtectionLevel.EncryptAndSign, SessionMode = SessionMode.Required)]
     public interface IAuthService
     {
         [OperationContract]
         String LogIn(String login, String password);
-        
+
+        [OperationContract]
+        bool SendVerificationCode(String email);
+
         [OperationContract]
         String Registration(String email, String login, String password, String confirmPassword);
 
@@ -22,7 +25,5 @@ namespace ContractClient.Contracts
         /// <returns>Operation success</returns>
         [OperationContract]
         bool LogOut();
-
-
     }
 }
