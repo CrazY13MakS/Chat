@@ -14,7 +14,6 @@ namespace AuthServiceHost
         public AuthHost()
         {
             host = new ServiceHost(typeof(ServiceImplementation.AuthService));
-
         }
         public void Start()
         {

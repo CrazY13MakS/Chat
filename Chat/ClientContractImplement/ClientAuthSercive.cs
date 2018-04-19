@@ -83,23 +83,23 @@ namespace ClientContractImplement
             }
         }
 
-        public OperationResult<bool> LogOut()
-        {
-            bool result = false;
-            try
-            {
-                result = channel.LogOut();
-                return new OperationResult<bool>(result, result);
-            }
-            catch (FaultException ex)
-            {
-                return new OperationResult<bool>(result, result, ex.Message);
-            }
-            catch (CommunicationException ex)
-            {
-                return new OperationResult<bool>(result, false, ex.Message);
-            }
-        }
+        //public OperationResult<bool> LogOut()
+        //{
+        //    bool result = false;
+        //    try
+        //    {
+        //        result = channel.LogOut();
+        //        return new OperationResult<bool>(result, result);
+        //    }
+        //    catch (FaultException ex)
+        //    {
+        //        return new OperationResult<bool>(result, result, ex.Message);
+        //    }
+        //    catch (CommunicationException ex)
+        //    {
+        //        return new OperationResult<bool>(result, false, ex.Message);
+        //    }
+        //}
 
         public OperationResult<String> Registration(string email, string login, string password, string confirmPassword)
         {

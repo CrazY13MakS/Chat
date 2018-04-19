@@ -19,11 +19,6 @@ namespace ContractClient.Contracts
         [OperationContract]
         String Registration(String email, String login, String password, String confirmPassword);
 
-        /// <summary>
-        /// Remove token
-        /// </summary>
-        /// <returns>Operation success</returns>
-        [OperationContract]
-        bool LogOut();
+
     }
 }

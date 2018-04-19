@@ -24,6 +24,12 @@ namespace ContractClient.Contracts
         [OperationContract(IsInitiating =false)]
         List<ConversationReply> UpdateConversations(DateTime lastUpdated);
 
+        /// <summary>
+        /// Remove token
+        /// </summary>
+        /// <returns>Operation success</returns>
+        [OperationContract]
+        bool LogOut();
 
     }
 }

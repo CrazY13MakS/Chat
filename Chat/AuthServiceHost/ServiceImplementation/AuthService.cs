@@ -21,11 +21,11 @@ namespace AuthServiceHost.ServiceImplementation
             return "asdasd";
         }
 
-        public bool LogOut()
-        {
-            Console.WriteLine("LogOut");
-            return true;
-        }
+        //public bool LogOut()
+        //{
+        //    Console.WriteLine("LogOut");
+        //    return true;
+        //}
 
         public string Registration(string email, string login, string password, string confirmPassword)
         {
