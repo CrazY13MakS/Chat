@@ -17,6 +17,7 @@ namespace ContractClient
         public bool IsConversation { get; set; }
         public List<String> ParticipantsLogin { get; set; }
         public ConversationMemberStatus MyStatus { get; set; }
+        public List<ConversationReply> Messages { get; set; }
         public DateTime LastChange { get; set; }
     }
 }

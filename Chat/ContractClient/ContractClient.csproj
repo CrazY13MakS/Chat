@@ -50,6 +50,7 @@
     <Compile Include="Conversation.cs" />
     <Compile Include="ConversationMemberStatus.cs" />
     <Compile Include="ConversationReply.cs" />
+    <Compile Include="ConversationReplyStatus.cs" />
     <Compile Include="NetworkStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RelationStatus.cs" />

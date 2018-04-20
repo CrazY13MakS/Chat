@@ -13,6 +13,6 @@ namespace ContractClient
         public String Body { get; set; }
         public String AuthorLogin { get; set; }
         public DateTime SendingTime { get; set; }
-        public bool IsRead { get; set; }
+        public ConversationReplyStatus Status { get; set; }
     }
 }

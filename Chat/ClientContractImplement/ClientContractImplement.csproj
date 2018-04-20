@@ -41,7 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChatClient.cs" />
+    <Compile Include="ChatCustomerCallbackService.cs" />
+    <Compile Include="ChatCustomerService.cs" />
     <Compile Include="ClientAuthSercive.cs" />
     <Compile Include="OperationResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

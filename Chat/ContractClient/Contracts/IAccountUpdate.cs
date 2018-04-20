@@ -15,7 +15,7 @@ namespace ContractClient.Contracts
         /// <param name="body">Текст при отправке запроса</param>
         /// <param name="userLogin">Уникальный логин аккаунта для отправки запроса</param>
         /// <returns></returns>
-        [OperationContract]                                /// >0  - Id вашего чата
+        [OperationContract]                                                      /// >0  - Id вашего чата
         User FriendshipRequest(String body, String userLogin);                  /// -1  - запрос уже отправлен
                                                                                 /// -2 - вы в черном списке
         [OperationContract]
