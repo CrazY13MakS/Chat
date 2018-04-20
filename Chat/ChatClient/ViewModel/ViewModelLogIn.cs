@@ -135,7 +135,7 @@ namespace ChatClient.ViewModel
         }
         private bool CanExecuteLogInCommand(object parametr)
         {
-            return true;// authSercive.IsValidMail(Email);
+            return  authSercive.IsValidMail(Email);
         }
 
         RelayCommand _registrationCommand;
@@ -153,6 +153,7 @@ namespace ChatClient.ViewModel
 
         private void ExecuteRegistrationCommand(object parametr)
         {
+
             // var a = ConvertToUnsecureString((parametr as PasswordBox).SecurePassword);
             var window = App.Current.Windows.OfType<ISecurePassword>().FirstOrDefault();
             String pass = ConvertToUnsecureString(window.Password);

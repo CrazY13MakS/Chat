@@ -11,42 +11,48 @@ using ContractClient.Contracts;
 
 namespace ClientContractImplement
 {
-    public class ChatCustomerService : INotifyPropertyChanged
+    public class ChatCustomerService //: INotifyPropertyChanged
     {
         public delegate void ErrorHandler(String action, string message);
         public event ErrorHandler Error;
 
-        void RaisePropertyChanged([CallerMemberName]string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        public event PropertyChangedEventHandler PropertyChanged;
+        //void RaisePropertyChanged([CallerMemberName]string propertyName = "")
+        //{
+        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        //}
+        //public event PropertyChangedEventHandler PropertyChanged;
 
-        UserExt _user;
-        public UserExt User
-        {
-            get
-            {
-                return _user;
-            }
-            set
-            {
-                if (_user != value)
-                {
-                    _user = value;
-                    RaisePropertyChanged();
-                }
-            }
-        }
+        //UserExt _user;
+        //public UserExt User
+        //{
+        //    get
+        //    {
+        //        return _user;
+        //    }
+        //    set
+        //    {
+        //        if (_user != value)
+        //        {
+        //            _user = value;
+        //            RaisePropertyChanged();
+        //        }
+        //    }
+        //}
 
         IChatService chatService;
         DuplexChannelFactory<IChatService> duplexChannelFactory;
-        public ChatCustomerService(String token)
+        private readonly String _token;
+        public ChatCustomerService(String token, IChatClient client)
         {
-            InstanceContext context = new InstanceContext(new ChatCustomerCallbackService());
+            _token = token;
+            InstanceContext context = new InstanceContext(client);
             duplexChannelFactory = new DuplexChannelFactory<IChatService>(context, "ClientMessageServiceEndPoint");
             chatService = duplexChannelFactory.CreateChannel();
-            User = chatService.Authentication(token);
+           // User = chatService.Authentication(token);
+        }
+        public UserExt Authentication()
+        {
+            return chatService.Authentication(_token);            
         }
 
         public async Task<bool> Disconnect()

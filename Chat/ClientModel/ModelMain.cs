@@ -12,9 +12,12 @@ namespace ClientModel
 {
     public class ModelMain:INotifyPropertyChanged
     {
-        public ModelMain()
+        ChatCustomerCallbackService callbackService;
+        ChatCustomerService chat;
+        public ModelMain(String token)
         {
-            ClientContractImplement.ChatCustomerService chatCustomerService = new ChatCustomerService();
+            callbackService = new ChatCustomerCallbackService();
+            chat = new ChatCustomerService(token, callbackService);
         }
         public delegate void ErrorHandler(String action, string message);
         public event ErrorHandler Error;
