@@ -9,11 +9,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientContractImplement", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatClient", "ChatClient\ChatClient.csproj", "{D9E51A77-BE5F-4487-B981-2D5C02AF66A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthServiceHost", "AuthServiceHost\AuthServiceHost.csproj", "{5D77105F-7CC7-40AE-B9E1-65C9789301EA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthServiceProvider", "AuthServiceHost\AuthServiceProvider.csproj", "{5D77105F-7CC7-40AE-B9E1-65C9789301EA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServicesProvider", "ServicesProvider\ServicesProvider.csproj", "{87250217-6A0D-4E3B-834B-B179E185D6A8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientModel", "ClientModel\ClientModel.csproj", "{BA81A3A9-F4DB-41AA-9039-8A4F33959486}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatServiceProvider", "ChatServiceProvider\ChatServiceProvider.csproj", "{C65C654B-B950-44E9-9374-8F80C789AEEE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{BA81A3A9-F4DB-41AA-9039-8A4F33959486}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA81A3A9-F4DB-41AA-9039-8A4F33959486}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA81A3A9-F4DB-41AA-9039-8A4F33959486}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C65C654B-B950-44E9-9374-8F80C789AEEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C65C654B-B950-44E9-9374-8F80C789AEEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C65C654B-B950-44E9-9374-8F80C789AEEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C65C654B-B950-44E9-9374-8F80C789AEEE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

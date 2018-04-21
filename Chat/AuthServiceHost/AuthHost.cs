@@ -6,7 +6,7 @@ using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AuthServiceHost
+namespace AuthServiceProvider
 {
     public class AuthHost
     {

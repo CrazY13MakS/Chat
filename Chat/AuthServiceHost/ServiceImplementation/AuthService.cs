@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ServiceModel;
 
-namespace AuthServiceHost.ServiceImplementation
+namespace AuthServiceProvider.ServiceImplementation
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession)]
     public class AuthService : ContractClient.Contracts.IAuthService,IDisposable

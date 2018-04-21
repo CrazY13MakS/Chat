@@ -9,6 +9,7 @@ namespace ContractClient
     public enum ConversationMemberStatus
     {
         None,
+        Admin,
         Active,
         Blocked,
         ReadOnly,
