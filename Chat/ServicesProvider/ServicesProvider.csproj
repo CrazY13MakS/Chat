@@ -32,6 +32,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\DbMain\bin\Debug\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -52,6 +56,10 @@
     <ProjectReference Include="..\AuthServiceHost\AuthServiceProvider.csproj">
       <Project>{5d77105f-7cc7-40ae-b9e1-65c9789301ea}</Project>
       <Name>AuthServiceProvider</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DbMain\DbMain.csproj">
+      <Project>{83be18b1-4543-4779-9a6f-f1dbd19dd933}</Project>
+      <Name>DbMain</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

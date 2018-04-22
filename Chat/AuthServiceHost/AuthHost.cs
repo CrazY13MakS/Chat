@@ -18,6 +18,8 @@ namespace AuthServiceProvider
         public void Start()
         {
             Console.WriteLine("Auth host started");
+            //host.AddServiceEndpoint(new EndpointAddress("net.tcp://localhost:4000/Auth"),)
+          //  host.AddServiceEndpoint(typeof(IAuthService), new NetTcpBinding(), "net.tcp://localhost:4000/Auth");
             host.Open();
         }
         public void Close()

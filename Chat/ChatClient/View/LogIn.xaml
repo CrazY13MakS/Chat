@@ -7,7 +7,7 @@
         xmlns:vm="clr-namespace:ChatClient.ViewModel"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
-        Title="MainWindow" Height="auto" Width="auto" SizeToContent="WidthAndHeight">
+        Title="MainWindow" Height="auto" Width="auto" SizeToContent="WidthAndHeight" ResizeMode="CanMinimize">
     <Window.DataContext>
         <vm:ViewModelLogIn></vm:ViewModelLogIn>
     </Window.DataContext>
@@ -61,7 +61,7 @@
                         <RowDefinition Height="AUTO"/>
                     </Grid.RowDefinitions>
                     <TextBlock Text="E-mail:"  Grid.ColumnSpan="2" Style="{StaticResource ResourceKey=AuthTextBlock}"></TextBlock>
-                    <TextBox Grid.Row="1" Grid.ColumnSpan="2" Style="{StaticResource ResourceKey=AuthTextBox}"/>
+                    <TextBox Grid.Row="1" Text="{Binding Email}" Grid.ColumnSpan="2" Style="{StaticResource ResourceKey=AuthTextBox}"/>
 
                     <TextBlock Text="Password:" Grid.Row="2"  Grid.ColumnSpan="2" Style="{StaticResource ResourceKey=AuthTextBlock}"></TextBlock>
                     <PasswordBox Grid.Row="3" x:Name="PassBox" Grid.ColumnSpan="2"  Style="{StaticResource ResourceKey=AuthTextBox}"/>
@@ -98,7 +98,7 @@
                     <TextBox Grid.Row="1" Grid.ColumnSpan="2" Style="{StaticResource ResourceKey=AuthTextBox}" Text="{Binding Email}"/>
 
                     <TextBlock Text="Login:" Grid.Row="2"  Grid.ColumnSpan="2" Style="{StaticResource ResourceKey=AuthTextBlock}"></TextBlock>
-                    <TextBox Grid.Row="3" Grid.ColumnSpan="2" Style="{StaticResource ResourceKey=AuthTextBox}" Text="{Binding Login}"/>
+                    <TextBox Grid.Row="3"  Grid.ColumnSpan="2" Style="{StaticResource ResourceKey=AuthTextBox}" Text="{Binding Login}"/>
 
                     <TextBlock Text="Password:" Grid.Row="4"  Grid.ColumnSpan="2" Style="{StaticResource ResourceKey=AuthTextBlock}"></TextBlock>
                     <PasswordBox x:Name="PassBox" Grid.Row="5" Grid.ColumnSpan="2"  Style="{StaticResource ResourceKey=AuthTextBox}"/>
@@ -127,7 +127,7 @@
     <Grid x:Name="container">
         <ToggleButton x:Name="TglBtnReg" Style="{StaticResource ResourceKey=ChangeToRegButton}" IsThreeState="False"  Panel.ZIndex="10" Width="125"></ToggleButton>
         <ContentPresenter Style="{StaticResource MyContentStyle}" x:Name="ContPresenter"  Grid.Row="0" Content="{Binding}"  />
-        <Button x:Name="Aaa" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="100" Height="50" Content="546" Click="Aaa_Click"/>
+        <!--<Button x:Name="Aaa" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="100" Height="50" Content="546" Click="Aaa_Click"/>-->
     </Grid>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">

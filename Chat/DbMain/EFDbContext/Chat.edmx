@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Хранилище ChatModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Хранилище ChatModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AccessTokens">
           <Key>
             <PropertyRef Name="Id" />
@@ -132,6 +132,7 @@
           <Property Name="GenderId" Type="int" />
           <Property Name="Status" Type="nvarchar" MaxLength="100" />
           <Property Name="LastEdit" Type="datetimeoffset" Precision="7" Nullable="false" />
+          <Property Name="Login" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <Association Name="AccessTokens_fk0">
           <End Role="Users" Type="Self.Users" Multiplicity="1" />
@@ -436,8 +437,7 @@
             <End Role="Users" EntitySet="Users" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="ChatModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -604,6 +604,7 @@
           <NavigationProperty Name="Conversations" Relationship="Self.Conversations_fk0" FromRole="Users" ToRole="Conversations" />
           <NavigationProperty Name="Conversations1" Relationship="Self.Conversations_fk1" FromRole="Users" ToRole="Conversations" />
           <NavigationProperty Name="Gender" Relationship="Self.Users_fk1" FromRole="Users" ToRole="Genders" />
+          <Property Name="Login" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="AccessTokens_fk0">
           <End Role="Users" Type="Self.User" Multiplicity="1" />
@@ -1039,6 +1040,7 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="ChatModel.User">
               <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="Login" ColumnName="Login" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Name" ColumnName="Name" />

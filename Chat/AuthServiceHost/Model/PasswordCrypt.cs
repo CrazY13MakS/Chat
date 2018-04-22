@@ -9,6 +9,13 @@ namespace AuthServiceProvider.Model
 {
     class PasswordCrypt
     {
+        /// <summary>
+        /// Generate hash and salt from password
+        /// </summary>
+        /// <param name="password"></param>
+        /// <param name="keyLength"></param>
+        /// <param name="saltLength"></param>
+        /// <returns>Item1 - key, Item2 - salt</returns>
         public static Tuple<byte[], byte[]> GetHashFromPassword(String password, int keyLength=32, int saltLength = 20)
         {
             // specify that we want to randomly generate a 20-byte salt

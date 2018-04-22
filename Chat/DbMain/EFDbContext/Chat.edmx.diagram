@@ -12,7 +12,7 @@
         <EntityTypeShape EntityType="ChatModel.ConversationMemberStatus" Width="1.5" PointX="5.25" PointY="5.125" IsExpanded="true" />
         <EntityTypeShape EntityType="ChatModel.ConversationReply" Width="1.5" PointX="7.5" PointY="13.375" IsExpanded="true" />
         <EntityTypeShape EntityType="ChatModel.ConversationReplyStatus" Width="1.5" PointX="5.25" PointY="15.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="ChatModel.Conversation" Width="1.5" PointX="10.5" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ChatModel.Conversation" Width="2.5" PointX="10.75" PointY="3.875" IsExpanded="true" />
         <EntityTypeShape EntityType="ChatModel.ConversationType" Width="1.5" PointX="8.25" PointY="2.125" IsExpanded="true" />
         <EntityTypeShape EntityType="ChatModel.Country" Width="1.5" PointX="0.75" PointY="10.125" IsExpanded="true" />
         <EntityTypeShape EntityType="ChatModel.Gender" Width="1.5" PointX="3" PointY="7.125" IsExpanded="true" />

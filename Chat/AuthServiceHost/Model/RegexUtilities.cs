@@ -46,7 +46,7 @@ namespace AuthServiceProvider.Model
             }
         }
         /// <summary>
-        /// This requires at least one digit, at least one alphabetic character, no special characters, and from 6-15 characters in length.
+        /// This requires at least one digit, at least one alphabetic character, no special characters, and from 6-24 characters in length.
         /// </summary>
         /// <param name="input">Password</param>
         /// <returns></returns>
@@ -59,7 +59,28 @@ namespace AuthServiceProvider.Model
             }
             try
             {
-                return Regex.IsMatch(input, "(? !^[0 - 9] *$)(? !^[a - zA - Z] *$)^ ([a - zA - Z0 - 9]{ 6,15})$");
+                return Regex.IsMatch(input, @"(?=^.{6,24}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$");
+            }
+            catch (RegexMatchTimeoutException)
+            {
+                return false;
+            }
+        }
+        /// <summary>
+        /// Логин должен начинаться с латинской буквы в нижнем регистре или знака "_",далее может содержать латинские буквы в нижнем регистре, знак "_" и цифры. Длина от 5 до 50 символов
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public bool IsValidLogin(String input)
+        {
+            ;
+            if (String.IsNullOrEmpty(input))
+            {
+                return false;
+            }
+            try
+            {
+                return Regex.IsMatch(input, "^[a-z_][a-z0-9_]{5,50}$");
             }
             catch (RegexMatchTimeoutException)
             {

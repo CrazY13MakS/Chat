@@ -12,6 +12,10 @@ namespace ServicesProvider
         {
             AuthHost authHost = new AuthHost();
             authHost.Start();
+            using (DbMain.EFDbContext.ChatEntities a = new DbMain.EFDbContext.ChatEntities())
+            {
+                Console.WriteLine(a.Users.Count().ToString());
+            }
             Console.ReadKey();
         }
     }

@@ -158,7 +158,8 @@ namespace ChatClient.ViewModel
             var window = App.Current.Windows.OfType<ISecurePassword>().FirstOrDefault();
             String pass = ConvertToUnsecureString(window.Password);
             String confPass = ConvertToUnsecureString(window.ConfirmedPassword);
-            var res = authSercive.Registration(Email, Login, pass, confPass);
+            var res = authSercive.Registration(Email, Login, pass, confPass, VerifCode);
+
         }
         private bool CanExecuteRegistrationCommand(object parametr)
         {
