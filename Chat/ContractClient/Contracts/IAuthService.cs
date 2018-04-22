@@ -17,7 +17,7 @@ namespace ContractClient.Contracts
         bool SendVerificationCode(String email);
 
         [OperationContract]
-        String Registration(String email, String login, String password, String confirmPassword);
+        String Registration(String email, String login, String password, String confirmPassword, String code);
 
 
     }

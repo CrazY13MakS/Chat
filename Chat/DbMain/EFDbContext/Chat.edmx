@@ -1,0 +1,1081 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище ChatModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AccessTokens">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="bigint" Nullable="false" />
+          <Property Name="Token" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Created" Type="datetimeoffset" Precision="7" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Cities">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="CountryId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Contacts">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AdderId" Type="bigint" Nullable="false" />
+          <Property Name="InvitedId" Type="bigint" Nullable="false" />
+          <Property Name="SendingDate" Type="datetimeoffset" Precision="7" Nullable="false" />
+          <Property Name="RelationTypeId" Type="int" Nullable="false" />
+          <Property Name="LastChangeDate" Type="datetimeoffset" Precision="7" />
+          <Property Name="ConversationId" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ConversationMembers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ConversationId" Type="bigint" Nullable="false" />
+          <Property Name="MemberId" Type="bigint" Nullable="false" />
+          <Property Name="AddedId" Type="bigint" />
+          <Property Name="Joined" Type="datetimeoffset" Precision="7" Nullable="false" />
+          <Property Name="LastStatusChanged" Type="datetimeoffset" Precision="7" Nullable="false" />
+          <Property Name="MemberStatusId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ConversationMemberStatuses">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ConversationReplies">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AuthorId" Type="bigint" Nullable="false" />
+          <Property Name="ConversationId" Type="bigint" Nullable="false" />
+          <Property Name="Body" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="SendingTime" Type="datetimeoffset" Precision="7" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+          <Property Name="ConversationReplyStatusId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ConversationReplyStatuses">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Conversations">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AuthorId" Type="bigint" Nullable="false" />
+          <Property Name="PartnerId" Type="bigint" />
+          <Property Name="Name" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="250" />
+          <Property Name="Created" Type="datetimeoffset" Precision="7" Nullable="false" />
+          <Property Name="LastChange" Type="datetimeoffset" Precision="7" Nullable="false" />
+          <Property Name="Icon" Type="varbinary(max)" />
+          <Property Name="ConversationTypeId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ConversationTypes">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Countries">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="250" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Genders">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RelationshipTypes">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="20" />
+          <Property Name="PasswordHash" Type="binary" MaxLength="32" Nullable="false" />
+          <Property Name="PasswordSalt" Type="binary" MaxLength="20" Nullable="false" />
+          <Property Name="Birthdate" Type="date" />
+          <Property Name="CityId" Type="bigint" />
+          <Property Name="FriendsCount" Type="int" Nullable="false" />
+          <Property Name="Icon" Type="varbinary(max)" />
+          <Property Name="GenderId" Type="int" />
+          <Property Name="Status" Type="nvarchar" MaxLength="100" />
+          <Property Name="LastEdit" Type="datetimeoffset" Precision="7" Nullable="false" />
+        </EntityType>
+        <Association Name="AccessTokens_fk0">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="AccessTokens" Type="Self.AccessTokens" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccessTokens">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Cities_fk0">
+          <End Role="Countries" Type="Self.Countries" Multiplicity="1" />
+          <End Role="Cities" Type="Self.Cities" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Countries">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Cities">
+              <PropertyRef Name="CountryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Contacts_fk0">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Contacts" Type="Self.Contacts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Contacts">
+              <PropertyRef Name="AdderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Contacts_fk1">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Contacts" Type="Self.Contacts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Contacts">
+              <PropertyRef Name="InvitedId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Contacts_fk2">
+          <End Role="RelationshipTypes" Type="Self.RelationshipTypes" Multiplicity="1" />
+          <End Role="Contacts" Type="Self.Contacts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RelationshipTypes">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Contacts">
+              <PropertyRef Name="RelationTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Contacts_fk3">
+          <End Role="Conversations" Type="Self.Conversations" Multiplicity="1" />
+          <End Role="Contacts" Type="Self.Contacts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Conversations">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Contacts">
+              <PropertyRef Name="ConversationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ConversationMembers_fk0">
+          <End Role="Conversations" Type="Self.Conversations" Multiplicity="1" />
+          <End Role="ConversationMembers" Type="Self.ConversationMembers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Conversations">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ConversationMembers">
+              <PropertyRef Name="ConversationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ConversationMembers_fk1">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="ConversationMembers" Type="Self.ConversationMembers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ConversationMembers">
+              <PropertyRef Name="MemberId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ConversationMembers_fk2">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="ConversationMembers" Type="Self.ConversationMembers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ConversationMembers">
+              <PropertyRef Name="AddedId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ConversationMembers_fk3">
+          <End Role="ConversationMemberStatuses" Type="Self.ConversationMemberStatuses" Multiplicity="1" />
+          <End Role="ConversationMembers" Type="Self.ConversationMembers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ConversationMemberStatuses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ConversationMembers">
+              <PropertyRef Name="MemberStatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ConversationReplies_fk0">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="ConversationReplies" Type="Self.ConversationReplies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ConversationReplies">
+              <PropertyRef Name="AuthorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ConversationReplies_fk1">
+          <End Role="Conversations" Type="Self.Conversations" Multiplicity="1" />
+          <End Role="ConversationReplies" Type="Self.ConversationReplies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Conversations">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ConversationReplies">
+              <PropertyRef Name="ConversationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ConversationReplies_fk2">
+          <End Role="ConversationReplyStatuses" Type="Self.ConversationReplyStatuses" Multiplicity="1" />
+          <End Role="ConversationReplies" Type="Self.ConversationReplies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ConversationReplyStatuses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ConversationReplies">
+              <PropertyRef Name="ConversationReplyStatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Conversations_fk0">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Conversations" Type="Self.Conversations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Conversations">
+              <PropertyRef Name="AuthorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Conversations_fk1">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Conversations" Type="Self.Conversations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Conversations">
+              <PropertyRef Name="PartnerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Conversations_fk2">
+          <End Role="ConversationTypes" Type="Self.ConversationTypes" Multiplicity="1" />
+          <End Role="Conversations" Type="Self.Conversations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ConversationTypes">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Conversations">
+              <PropertyRef Name="ConversationTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Users_fk0">
+          <End Role="Cities" Type="Self.Cities" Multiplicity="0..1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cities">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="CityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Users_fk1">
+          <End Role="Genders" Type="Self.Genders" Multiplicity="0..1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Genders">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="GenderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище ChatModelContainer">
+          <EntitySet Name="AccessTokens" EntityType="Self.AccessTokens" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cities" EntityType="Self.Cities" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Contacts" EntityType="Self.Contacts" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ConversationMembers" EntityType="Self.ConversationMembers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ConversationMemberStatuses" EntityType="Self.ConversationMemberStatuses" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ConversationReplies" EntityType="Self.ConversationReplies" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ConversationReplyStatuses" EntityType="Self.ConversationReplyStatuses" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Conversations" EntityType="Self.Conversations" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ConversationTypes" EntityType="Self.ConversationTypes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Countries" EntityType="Self.Countries" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Genders" EntityType="Self.Genders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RelationshipTypes" EntityType="Self.RelationshipTypes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="AccessTokens_fk0" Association="Self.AccessTokens_fk0">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="AccessTokens" EntitySet="AccessTokens" />
+          </AssociationSet>
+          <AssociationSet Name="Cities_fk0" Association="Self.Cities_fk0">
+            <End Role="Countries" EntitySet="Countries" />
+            <End Role="Cities" EntitySet="Cities" />
+          </AssociationSet>
+          <AssociationSet Name="Contacts_fk0" Association="Self.Contacts_fk0">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Contacts" EntitySet="Contacts" />
+          </AssociationSet>
+          <AssociationSet Name="Contacts_fk1" Association="Self.Contacts_fk1">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Contacts" EntitySet="Contacts" />
+          </AssociationSet>
+          <AssociationSet Name="Contacts_fk2" Association="Self.Contacts_fk2">
+            <End Role="RelationshipTypes" EntitySet="RelationshipTypes" />
+            <End Role="Contacts" EntitySet="Contacts" />
+          </AssociationSet>
+          <AssociationSet Name="Contacts_fk3" Association="Self.Contacts_fk3">
+            <End Role="Conversations" EntitySet="Conversations" />
+            <End Role="Contacts" EntitySet="Contacts" />
+          </AssociationSet>
+          <AssociationSet Name="ConversationMembers_fk0" Association="Self.ConversationMembers_fk0">
+            <End Role="Conversations" EntitySet="Conversations" />
+            <End Role="ConversationMembers" EntitySet="ConversationMembers" />
+          </AssociationSet>
+          <AssociationSet Name="ConversationMembers_fk1" Association="Self.ConversationMembers_fk1">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="ConversationMembers" EntitySet="ConversationMembers" />
+          </AssociationSet>
+          <AssociationSet Name="ConversationMembers_fk2" Association="Self.ConversationMembers_fk2">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="ConversationMembers" EntitySet="ConversationMembers" />
+          </AssociationSet>
+          <AssociationSet Name="ConversationMembers_fk3" Association="Self.ConversationMembers_fk3">
+            <End Role="ConversationMemberStatuses" EntitySet="ConversationMemberStatuses" />
+            <End Role="ConversationMembers" EntitySet="ConversationMembers" />
+          </AssociationSet>
+          <AssociationSet Name="ConversationReplies_fk0" Association="Self.ConversationReplies_fk0">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="ConversationReplies" EntitySet="ConversationReplies" />
+          </AssociationSet>
+          <AssociationSet Name="ConversationReplies_fk1" Association="Self.ConversationReplies_fk1">
+            <End Role="Conversations" EntitySet="Conversations" />
+            <End Role="ConversationReplies" EntitySet="ConversationReplies" />
+          </AssociationSet>
+          <AssociationSet Name="ConversationReplies_fk2" Association="Self.ConversationReplies_fk2">
+            <End Role="ConversationReplyStatuses" EntitySet="ConversationReplyStatuses" />
+            <End Role="ConversationReplies" EntitySet="ConversationReplies" />
+          </AssociationSet>
+          <AssociationSet Name="Conversations_fk0" Association="Self.Conversations_fk0">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Conversations" EntitySet="Conversations" />
+          </AssociationSet>
+          <AssociationSet Name="Conversations_fk1" Association="Self.Conversations_fk1">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Conversations" EntitySet="Conversations" />
+          </AssociationSet>
+          <AssociationSet Name="Conversations_fk2" Association="Self.Conversations_fk2">
+            <End Role="ConversationTypes" EntitySet="ConversationTypes" />
+            <End Role="Conversations" EntitySet="Conversations" />
+          </AssociationSet>
+          <AssociationSet Name="Users_fk0" Association="Self.Users_fk0">
+            <End Role="Cities" EntitySet="Cities" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="Users_fk1" Association="Self.Users_fk1">
+            <End Role="Genders" EntitySet="Genders" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ChatModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AccessToken">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int64" Nullable="false" />
+          <Property Name="Token" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="Self.AccessTokens_fk0" FromRole="AccessTokens" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="City">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CountryId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Country" Relationship="Self.Cities_fk0" FromRole="Cities" ToRole="Countries" />
+          <NavigationProperty Name="Users" Relationship="Self.Users_fk0" FromRole="Cities" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Contact">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AdderId" Type="Int64" Nullable="false" />
+          <Property Name="InvitedId" Type="Int64" Nullable="false" />
+          <Property Name="SendingDate" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="RelationTypeId" Type="Int32" Nullable="false" />
+          <Property Name="LastChangeDate" Type="DateTimeOffset" Precision="7" />
+          <Property Name="ConversationId" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="Self.Contacts_fk0" FromRole="Contacts" ToRole="Users" />
+          <NavigationProperty Name="User1" Relationship="Self.Contacts_fk1" FromRole="Contacts" ToRole="Users" />
+          <NavigationProperty Name="RelationshipType" Relationship="Self.Contacts_fk2" FromRole="Contacts" ToRole="RelationshipTypes" />
+          <NavigationProperty Name="Conversation" Relationship="Self.Contacts_fk3" FromRole="Contacts" ToRole="Conversations" />
+        </EntityType>
+        <EntityType Name="ConversationMember">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ConversationId" Type="Int64" Nullable="false" />
+          <Property Name="MemberId" Type="Int64" Nullable="false" />
+          <Property Name="AddedId" Type="Int64" />
+          <Property Name="Joined" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="LastStatusChanged" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="MemberStatusId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Conversation" Relationship="Self.ConversationMembers_fk0" FromRole="ConversationMembers" ToRole="Conversations" />
+          <NavigationProperty Name="User" Relationship="Self.ConversationMembers_fk1" FromRole="ConversationMembers" ToRole="Users" />
+          <NavigationProperty Name="User1" Relationship="Self.ConversationMembers_fk2" FromRole="ConversationMembers" ToRole="Users" />
+          <NavigationProperty Name="ConversationMemberStatus" Relationship="Self.ConversationMembers_fk3" FromRole="ConversationMembers" ToRole="ConversationMemberStatuses" />
+        </EntityType>
+        <EntityType Name="ConversationMemberStatus">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="1" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="ConversationMembers" Relationship="Self.ConversationMembers_fk3" FromRole="ConversationMemberStatuses" ToRole="ConversationMembers" />
+        </EntityType>
+        <EntityType Name="ConversationReply">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AuthorId" Type="Int64" Nullable="false" />
+          <Property Name="ConversationId" Type="Int64" Nullable="false" />
+          <Property Name="Body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SendingTime" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <Property Name="ConversationReplyStatusId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="Self.ConversationReplies_fk0" FromRole="ConversationReplies" ToRole="Users" />
+          <NavigationProperty Name="Conversation" Relationship="Self.ConversationReplies_fk1" FromRole="ConversationReplies" ToRole="Conversations" />
+          <NavigationProperty Name="ConversationReplyStatus" Relationship="Self.ConversationReplies_fk2" FromRole="ConversationReplies" ToRole="ConversationReplyStatuses" />
+        </EntityType>
+        <EntityType Name="ConversationReplyStatus">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="ConversationReplies" Relationship="Self.ConversationReplies_fk2" FromRole="ConversationReplyStatuses" ToRole="ConversationReplies" />
+        </EntityType>
+        <EntityType Name="Conversation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AuthorId" Type="Int64" Nullable="false" />
+          <Property Name="PartnerId" Type="Int64" />
+          <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="LastChange" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="Icon" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="ConversationTypeId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Contacts" Relationship="Self.Contacts_fk3" FromRole="Conversations" ToRole="Contacts" />
+          <NavigationProperty Name="ConversationMembers" Relationship="Self.ConversationMembers_fk0" FromRole="Conversations" ToRole="ConversationMembers" />
+          <NavigationProperty Name="ConversationReplies" Relationship="Self.ConversationReplies_fk1" FromRole="Conversations" ToRole="ConversationReplies" />
+          <NavigationProperty Name="User" Relationship="Self.Conversations_fk0" FromRole="Conversations" ToRole="Users" />
+          <NavigationProperty Name="User1" Relationship="Self.Conversations_fk1" FromRole="Conversations" ToRole="Users" />
+          <NavigationProperty Name="ConversationType" Relationship="Self.Conversations_fk2" FromRole="Conversations" ToRole="ConversationTypes" />
+        </EntityType>
+        <EntityType Name="ConversationType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Conversations" Relationship="Self.Conversations_fk2" FromRole="ConversationTypes" ToRole="Conversations" />
+        </EntityType>
+        <EntityType Name="Country">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Cities" Relationship="Self.Cities_fk0" FromRole="Countries" ToRole="Cities" />
+        </EntityType>
+        <EntityType Name="Gender">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Users" Relationship="Self.Users_fk1" FromRole="Genders" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="RelationshipType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Contacts" Relationship="Self.Contacts_fk2" FromRole="RelationshipTypes" ToRole="Contacts" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Email" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="PasswordHash" Type="Binary" MaxLength="32" FixedLength="true" Nullable="false" />
+          <Property Name="PasswordSalt" Type="Binary" MaxLength="20" FixedLength="true" Nullable="false" />
+          <Property Name="Birthdate" Type="DateTime" Precision="0" />
+          <Property Name="CityId" Type="Int64" />
+          <Property Name="FriendsCount" Type="Int32" Nullable="false" />
+          <Property Name="Icon" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="GenderId" Type="Int32" />
+          <Property Name="Status" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="LastEdit" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <NavigationProperty Name="AccessTokens" Relationship="Self.AccessTokens_fk0" FromRole="Users" ToRole="AccessTokens" />
+          <NavigationProperty Name="City" Relationship="Self.Users_fk0" FromRole="Users" ToRole="Cities" />
+          <NavigationProperty Name="Contacts" Relationship="Self.Contacts_fk0" FromRole="Users" ToRole="Contacts" />
+          <NavigationProperty Name="Contacts1" Relationship="Self.Contacts_fk1" FromRole="Users" ToRole="Contacts" />
+          <NavigationProperty Name="ConversationMembers" Relationship="Self.ConversationMembers_fk1" FromRole="Users" ToRole="ConversationMembers" />
+          <NavigationProperty Name="ConversationMembers1" Relationship="Self.ConversationMembers_fk2" FromRole="Users" ToRole="ConversationMembers" />
+          <NavigationProperty Name="ConversationReplies" Relationship="Self.ConversationReplies_fk0" FromRole="Users" ToRole="ConversationReplies" />
+          <NavigationProperty Name="Conversations" Relationship="Self.Conversations_fk0" FromRole="Users" ToRole="Conversations" />
+          <NavigationProperty Name="Conversations1" Relationship="Self.Conversations_fk1" FromRole="Users" ToRole="Conversations" />
+          <NavigationProperty Name="Gender" Relationship="Self.Users_fk1" FromRole="Users" ToRole="Genders" />
+        </EntityType>
+        <Association Name="AccessTokens_fk0">
+          <End Role="Users" Type="Self.User" Multiplicity="1" />
+          <End Role="AccessTokens" Type="Self.AccessToken" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccessTokens">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Cities_fk0">
+          <End Role="Countries" Type="Self.Country" Multiplicity="1" />
+          <End Role="Cities" Type="Self.City" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Countries">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Cities">
+              <PropertyRef Name="CountryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Users_fk0">
+          <End Role="Cities" Type="Self.City" Multiplicity="0..1" />
+          <End Role="Users" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cities">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="CityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Contacts_fk0">
+          <End Role="Users" Type="Self.User" Multiplicity="1" />
+          <End Role="Contacts" Type="Self.Contact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Contacts">
+              <PropertyRef Name="AdderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Contacts_fk1">
+          <End Role="Users" Type="Self.User" Multiplicity="1" />
+          <End Role="Contacts" Type="Self.Contact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Contacts">
+              <PropertyRef Name="InvitedId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Contacts_fk2">
+          <End Role="RelationshipTypes" Type="Self.RelationshipType" Multiplicity="1" />
+          <End Role="Contacts" Type="Self.Contact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RelationshipTypes">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Contacts">
+              <PropertyRef Name="RelationTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Contacts_fk3">
+          <End Role="Conversations" Type="Self.Conversation" Multiplicity="1" />
+          <End Role="Contacts" Type="Self.Contact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Conversations">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Contacts">
+              <PropertyRef Name="ConversationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ConversationMembers_fk0">
+          <End Role="Conversations" Type="Self.Conversation" Multiplicity="1" />
+          <End Role="ConversationMembers" Type="Self.ConversationMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Conversations">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ConversationMembers">
+              <PropertyRef Name="ConversationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ConversationMembers_fk1">
+          <End Role="Users" Type="Self.User" Multiplicity="1" />
+          <End Role="ConversationMembers" Type="Self.ConversationMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ConversationMembers">
+              <PropertyRef Name="MemberId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ConversationMembers_fk2">
+          <End Role="Users" Type="Self.User" Multiplicity="0..1" />
+          <End Role="ConversationMembers" Type="Self.ConversationMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ConversationMembers">
+              <PropertyRef Name="AddedId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ConversationMembers_fk3">
+          <End Role="ConversationMemberStatuses" Type="Self.ConversationMemberStatus" Multiplicity="1" />
+          <End Role="ConversationMembers" Type="Self.ConversationMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ConversationMemberStatuses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ConversationMembers">
+              <PropertyRef Name="MemberStatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ConversationReplies_fk0">
+          <End Role="Users" Type="Self.User" Multiplicity="1" />
+          <End Role="ConversationReplies" Type="Self.ConversationReply" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ConversationReplies">
+              <PropertyRef Name="AuthorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ConversationReplies_fk1">
+          <End Role="Conversations" Type="Self.Conversation" Multiplicity="1" />
+          <End Role="ConversationReplies" Type="Self.ConversationReply" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Conversations">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ConversationReplies">
+              <PropertyRef Name="ConversationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ConversationReplies_fk2">
+          <End Role="ConversationReplyStatuses" Type="Self.ConversationReplyStatus" Multiplicity="1" />
+          <End Role="ConversationReplies" Type="Self.ConversationReply" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ConversationReplyStatuses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ConversationReplies">
+              <PropertyRef Name="ConversationReplyStatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Conversations_fk0">
+          <End Role="Users" Type="Self.User" Multiplicity="1" />
+          <End Role="Conversations" Type="Self.Conversation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Conversations">
+              <PropertyRef Name="AuthorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Conversations_fk1">
+          <End Role="Users" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Conversations" Type="Self.Conversation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Conversations">
+              <PropertyRef Name="PartnerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Conversations_fk2">
+          <End Role="ConversationTypes" Type="Self.ConversationType" Multiplicity="1" />
+          <End Role="Conversations" Type="Self.Conversation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ConversationTypes">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Conversations">
+              <PropertyRef Name="ConversationTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Users_fk1">
+          <End Role="Genders" Type="Self.Gender" Multiplicity="0..1" />
+          <End Role="Users" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Genders">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="GenderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ChatEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AccessTokens" EntityType="Self.AccessToken" />
+          <EntitySet Name="Cities" EntityType="Self.City" />
+          <EntitySet Name="Contacts" EntityType="Self.Contact" />
+          <EntitySet Name="ConversationMembers" EntityType="Self.ConversationMember" />
+          <EntitySet Name="ConversationMemberStatuses" EntityType="Self.ConversationMemberStatus" />
+          <EntitySet Name="ConversationReplies" EntityType="Self.ConversationReply" />
+          <EntitySet Name="ConversationReplyStatuses" EntityType="Self.ConversationReplyStatus" />
+          <EntitySet Name="Conversations" EntityType="Self.Conversation" />
+          <EntitySet Name="ConversationTypes" EntityType="Self.ConversationType" />
+          <EntitySet Name="Countries" EntityType="Self.Country" />
+          <EntitySet Name="Genders" EntityType="Self.Gender" />
+          <EntitySet Name="RelationshipTypes" EntityType="Self.RelationshipType" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <AssociationSet Name="AccessTokens_fk0" Association="Self.AccessTokens_fk0">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="AccessTokens" EntitySet="AccessTokens" />
+          </AssociationSet>
+          <AssociationSet Name="Cities_fk0" Association="Self.Cities_fk0">
+            <End Role="Countries" EntitySet="Countries" />
+            <End Role="Cities" EntitySet="Cities" />
+          </AssociationSet>
+          <AssociationSet Name="Users_fk0" Association="Self.Users_fk0">
+            <End Role="Cities" EntitySet="Cities" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="Contacts_fk0" Association="Self.Contacts_fk0">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Contacts" EntitySet="Contacts" />
+          </AssociationSet>
+          <AssociationSet Name="Contacts_fk1" Association="Self.Contacts_fk1">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Contacts" EntitySet="Contacts" />
+          </AssociationSet>
+          <AssociationSet Name="Contacts_fk2" Association="Self.Contacts_fk2">
+            <End Role="RelationshipTypes" EntitySet="RelationshipTypes" />
+            <End Role="Contacts" EntitySet="Contacts" />
+          </AssociationSet>
+          <AssociationSet Name="Contacts_fk3" Association="Self.Contacts_fk3">
+            <End Role="Conversations" EntitySet="Conversations" />
+            <End Role="Contacts" EntitySet="Contacts" />
+          </AssociationSet>
+          <AssociationSet Name="ConversationMembers_fk0" Association="Self.ConversationMembers_fk0">
+            <End Role="Conversations" EntitySet="Conversations" />
+            <End Role="ConversationMembers" EntitySet="ConversationMembers" />
+          </AssociationSet>
+          <AssociationSet Name="ConversationMembers_fk1" Association="Self.ConversationMembers_fk1">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="ConversationMembers" EntitySet="ConversationMembers" />
+          </AssociationSet>
+          <AssociationSet Name="ConversationMembers_fk2" Association="Self.ConversationMembers_fk2">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="ConversationMembers" EntitySet="ConversationMembers" />
+          </AssociationSet>
+          <AssociationSet Name="ConversationMembers_fk3" Association="Self.ConversationMembers_fk3">
+            <End Role="ConversationMemberStatuses" EntitySet="ConversationMemberStatuses" />
+            <End Role="ConversationMembers" EntitySet="ConversationMembers" />
+          </AssociationSet>
+          <AssociationSet Name="ConversationReplies_fk0" Association="Self.ConversationReplies_fk0">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="ConversationReplies" EntitySet="ConversationReplies" />
+          </AssociationSet>
+          <AssociationSet Name="ConversationReplies_fk1" Association="Self.ConversationReplies_fk1">
+            <End Role="Conversations" EntitySet="Conversations" />
+            <End Role="ConversationReplies" EntitySet="ConversationReplies" />
+          </AssociationSet>
+          <AssociationSet Name="ConversationReplies_fk2" Association="Self.ConversationReplies_fk2">
+            <End Role="ConversationReplyStatuses" EntitySet="ConversationReplyStatuses" />
+            <End Role="ConversationReplies" EntitySet="ConversationReplies" />
+          </AssociationSet>
+          <AssociationSet Name="Conversations_fk0" Association="Self.Conversations_fk0">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Conversations" EntitySet="Conversations" />
+          </AssociationSet>
+          <AssociationSet Name="Conversations_fk1" Association="Self.Conversations_fk1">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Conversations" EntitySet="Conversations" />
+          </AssociationSet>
+          <AssociationSet Name="Conversations_fk2" Association="Self.Conversations_fk2">
+            <End Role="ConversationTypes" EntitySet="ConversationTypes" />
+            <End Role="Conversations" EntitySet="Conversations" />
+          </AssociationSet>
+          <AssociationSet Name="Users_fk1" Association="Self.Users_fk1">
+            <End Role="Genders" EntitySet="Genders" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище ChatModelContainer" CdmEntityContainer="ChatEntities">
+          <EntitySetMapping Name="AccessTokens">
+            <EntityTypeMapping TypeName="ChatModel.AccessToken">
+              <MappingFragment StoreEntitySet="AccessTokens">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Token" ColumnName="Token" />
+                <ScalarProperty Name="Created" ColumnName="Created" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cities">
+            <EntityTypeMapping TypeName="ChatModel.City">
+              <MappingFragment StoreEntitySet="Cities">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="CountryId" ColumnName="CountryId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Contacts">
+            <EntityTypeMapping TypeName="ChatModel.Contact">
+              <MappingFragment StoreEntitySet="Contacts">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="AdderId" ColumnName="AdderId" />
+                <ScalarProperty Name="InvitedId" ColumnName="InvitedId" />
+                <ScalarProperty Name="SendingDate" ColumnName="SendingDate" />
+                <ScalarProperty Name="RelationTypeId" ColumnName="RelationTypeId" />
+                <ScalarProperty Name="LastChangeDate" ColumnName="LastChangeDate" />
+                <ScalarProperty Name="ConversationId" ColumnName="ConversationId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ConversationMembers">
+            <EntityTypeMapping TypeName="ChatModel.ConversationMember">
+              <MappingFragment StoreEntitySet="ConversationMembers">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ConversationId" ColumnName="ConversationId" />
+                <ScalarProperty Name="MemberId" ColumnName="MemberId" />
+                <ScalarProperty Name="AddedId" ColumnName="AddedId" />
+                <ScalarProperty Name="Joined" ColumnName="Joined" />
+                <ScalarProperty Name="LastStatusChanged" ColumnName="LastStatusChanged" />
+                <ScalarProperty Name="MemberStatusId" ColumnName="MemberStatusId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ConversationMemberStatuses">
+            <EntityTypeMapping TypeName="ChatModel.ConversationMemberStatus">
+              <MappingFragment StoreEntitySet="ConversationMemberStatuses">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ConversationReplies">
+            <EntityTypeMapping TypeName="ChatModel.ConversationReply">
+              <MappingFragment StoreEntitySet="ConversationReplies">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="AuthorId" ColumnName="AuthorId" />
+                <ScalarProperty Name="ConversationId" ColumnName="ConversationId" />
+                <ScalarProperty Name="Body" ColumnName="Body" />
+                <ScalarProperty Name="SendingTime" ColumnName="SendingTime" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="ConversationReplyStatusId" ColumnName="ConversationReplyStatusId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ConversationReplyStatuses">
+            <EntityTypeMapping TypeName="ChatModel.ConversationReplyStatus">
+              <MappingFragment StoreEntitySet="ConversationReplyStatuses">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Conversations">
+            <EntityTypeMapping TypeName="ChatModel.Conversation">
+              <MappingFragment StoreEntitySet="Conversations">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="AuthorId" ColumnName="AuthorId" />
+                <ScalarProperty Name="PartnerId" ColumnName="PartnerId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Created" ColumnName="Created" />
+                <ScalarProperty Name="LastChange" ColumnName="LastChange" />
+                <ScalarProperty Name="Icon" ColumnName="Icon" />
+                <ScalarProperty Name="ConversationTypeId" ColumnName="ConversationTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ConversationTypes">
+            <EntityTypeMapping TypeName="ChatModel.ConversationType">
+              <MappingFragment StoreEntitySet="ConversationTypes">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Countries">
+            <EntityTypeMapping TypeName="ChatModel.Country">
+              <MappingFragment StoreEntitySet="Countries">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Genders">
+            <EntityTypeMapping TypeName="ChatModel.Gender">
+              <MappingFragment StoreEntitySet="Genders">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RelationshipTypes">
+            <EntityTypeMapping TypeName="ChatModel.RelationshipType">
+              <MappingFragment StoreEntitySet="RelationshipTypes">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="ChatModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="PasswordSalt" ColumnName="PasswordSalt" />
+                <ScalarProperty Name="Birthdate" ColumnName="Birthdate" />
+                <ScalarProperty Name="CityId" ColumnName="CityId" />
+                <ScalarProperty Name="FriendsCount" ColumnName="FriendsCount" />
+                <ScalarProperty Name="Icon" ColumnName="Icon" />
+                <ScalarProperty Name="GenderId" ColumnName="GenderId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="LastEdit" ColumnName="LastEdit" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

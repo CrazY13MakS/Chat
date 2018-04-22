@@ -8,11 +8,11 @@ namespace ContractClient
 {
     public enum ConversationMemberStatus
     {
-        None,
-        Admin,
-        Active,
-        Blocked,
-        ReadOnly,
-        LeftConversation
+        None=1,
+        Admin=2,
+        Active=3,
+        Blocked=4,
+        ReadOnly=5,
+        LeftConversation=6
     }
 }

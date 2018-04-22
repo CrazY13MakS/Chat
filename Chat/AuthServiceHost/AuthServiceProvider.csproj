@@ -42,6 +42,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthHost.cs" />
+    <Compile Include="Model\PasswordCrypt.cs" />
+    <Compile Include="Model\RegexUtilities.cs" />
+    <Compile Include="Model\UserAccess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceImplementation\AuthService.cs" />
   </ItemGroup>

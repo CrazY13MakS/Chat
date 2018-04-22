@@ -101,12 +101,12 @@ namespace ClientContractImplement
         //    }
         //}
 
-        public OperationResult<String> Registration(string email, string login, string password, string confirmPassword)
+        public OperationResult<String> Registration(string email, string login, string password, string confirmPassword, String code)
         {
             String result = String.Empty;
             try
             {
-                result = channel.Registration(email, login, password, confirmPassword);
+                result = channel.Registration(email, login, password, confirmPassword, code);
                 if (result.Contains("Error"))
                 {
                     return new OperationResult<string>(result, false, result);

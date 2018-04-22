@@ -8,10 +8,10 @@ namespace ContractClient
 {
     public enum ConversationReplyStatus
     {
-        Sendidg,
-        SendingError,
-        Sent,
-        Delivered,
-        AlreadyRead
+        Sent = 1,
+        Delivered = 2,
+        AlreadyRead = 3,
+        Sendidg = 4,
+        SendingError = 5
     }
 }
