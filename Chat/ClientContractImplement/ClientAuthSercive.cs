@@ -11,7 +11,7 @@ namespace ClientContractImplement
 {
     public class ClientAuthSercive : IDisposable
     {
-        static int secondsDelay = 60;
+       public static int SecondsDelay { get; private set; } = 60;
         //Uri address = new Uri("http://localhost:4000/Auth");
         //NetTcpBinding binding = new NetTcpBinding();
         ChannelFactory<IAuthService> factory = null;
@@ -31,7 +31,7 @@ namespace ClientContractImplement
         }
         private async void UpdateCanSendCode()
         {
-            await Task.Delay(TimeSpan.FromSeconds(secondsDelay));
+            await Task.Delay(TimeSpan.FromSeconds(SecondsDelay));
             lock (this)
             {
                 CanSendCode = true;
@@ -41,7 +41,7 @@ namespace ClientContractImplement
         {
             if (!CanSendCode)
             {
-                return new OperationResult<bool>(false, false, $"{(_lastSendTime.AddSeconds(secondsDelay) - DateTime.Now)} seconds left until next try");
+                return new OperationResult<bool>(false, false, $"{(_lastSendTime.AddSeconds(SecondsDelay) - DateTime.Now)} seconds left until next try");
             }
             _lastSendTime = DateTime.Now;
             UpdateCanSendCode();

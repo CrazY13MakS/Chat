@@ -167,7 +167,12 @@ namespace AuthServiceProvider.Model
             {
                 return resultPassword;
             }
-            
+            var resultLogin = IsValidLogin(login);
+            if (!resultLogin.Item1)
+            {
+                return resultLogin;
+            }
+
             try
             {
                 using (chatContext = new ChatEntities())
@@ -185,6 +190,7 @@ namespace AuthServiceProvider.Model
                     {
                         PasswordHash = passKeyAndSalt.Item1,
                         PasswordSalt=passKeyAndSalt.Item2,
+                        Login=login,
                         Name=login,
                         Email=email
                     };

@@ -27,7 +27,7 @@
             <Setter Property="TextBlock.FontSize" Value="22"/>
         </Style>
         <Style x:Key="AuthButton" >
-            <Setter Property="FrameworkElement.Margin" Value="20,20,40,10"/>
+            <Setter Property="FrameworkElement.Margin" Value="10,20,10,10"/>
             <Setter Property="TextBlock.FontSize" Value="22"/>
         </Style>
         <Style x:Key="ChangeToRegButton" >
@@ -35,11 +35,11 @@
             <Setter Property="FrameworkElement.VerticalAlignment" Value="Top"/>
             <Setter Property="FrameworkElement.Margin" Value="10"/>
             <Setter Property="TextBlock.FontSize" Value="22"/>
-            <Setter Property="ToggleButton.Content" Value="Registration"/>
+            <Setter Property="ToggleButton.Content" Value="SignUp"/>
             <!--<Setter TargetName="ContPresenter" Property="ContentTemplate" Value="{StaticResource RegTemplate}"/>-->
             <Style.Triggers>
                 <Trigger Property="ToggleButton.IsChecked" Value="True">
-                    <Setter Property="ToggleButton.Content" Value="Login"/>
+                    <Setter Property="ToggleButton.Content" Value="SignIn"/>
                     <Setter Property="ToggleButton.Foreground" Value="Red"/>
                 </Trigger>
             </Style.Triggers>
@@ -47,8 +47,8 @@
         <!--Log In Template-->
         <DataTemplate x:Key="LogInTemplate" >
             <Border BorderBrush="DarkSlateBlue" BorderThickness="3" CornerRadius="10">
-                <Grid Margin="20,10">
-                    <Grid.ColumnDefinitions>
+                <StackPanel Margin="20,10" Width="300">
+                    <!--<Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
@@ -59,26 +59,31 @@
                         <RowDefinition Height="AUTO"/>
                         <RowDefinition Height="AUTO"/>
                         <RowDefinition Height="AUTO"/>
-                    </Grid.RowDefinitions>
+                    </Grid.RowDefinitions>-->
                     <TextBlock Text="E-mail:"  Grid.ColumnSpan="2" Style="{StaticResource ResourceKey=AuthTextBlock}"></TextBlock>
                     <TextBox Grid.Row="1" Text="{Binding Email}" Grid.ColumnSpan="2" Style="{StaticResource ResourceKey=AuthTextBox}"/>
 
                     <TextBlock Text="Password:" Grid.Row="2"  Grid.ColumnSpan="2" Style="{StaticResource ResourceKey=AuthTextBlock}"></TextBlock>
                     <PasswordBox Grid.Row="3" x:Name="PassBox" Grid.ColumnSpan="2"  Style="{StaticResource ResourceKey=AuthTextBox}"/>
-
-                    <Button Content="Log In" Grid.Row="4" Style="{StaticResource ResourceKey=AuthButton}" Command="{Binding LogInCommand}" CommandParameter="{Binding ElementName=PassBox}"/>
-                    <Button Content="Cancel" Grid.Row="4" Grid.Column="1" Style="{StaticResource ResourceKey=AuthButton}" Command="{Binding CloseCommand}"/>
+                    <Grid Height="100">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Content="Log In"   Style="{StaticResource ResourceKey=AuthButton}" Command="{Binding LogInCommand}" CommandParameter="{Binding ElementName=PassBox}"/>
+                        <Button Content="Cancel"   Grid.Column="1" Style="{StaticResource ResourceKey=AuthButton}" Command="{Binding CloseCommand}"/>
+                    </Grid>
                     <!--<ToggleButton Style="{DynamicResource ResourceKey=ChangeToRegButton}" IsThreeState="False" Grid.Column="1"  HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10"></ToggleButton>-->
-                    <TextBlock Text="{Binding Message}" Grid.Row="5" Grid.ColumnSpan="2" TextAlignment="Center" TextWrapping="Wrap"/>
-                </Grid>
+                    <TextBlock Text="{Binding Message}" Foreground="LightSkyBlue" Grid.Row="5" Grid.ColumnSpan="2" TextAlignment="Center" TextWrapping="Wrap"/>
+                </StackPanel>
 
             </Border>
         </DataTemplate>
         <!--Registration template-->
         <DataTemplate x:Key="RegTemplate" >
             <Border BorderBrush="DarkSlateBlue" BorderThickness="3" CornerRadius="10">
-                <Grid Margin="20,10">
-                    <Grid.ColumnDefinitions>
+                <StackPanel Orientation="Vertical" Margin="20,10" Width="300">
+                    <!--<Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
@@ -93,7 +98,7 @@
                         <RowDefinition Height="AUTO"/>
                         <RowDefinition Height="AUTO"/>
                         <RowDefinition Height="AUTO"/>
-                    </Grid.RowDefinitions>
+                    </Grid.RowDefinitions>-->
                     <TextBlock Text="E-mail:"  Grid.ColumnSpan="2" Style="{StaticResource ResourceKey=AuthTextBlock}"></TextBlock>
                     <TextBox Grid.Row="1" Grid.ColumnSpan="2" Style="{StaticResource ResourceKey=AuthTextBox}" Text="{Binding Email}"/>
 
@@ -106,12 +111,26 @@
                     <TextBlock Text="Confirmed Password:" Grid.Row="6"  Grid.ColumnSpan="2" Style="{StaticResource ResourceKey=AuthTextBlock}"></TextBlock>
                     <PasswordBox x:Name="PassBoxConf" Grid.Row="7" Grid.ColumnSpan="2"  Style="{StaticResource ResourceKey=AuthTextBox}"/>
 
-                    <Button Content="Registration" Grid.Row="8" Style="{StaticResource ResourceKey=AuthButton}" Command="{Binding RegistrationCommand}"/>
-                    <Button Content="Cancel" Grid.Row="8" Grid.Column="1" Style="{StaticResource ResourceKey=AuthButton}" Command="{Binding CloseCommand}" />
+                    <TextBlock Text="Verification code:" Grid.Row="2"  Grid.ColumnSpan="2" Style="{StaticResource ResourceKey=AuthTextBlock}"></TextBlock>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox    Style="{StaticResource ResourceKey=AuthTextBox}" Text="{Binding VerifCode}"/>
+                        <Button Content="{Binding ButtonSendContent}" Command="{Binding SendVerifCodeCommand}" Grid.Column="1" Margin="10"/>
+                    </Grid>  
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Content="Registration" Grid.Row="8" Style="{StaticResource ResourceKey=AuthButton}" Command="{Binding RegistrationCommand}"/>
+                        <Button Content="Cancel" Grid.Row="8" Grid.Column="1" Style="{StaticResource ResourceKey=AuthButton}" Command="{Binding CloseCommand}" />
+                    </Grid>
+                    <TextBlock Text="{Binding Message}" Foreground="LightSkyBlue" Grid.Row="9" Grid.ColumnSpan="2" TextAlignment="Center" TextWrapping="Wrap"/>
 
-                    <TextBlock Text="{Binding Message}" Grid.Row="9" Grid.ColumnSpan="2" TextAlignment="Center" TextWrapping="Wrap"/>
-
-                </Grid>
+                </StackPanel>
             </Border>
         </DataTemplate>
         <Style x:Key="MyContentStyle" TargetType="ContentPresenter">
@@ -125,7 +144,7 @@
 
     </Window.Resources>
     <Grid x:Name="container">
-        <ToggleButton x:Name="TglBtnReg" Style="{StaticResource ResourceKey=ChangeToRegButton}" IsThreeState="False"  Panel.ZIndex="10" Width="125"></ToggleButton>
+        <ToggleButton x:Name="TglBtnReg" Style="{StaticResource ResourceKey=ChangeToRegButton}" IsThreeState="False"  Panel.ZIndex="10" Width="100"></ToggleButton>
         <ContentPresenter Style="{StaticResource MyContentStyle}" x:Name="ContPresenter"  Grid.Row="0" Content="{Binding}"  />
         <!--<Button x:Name="Aaa" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="100" Height="50" Content="546" Click="Aaa_Click"/>-->
     </Grid>

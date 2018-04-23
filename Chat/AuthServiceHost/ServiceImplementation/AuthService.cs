@@ -55,6 +55,10 @@ namespace AuthServiceProvider.ServiceImplementation
             {
                 throw new FaultException("Passwords do not match");
             }
+            if(code!=verifCode)
+            {
+                throw new FaultException("Verification code do not match");
+            }
             var res = access.Registration(email, login, password);
             if(!res.Item1)
             {

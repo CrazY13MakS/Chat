@@ -10,12 +10,17 @@ using System.Net.Mail;
 using System.Security;
 using System.Runtime.InteropServices;
 using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace ChatClient.ViewModel
 {
     class ViewModelLogIn : ViewModelBase
     {
         ClientAuthSercive authSercive = new ClientAuthSercive();
+        DispatcherTimer timer;
+        DateTime timerEnd;
+        bool CanSendCode = true;
+        int delaySendCode;
         // UserAuth _userAuth;
         //public UserAuth UserAuth
         //{
@@ -83,6 +88,22 @@ namespace ChatClient.ViewModel
                 }
             }
         }
+        String _buttonSendContent = "Send";
+        public String ButtonSendContent
+        {
+            get
+            {
+                return _buttonSendContent;
+            }
+            set
+            {
+                if (_buttonSendContent != value)
+                {
+                    _buttonSendContent = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         RelayCommand _sendVerifCode;
         public ICommand SendVerifCodeCommand
@@ -99,17 +120,45 @@ namespace ChatClient.ViewModel
 
         private void ExecuteSendVerifCodeCommand(object parametr)
         {
+            timer = new DispatcherTimer();
+            timer.Interval = new TimeSpan(0, 0, 0, 1);
+            timer.Tick += TimerForVerificationCodeSending_Tick; ;
+            // timerEnd = DateTime.Now.AddSeconds(ClientAuthSercive.SecondsDelay);
+            delaySendCode = ClientAuthSercive.SecondsDelay;
+            timer.Start();
+            // CanSendCode = false;
             var res = authSercive.SendVerificationCode(Email);
             if (!res.IsOk)
             {
                 Message = res.ErrorMessage;
             }
         }
+
+
+
         private bool CanExecuteSendVerifCodeCommand(object parametr)
         {
-            return authSercive.CanSendCode && authSercive.IsValidMail(Email);
+            return delaySendCode < 1 && authSercive.CanSendCode && authSercive.IsValidMail(Email);
         }
 
+        /// <summary>
+        /// Handler for timer
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TimerForVerificationCodeSending_Tick(object sender, EventArgs e)
+        {
+            if (delaySendCode == 0)
+            {
+                timer.Stop();
+                ButtonSendContent = "Send";
+                // CanSendCode = true;
+            }
+            else
+            {
+                ButtonSendContent = delaySendCode--.ToString();
+            }
+        }
 
 
         RelayCommand _logInCommand;
@@ -130,12 +179,19 @@ namespace ChatClient.ViewModel
 
             var window = App.Current.Windows.OfType<ISecurePassword>().FirstOrDefault();
             String pass = ConvertToUnsecureString(window.Password);
-           var res= authSercive.LogIn(Email, pass);
-
+            var res = authSercive.LogIn(Email, pass);
+            if (!res.IsOk)
+            {
+                Message = res.ErrorMessage;
+            }
+            else
+            {
+                Message = "Success";
+            }
         }
         private bool CanExecuteLogInCommand(object parametr)
         {
-            return  authSercive.IsValidMail(Email);
+            return authSercive.IsValidMail(Email);
         }
 
         RelayCommand _registrationCommand;
@@ -159,6 +215,15 @@ namespace ChatClient.ViewModel
             String pass = ConvertToUnsecureString(window.Password);
             String confPass = ConvertToUnsecureString(window.ConfirmedPassword);
             var res = authSercive.Registration(Email, Login, pass, confPass, VerifCode);
+            if (!res.IsOk)
+            {
+                Message = res.ErrorMessage;
+            }
+            else
+            {
+                Message = "Success";
+            }
+
 
         }
         private bool CanExecuteRegistrationCommand(object parametr)
