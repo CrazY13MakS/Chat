@@ -28,8 +28,7 @@ namespace ChatClient
 
         public MainWindow()
         {
-            InitializeComponent();  
-       
+            InitializeComponent();
         }
 
         SecureString GetSecureString(String name)

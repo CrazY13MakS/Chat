@@ -176,7 +176,8 @@ namespace ChatClient.ViewModel
 
         private void ExecuteLogInCommand(object parametr)
         {
-
+            OpenMainAndCloseThis();
+            return;
             var window = App.Current.Windows.OfType<ISecurePassword>().FirstOrDefault();
             String pass = ConvertToUnsecureString(window.Password);
             var res = authSercive.LogIn(Email, pass);
@@ -191,7 +192,7 @@ namespace ChatClient.ViewModel
         }
         private bool CanExecuteLogInCommand(object parametr)
         {
-            return authSercive.IsValidMail(Email);
+            return true;// authSercive.IsValidMail(Email);
         }
 
         RelayCommand _registrationCommand;
@@ -222,16 +223,20 @@ namespace ChatClient.ViewModel
             else
             {
                 Message = "Success";
+                OpenMainAndCloseThis();
             }
-
-
         }
+
         private bool CanExecuteRegistrationCommand(object parametr)
         {
             return authSercive.IsValidMail(Email);
         }
 
-
+        private  void OpenMainAndCloseThis()///Open new window
+        {
+            App.DisplayWindowHelper.ShowPresentation(new ChatMainWindowViewModel());
+            App.DisplayWindowHelper.ClosePresentation(this);
+        }
 
 
         RelayCommand _closeCommand;

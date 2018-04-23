@@ -12,6 +12,7 @@ namespace ContractClient
         Delivered = 2,
         AlreadyRead = 3,
         Sendidg = 4,
-        SendingError = 5
+        SendingError = 5 
+
     }
 }

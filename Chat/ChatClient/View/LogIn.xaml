@@ -148,9 +148,9 @@
         <ContentPresenter Style="{StaticResource MyContentStyle}" x:Name="ContPresenter"  Grid.Row="0" Content="{Binding}"  />
         <!--<Button x:Name="Aaa" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="100" Height="50" Content="546" Click="Aaa_Click"/>-->
     </Grid>
-    <i:Interaction.Triggers>
+    <!--<i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">
             <i:InvokeCommandAction  Command="{Binding CloseCommand}" />
         </i:EventTrigger>
-    </i:Interaction.Triggers>
+    </i:Interaction.Triggers>-->
 </Window>

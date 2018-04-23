@@ -60,6 +60,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="View\ChatControls\ConversationDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\ChatControls\ConversationPreview.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -76,11 +80,15 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Infrastructure\DisplayHelper.cs" />
     <Compile Include="Infrastructure\ISecurePassword.cs" />
     <Compile Include="Infrastructure\RelayCommand.cs" />
     <Compile Include="ViewModel\ChatMainWindowViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="ViewModel\ViewModelLogIn.cs" />
+    <Compile Include="View\ChatControls\ConversationDialog.xaml.cs">
+      <DependentUpon>ConversationDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\ChatControls\ConversationPreview.xaml.cs">
       <DependentUpon>ConversationPreview.xaml</DependentUpon>
     </Compile>
