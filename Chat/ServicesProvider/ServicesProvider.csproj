@@ -4,16 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3B8B9D05-2930-4D47-9A3E-B1BE49361D55}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ContractClient</RootNamespace>
-    <AssemblyName>ContractClient</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <ProjectGuid>{87250217-6A0D-4E3B-834B-B179E185D6A8}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>ServicesProvider</RootNamespace>
+    <AssemblyName>ServicesProvider</AssemblyName>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -31,10 +32,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\DbMain\bin\Debug\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -43,20 +46,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Contracts\IAccountUpdate.cs" />
-    <Compile Include="Contracts\IAuthService.cs" />
-    <Compile Include="Contracts\IChatService.cs" />
-    <Compile Include="Contracts\IChatClient.cs" />
-    <Compile Include="Conversation.cs" />
-    <Compile Include="ConversationMemberStatus.cs" />
-    <Compile Include="ConversationReply.cs" />
-    <Compile Include="ConversationReplyStatus.cs" />
-    <Compile Include="NetworkStatus.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RelationStatus.cs" />
-    <Compile Include="User.cs" />
-    <Compile Include="UserExt.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AuthServiceHost\AuthServiceProvider.csproj">
+      <Project>{5d77105f-7cc7-40ae-b9e1-65c9789301ea}</Project>
+      <Name>AuthServiceProvider</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DbMain\DbMain.csproj">
+      <Project>{83be18b1-4543-4779-9a6f-f1dbd19dd933}</Project>
+      <Name>DbMain</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

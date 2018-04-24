@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace ContractClient
 {
-    public class Class1
+    public enum ConversationReplyStatus
     {
+        Sent = 1,
+        Delivered = 2,
+        AlreadyRead = 3,
+        Sendidg = 4,
+        SendingError = 5
     }
 }
