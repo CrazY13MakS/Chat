@@ -64,7 +64,7 @@ namespace ClientModel
             }
             ConversationReply reply = new ConversationReply()
             {
-                AuthorLogin = Author.Login,
+                Author = Author.Login,
                 Body = body,
                 ConversationId = conversationId,
                 SendingTime = DateTime.UtcNow,

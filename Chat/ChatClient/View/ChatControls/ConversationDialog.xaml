@@ -6,27 +6,113 @@
              xmlns:local="clr-namespace:ChatClient.View.ChatControls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+    <UserControl.Resources>
+        <Style x:Key="MyFocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Control}">
+                        <Grid Margin="8">
+                            <Ellipse
+                    Name="r1"
+                    Stroke="Black"
+                    StrokeDashArray="2 2"
+                    StrokeThickness="1"/>
+                            <Border
+                    Name="border"
+                    Width="{TemplateBinding ActualWidth}"
+                    Height="{TemplateBinding ActualHeight}"
+                    BorderThickness="1"
+                    CornerRadius="2"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="CircleButton" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="FocusVisualStyle" Value="{StaticResource MyFocusVisual}"/>
+            <Setter Property="Background" Value="#FF6DB4EF"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Ellipse Fill="{TemplateBinding Background}"/>
+                            <TextBlock Text="Send" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <Ellipse>
+                                <Ellipse.Fill>
+                                    <RadialGradientBrush>
+                                        <GradientStop Offset="0" Color="#00000000"/>
+                                        <GradientStop Offset="0.88" Color="#00000000"/>
+                                        <GradientStop Offset="1" Color="#80000000"/>
+                                    </RadialGradientBrush>
+                                </Ellipse.Fill>
+                            </Ellipse>
+                            <Ellipse Margin="10" x:Name="highlightCircle" >
+                                <Ellipse.Fill >
+                                    <LinearGradientBrush >
+                                        <GradientStop Offset="0" Color="#50FFFFFF"/>
+                                        <GradientStop Offset="0.5" Color="#00FFFFFF"/>
+                                        <GradientStop Offset="1" Color="#50FFFFFF"/>
+                                    </LinearGradientBrush>
+                                </Ellipse.Fill>
+                            </Ellipse>
+                            <ContentPresenter x:Name="content" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="highlightCircle" Property="Fill">
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0.3,0" EndPoint="0.7,1">
+                                            <GradientStop Offset="0" Color="#50FFFFFF"/>
+                                            <GradientStop Offset="0.5" Color="#00FFFFFF"/>
+                                            <GradientStop Offset="1" Color="#50FFFFFF"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter TargetName="content" Property="RenderTransform">
+                                    <Setter.Value>
+                                        <TranslateTransform Y="0.5" X="0.5"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <DataTemplate x:Key="replyTemplate">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="*"/>
+                    
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{Binding Author}"/>
+                <TextBlock Text="{Binding Body}" Grid.Column="1"/>
+                <TextBlock Text="{Binding SendingTime}" Grid.Column="2"/>
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
+    <Grid Background="Azure">
         <Grid.RowDefinitions>
             <RowDefinition Height="64*"/>
             <RowDefinition Height="298*"/>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="77*"/>
+            <RowDefinition MinHeight="55"/>
         </Grid.RowDefinitions>
         <GridSplitter Grid.Row="2" Height="2" Background="AliceBlue"/>
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="50"/>
             </Grid.ColumnDefinitions>
-            <Border CornerRadius="20" BorderThickness="2" BorderBrush="Black" >
-                <TextBox x:Name="tbMessage" VerticalScrollBarVisibility="Auto" TextWrapping="WrapWithOverflow" Margin="5,0,10,0" />
+            <ListBox ItemsSource="{Binding Messages}" ItemTemplate="{ StaticResource replyTemplate}" Grid.Row="1"/>
+            <Border CornerRadius="20" BorderThickness="2" BorderBrush="Black" Background="White" >
+                <TextBox BorderBrush="Transparent" x:Name="tbMessage" VerticalScrollBarVisibility="Auto" TextWrapping="WrapWithOverflow" Margin="5,7,10,7" />
             </Border>
-            <Button Grid.Column="1">
-                <Ellipse Fill="Azure" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                    
-                </Ellipse>
-            </Button>
+            <Button Grid.Column="1" Style="{StaticResource CircleButton}" Background="Aqua" Height="50"/>
         </Grid>
     </Grid>
 </UserControl>

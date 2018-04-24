@@ -20,7 +20,7 @@ namespace ContractClient
         public long Id { get; set; }
         public long ConversationId { get; set; }
         public String Body { get; set; }
-        public String AuthorLogin { get; set; }
+        public String Author { get; set; }
         public DateTime SendingTime { get; set; }
         bool _isRead;
         public bool IsRead

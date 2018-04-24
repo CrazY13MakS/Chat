@@ -7,7 +7,7 @@ using System.ServiceModel;
 namespace ContractClient.Contracts
 {
     [ServiceContract(SessionMode = SessionMode.Allowed)]
-   public interface IAccountUpdate
+    public interface IAccountUpdate
     {
         /// <summary>
         /// Запрос на добаление в друзья
@@ -16,24 +16,24 @@ namespace ContractClient.Contracts
         /// <param name="userLogin">Уникальный логин аккаунта для отправки запроса</param>
         /// <returns></returns>
         [OperationContract]                                                      /// >0  - Id вашего чата
-        User FriendshipRequest(String body, String userLogin);                  /// -1  - запрос уже отправлен
-                                                                                /// -2 - вы в черном списке
+        OperationResult<User> FriendshipRequest(String body, String userLogin);                  /// -1  - запрос уже отправлен
+                                                                                                 /// -2 - вы в черном списке
         [OperationContract]
-        bool ChangeNetworkStatus(String token, NetworkStatus status);
+        OperationResult<bool> ChangeNetworkStatus( NetworkStatus status);
 
         [OperationContract]
-        List<User> FindUsers(String token, String param);
+        OperationResult<List<User>> FindUsers(String param);
 
         [OperationContract]
-        String UpdateProfile(UserExt user);
+        OperationResult<bool> UpdateProfile(UserExt user);
 
         [OperationContract]
-        bool FrienshipResponse(String login, bool isConfirmed);
+        OperationResult<bool> FrienshipResponse(String login, bool isConfirmed);
 
         [OperationContract]
-        bool BlockedUser(String login);
+        OperationResult<bool> BlockUser(String login);
 
         [OperationContract]
-        bool UnBlockedUser(String login);
+        OperationResult<bool> UnBlockUser(String login);
     }
 }

@@ -72,6 +72,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\FindFriends.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\LogIn.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -84,6 +88,7 @@
     <Compile Include="Infrastructure\ISecurePassword.cs" />
     <Compile Include="Infrastructure\RelayCommand.cs" />
     <Compile Include="ViewModel\ChatMainWindowViewModel.cs" />
+    <Compile Include="ViewModel\FindFriendsVM.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="ViewModel\ViewModelLogIn.cs" />
     <Compile Include="View\ChatControls\ConversationDialog.xaml.cs">
@@ -94,6 +99,9 @@
     </Compile>
     <Compile Include="View\ChatMainWindow.xaml.cs">
       <DependentUpon>ChatMainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\FindFriends.xaml.cs">
+      <DependentUpon>FindFriends.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\LogIn.xaml.cs">
       <DependentUpon>LogIn.xaml</DependentUpon>

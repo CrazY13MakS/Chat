@@ -52,6 +52,7 @@
     <Compile Include="ConversationReply.cs" />
     <Compile Include="ConversationReplyStatus.cs" />
     <Compile Include="NetworkStatus.cs" />
+    <Compile Include="OperationResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RelationStatus.cs" />
     <Compile Include="User.cs" />
