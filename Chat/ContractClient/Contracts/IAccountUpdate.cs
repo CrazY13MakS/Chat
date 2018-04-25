@@ -6,34 +6,47 @@ using System.Threading.Tasks;
 using System.ServiceModel;
 namespace ContractClient.Contracts
 {
-    [ServiceContract(SessionMode = SessionMode.Allowed)]
+    [ServiceContract( ProtectionLevel = System.Net.Security.ProtectionLevel.EncryptAndSign, SessionMode = SessionMode.Allowed)]
     public interface IAccountUpdate
     {
+
+        [OperationContract(IsInitiating = true)]
+        OperationResult<bool> Authentication(String token);
+
+
         /// <summary>
         /// Запрос на добаление в друзья
         /// </summary>
         /// <param name="body">Текст при отправке запроса</param>
         /// <param name="userLogin">Уникальный логин аккаунта для отправки запроса</param>
         /// <returns></returns>
-        [OperationContract]                                                      /// >0  - Id вашего чата
+        [OperationContract(IsInitiating =false)]                                                      /// >0  - Id вашего чата
         OperationResult<User> FriendshipRequest(String body, String userLogin);                  /// -1  - запрос уже отправлен
                                                                                                  /// -2 - вы в черном списке
-        [OperationContract]
+        [OperationContract(IsInitiating = false)]
         OperationResult<bool> ChangeNetworkStatus( NetworkStatus status);
 
-        [OperationContract]
-        OperationResult<List<User>> FindUsers(String param);
+        [OperationContract(IsInitiating = false)]
+        OperationResult<List<User>> FindUsers( String param);
 
-        [OperationContract]
-        OperationResult<bool> UpdateProfile(UserExt user);
+        [OperationContract(IsInitiating = false)]
+        OperationResult<bool> UpdateProfile( UserExt user);
 
-        [OperationContract]
-        OperationResult<bool> FrienshipResponse(String login, bool isConfirmed);
+        [OperationContract(IsInitiating = false)]
+        OperationResult<bool> UpdateRelationType(String login, RelationStatus status);
 
-        [OperationContract]
-        OperationResult<bool> BlockUser(String login);
+        //[OperationContract(IsInitiating = false)]
+        //OperationResult<bool> FrienshipResponse( String login, bool isConfirmed);
 
-        [OperationContract]
-        OperationResult<bool> UnBlockUser(String login);
+        //[OperationContract(IsInitiating = false)]
+        //OperationResult<bool> BlockUser(String login);
+
+        //[OperationContract(IsInitiating = false)]
+        //OperationResult<bool> UnBlockUser( String login);
+
+        [OperationContract(IsInitiating = false)]
+        OperationResult<List<User>> GetBlockedUsers();
+
+
     }
 }

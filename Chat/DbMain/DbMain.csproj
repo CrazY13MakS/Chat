@@ -97,6 +97,9 @@
     <Compile Include="EFDbContext\Gender.cs">
       <DependentUpon>Chat.tt</DependentUpon>
     </Compile>
+    <Compile Include="EFDbContext\NetworkStatus.cs">
+      <DependentUpon>Chat.tt</DependentUpon>
+    </Compile>
     <Compile Include="EFDbContext\RelationshipType.cs">
       <DependentUpon>Chat.tt</DependentUpon>
     </Compile>

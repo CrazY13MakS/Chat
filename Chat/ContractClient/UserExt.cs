@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ContractClient
 {
-  public  class UserExt : User
+    public class UserExt : User
     {
         [DataMember]
         public int FriendsCount { get; set; }

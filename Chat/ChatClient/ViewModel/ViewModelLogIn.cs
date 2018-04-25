@@ -176,8 +176,6 @@ namespace ChatClient.ViewModel
 
         private void ExecuteLogInCommand(object parametr)
         {
-            OpenMainAndCloseThis();
-            return;
             var window = App.Current.Windows.OfType<ISecurePassword>().FirstOrDefault();
             String pass = ConvertToUnsecureString(window.Password);
             var res = authSercive.LogIn(Email, pass);
@@ -188,6 +186,7 @@ namespace ChatClient.ViewModel
             else
             {
                 Message = "Success";
+            OpenMainAndCloseThis();
             }
         }
         private bool CanExecuteLogInCommand(object parametr)

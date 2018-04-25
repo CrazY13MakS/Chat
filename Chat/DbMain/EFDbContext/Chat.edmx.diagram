@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="d2a804619e3b4f6c8448629e4c7eea76" Name="Diagram1">
+      <Diagram DiagramId="84cc6c206b4f431a94f0e864b18b0fad" Name="Diagram1" DisplayType="true">
         <EntityTypeShape EntityType="ChatModel.AccessToken" Width="1.5" PointX="7.5" PointY="9.75" IsExpanded="true" />
         <EntityTypeShape EntityType="ChatModel.City" Width="1.5" PointX="3" PointY="9.875" IsExpanded="true" />
         <EntityTypeShape EntityType="ChatModel.Contact" Width="1.5" PointX="10.5" PointY="9.375" IsExpanded="true" />
@@ -12,12 +12,13 @@
         <EntityTypeShape EntityType="ChatModel.ConversationMemberStatus" Width="1.5" PointX="5.25" PointY="5.125" IsExpanded="true" />
         <EntityTypeShape EntityType="ChatModel.ConversationReply" Width="1.5" PointX="7.5" PointY="13.375" IsExpanded="true" />
         <EntityTypeShape EntityType="ChatModel.ConversationReplyStatus" Width="1.5" PointX="5.25" PointY="15.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="ChatModel.Conversation" Width="2.5" PointX="10.75" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ChatModel.Conversation" Width="1.5" PointX="10.5" PointY="3.875" IsExpanded="true" />
         <EntityTypeShape EntityType="ChatModel.ConversationType" Width="1.5" PointX="8.25" PointY="2.125" IsExpanded="true" />
         <EntityTypeShape EntityType="ChatModel.Country" Width="1.5" PointX="0.75" PointY="10.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="ChatModel.Gender" Width="1.5" PointX="3" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ChatModel.Gender" Width="1.5" PointX="3" PointY="6.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ChatModel.NetworkStatus" Width="1.5" PointX="3" PointY="13.25" IsExpanded="true" />
         <EntityTypeShape EntityType="ChatModel.RelationshipType" Width="1.5" PointX="8.25" PointY="18.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="ChatModel.User" Width="1.5" PointX="5.25" PointY="8.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ChatModel.User" Width="1.5" PointX="5.25" PointY="7.75" IsExpanded="true" />
         <AssociationConnector Association="ChatModel.AccessTokens_fk0" ManuallyRouted="false" />
         <AssociationConnector Association="ChatModel.Cities_fk0" ManuallyRouted="false" />
         <AssociationConnector Association="ChatModel.Users_fk0" ManuallyRouted="false" />
@@ -36,6 +37,7 @@
         <AssociationConnector Association="ChatModel.Conversations_fk1" ManuallyRouted="false" />
         <AssociationConnector Association="ChatModel.Conversations_fk2" ManuallyRouted="false" />
         <AssociationConnector Association="ChatModel.Users_fk1" ManuallyRouted="false" />
+        <AssociationConnector Association="ChatModel.Users_fk2" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

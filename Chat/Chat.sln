@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatServiceProvider", "Chat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbMain", "DbMain\DbMain.csproj", "{83BE18B1-4543-4779-9A6F-F1DBD19DD933}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountUpdateProvider", "AccountUpdateProvider\AccountUpdateProvider.csproj", "{9EA9F434-9243-4A9A-85D9-ECAA53B9C1D9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{83BE18B1-4543-4779-9A6F-F1DBD19DD933}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83BE18B1-4543-4779-9A6F-F1DBD19DD933}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83BE18B1-4543-4779-9A6F-F1DBD19DD933}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9EA9F434-9243-4A9A-85D9-ECAA53B9C1D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EA9F434-9243-4A9A-85D9-ECAA53B9C1D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EA9F434-9243-4A9A-85D9-ECAA53B9C1D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EA9F434-9243-4A9A-85D9-ECAA53B9C1D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

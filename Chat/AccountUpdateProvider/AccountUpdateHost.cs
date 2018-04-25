@@ -1,25 +1,24 @@
-﻿using ContractClient.Contracts;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AuthServiceProvider
+namespace AccountUpdateProvider
 {
-    public class AuthHost
+    public class AccountUpdateHost
     {
         ServiceHost host;
-        public AuthHost()
+        public AccountUpdateHost()
         {
-            host = new ServiceHost(typeof(ServiceImplementation.AuthService));
+          //  host = new ServiceHost(typeof(.AuthService));
         }
         public void Open()
         {
             Console.WriteLine("Auth host started");
             //host.AddServiceEndpoint(new EndpointAddress("net.tcp://localhost:4000/Auth"),)
-          //  host.AddServiceEndpoint(typeof(IAuthService), new NetTcpBinding(), "net.tcp://localhost:4000/Auth");
+            //  host.AddServiceEndpoint(typeof(IAuthService), new NetTcpBinding(), "net.tcp://localhost:4000/Auth");
             host.Open();
         }
         public void Close()

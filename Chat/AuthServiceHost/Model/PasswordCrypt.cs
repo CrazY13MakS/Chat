@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AuthServiceProvider.Model
 {
-    class PasswordCrypt
+   public class PasswordCrypt
     {
         /// <summary>
         /// Generate hash and salt from password

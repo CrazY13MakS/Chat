@@ -61,6 +61,8 @@ namespace AuthServiceProvider.Model
                 return new Tuple<bool, string>(false, ex.Message);
             }
         }
+
+
         private AccessToken GenerateToken(User user)
         {
             var token = new AccessToken()
@@ -70,11 +72,15 @@ namespace AuthServiceProvider.Model
             };
             return token;
         }
+
+
         private String CreateToken()
         {
             var guid = Guid.NewGuid().ToString();
             return guid + DateTime.UtcNow.ToLongTimeString();
         }
+
+
         public Tuple<bool, String> IsValidPassword(String password)
         {
             if (String.IsNullOrWhiteSpace(password))
