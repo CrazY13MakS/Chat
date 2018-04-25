@@ -80,7 +80,7 @@ namespace AuthServiceProvider.Model
             }
             try
             {
-                return Regex.IsMatch(input, "^[a-z_][a-z0-9_]{5,50}$");
+                return Regex.IsMatch(input, "^[a-z_][a-z0-9_]{4,49}$");
             }
             catch (RegexMatchTimeoutException)
             {

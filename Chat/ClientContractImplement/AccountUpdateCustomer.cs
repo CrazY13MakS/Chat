@@ -9,7 +9,7 @@ using ContractClient;
 using ContractClient.Contracts;
 namespace ClientContractImplement
 {
-    class AccountUpdateCustomer : IDisposable
+    public class AccountUpdateCustomer : IDisposable
     {
         //Uri address = new Uri("http://localhost:4000/Auth");
         //NetTcpBinding binding = new NetTcpBinding();
@@ -20,7 +20,14 @@ namespace ClientContractImplement
             factory = new ChannelFactory<IAccountUpdate>("ClientAccUpdateEndPoint");
             factory.Faulted += Factory_Faulted;
             channel = factory.CreateChannel();
-
+            channel.Authentication("f1c67506-060c-456b-992f-83109a1c520014:01:09");
+        }
+        public AccountUpdateCustomer(String token)
+        {
+            factory = new ChannelFactory<IAccountUpdate>("ClientAccUpdateEndPoint");
+            factory.Faulted += Factory_Faulted;
+            channel = factory.CreateChannel();
+            channel.Authentication(token);
         }
 
         private void Factory_Faulted(object sender, EventArgs e)
@@ -40,7 +47,7 @@ namespace ClientContractImplement
             factory?.Close();
         }
 
-        OperationResult<User> FriendshipRequest(String body, String userLogin)
+        public OperationResult<User> FriendshipRequest(String body, String userLogin)
         {
             OperationResult<User> result = null;
             try
@@ -64,7 +71,7 @@ namespace ClientContractImplement
             channel = factory.CreateChannel();
         }
 
-        OperationResult<bool> ChangeNetworkStatus(NetworkStatus status)
+        public OperationResult<bool> ChangeNetworkStatus(NetworkStatus status)
         {
             try
             {
@@ -83,7 +90,7 @@ namespace ClientContractImplement
         }
 
 
-        OperationResult<List<User>> FindUsers( String param)
+        public OperationResult<List<User>> FindUsers(String param)
         {
             try
             {
@@ -102,7 +109,7 @@ namespace ClientContractImplement
         }
 
 
-       OperationResult< bool> UpdateProfile(UserExt user)
+        public OperationResult<bool> UpdateProfile(UserExt user)
         {
             try
             {
@@ -121,62 +128,62 @@ namespace ClientContractImplement
         }
 
 
-        OperationResult<bool> FrienshipResponse(String login, bool isConfirmed)
-        {
-            try
-            {
-                return channel.FrienshipResponse(login, isConfirmed);
-            }
-            catch (CommunicationException ex)
-            {
-                ReloadChannel();
-                var res = FrienshipResponse(login, isConfirmed);
-                if (!res.IsOk)
-                {
-                    res = new OperationResult<bool>(false, false, ex.Message);
-                }
-                return res;
-            }
-        }
+        //OperationResult<bool> FrienshipResponse(String login, bool isConfirmed)
+        //{
+        //    try
+        //    {
+        //        return channel.FrienshipResponse(login, isConfirmed);
+        //    }
+        //    catch (CommunicationException ex)
+        //    {
+        //        ReloadChannel();
+        //        var res = FrienshipResponse(login, isConfirmed);
+        //        if (!res.IsOk)
+        //        {
+        //            res = new OperationResult<bool>(false, false, ex.Message);
+        //        }
+        //        return res;
+        //    }
+        //}
 
 
-        OperationResult<bool> BlockUser(String login)
-        {
-            try
-            {
-                return channel.BlockUser(login);
-            }
-            catch (CommunicationException ex)
-            {
-                ReloadChannel();
-                var res = channel.BlockUser(login);
-                if (!res.IsOk)
-                {
-                    res = new OperationResult<bool>(false, false, ex.Message);
-                }
-                return res;
-            }
-        }
+        //OperationResult<bool> BlockUser(String login)
+        //{
+        //    try
+        //    {
+        //        return channel.BlockUser(login);
+        //    }
+        //    catch (CommunicationException ex)
+        //    {
+        //        ReloadChannel();
+        //        var res = channel.BlockUser(login);
+        //        if (!res.IsOk)
+        //        {
+        //            res = new OperationResult<bool>(false, false, ex.Message);
+        //        }
+        //        return res;
+        //    }
+        //}
 
 
-        OperationResult<bool> UnBlockUser(String login)
-        {
-            try
-            {
-                return channel.UnBlockUser(login);
-            }
-            catch (CommunicationException ex)
-            {
-                ReloadChannel();
+        //OperationResult<bool> UnBlockUser(String login)
+        //{
+        //    try
+        //    {
+        //        return channel.UnBlockUser(login);
+        //    }
+        //    catch (CommunicationException ex)
+        //    {
+        //        ReloadChannel();
 
-                var res = UnBlockUser(login);
-                if (!res.IsOk)
-                {
-                    res = new OperationResult<bool>(false, false, ex.Message);
-                }
-                return res;
-            }
-        }
+        //        var res = UnBlockUser(login);
+        //        if (!res.IsOk)
+        //        {
+        //            res = new OperationResult<bool>(false, false, ex.Message);
+        //        }
+        //        return res;
+        //    }
+        //}
 
     }
 }

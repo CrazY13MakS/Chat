@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace ContractClient
 {
+    [Serializable]
     public class OperationResult<T>
     {
         public OperationResult(T response, bool isOk = true, String error = "")

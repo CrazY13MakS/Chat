@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.ServiceModel;
 namespace ContractClient.Contracts
 {
-    [ServiceContract( ProtectionLevel = System.Net.Security.ProtectionLevel.EncryptAndSign, SessionMode = SessionMode.Allowed)]
+    [ServiceContract( ProtectionLevel = System.Net.Security.ProtectionLevel.EncryptAndSign, SessionMode = SessionMode.Required)]
     public interface IAccountUpdate
     {
 
@@ -33,7 +33,7 @@ namespace ContractClient.Contracts
         OperationResult<bool> UpdateProfile( UserExt user);
 
         [OperationContract(IsInitiating = false)]
-        OperationResult<bool> UpdateRelationType(String login, RelationStatus status);
+        OperationResult<bool> ChangeRelationType(String login, RelationStatus status);
 
         //[OperationContract(IsInitiating = false)]
         //OperationResult<bool> FrienshipResponse( String login, bool isConfirmed);

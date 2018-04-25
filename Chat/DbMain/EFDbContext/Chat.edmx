@@ -13,7 +13,7 @@
           <Property Name="UserId" Type="bigint" Nullable="false" />
           <Property Name="Token" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Created" Type="datetimeoffset" Precision="7" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" StoreGeneratedPattern="Identity" />
         </EntityType>
         <EntityType Name="Cities">
           <Key>
@@ -476,7 +476,7 @@
           <Property Name="UserId" Type="Int64" Nullable="false" />
           <Property Name="Token" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="User" Relationship="Self.AccessTokens_fk0" FromRole="AccessTokens" ToRole="Users" />
         </EntityType>
         <EntityType Name="City">
@@ -564,7 +564,7 @@
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="LastChange" Type="DateTimeOffset" Nullable="false" Precision="7" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="Icon" Type="Binary" MaxLength="Max" FixedLength="false" />
-          <Property Name="ConversationTypeId" Type="Int32" Nullable="false" />
+          <Property Name="ConversationTypeId" Type="Int32" Nullable="false" DefaultValue="1" />
           <NavigationProperty Name="Contacts" Relationship="Self.Contacts_fk3" FromRole="Conversations" ToRole="Contacts" />
           <NavigationProperty Name="ConversationMembers" Relationship="Self.ConversationMembers_fk0" FromRole="Conversations" ToRole="ConversationMembers" />
           <NavigationProperty Name="ConversationReplies" Relationship="Self.ConversationReplies_fk1" FromRole="Conversations" ToRole="ConversationReplies" />

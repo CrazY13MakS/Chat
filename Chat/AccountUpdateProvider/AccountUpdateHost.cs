@@ -12,7 +12,7 @@ namespace AccountUpdateProvider
         ServiceHost host;
         public AccountUpdateHost()
         {
-          //  host = new ServiceHost(typeof(.AuthService));
+            host = new ServiceHost(typeof(AccountUpdateProvider.ServiceImplementation.AccountUpdateServiceprovider));
         }
         public void Open()
         {

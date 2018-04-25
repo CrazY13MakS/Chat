@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AuthServiceProvider;
 using DbMain.EFDbContext;
+using AccountUpdateProvider;
 
 namespace ServicesProvider
 {
@@ -13,8 +14,9 @@ namespace ServicesProvider
         static void Main(string[] args)
         {
             AuthHost authHost = new AuthHost();
+            AccountUpdateHost accHost = new AccountUpdateHost();
             authHost.Open();
-
+            accHost.Open();
             //AuthServiceProvider.Model.UserAccess a = new AuthServiceProvider.Model.UserAccess();
             ////   var res =  a.Registration("crazy13maks@gmail.com", "crazy13maks", "!QAZ2wsx");
 
@@ -52,10 +54,17 @@ namespace ServicesProvider
             //    };
 
             //}
-            // AuthServiceProvider.Model.UserAccess userAccess = new AuthServiceProvider.Model.UserAccess();
-            // userAccess.Registration("crazy13maks@gmail.com", "crazy13maks", "!QAZ2wsx");
+            //AuthServiceProvider.Model.UserAccess userAccess = new AuthServiceProvider.Model.UserAccess();
+            //userAccess.Registration("temp@temp.com", "temp1", "!QAZ2wsx");
+            //userAccess.Registration("temp2@temp.com", "temp2", "!QAZ2wsx");
+            //userAccess.Registration("temp3@temp.com", "temp3", "!QAZ2wsx");
+            while (true)
+            {
+
+            }
             Console.ReadKey();
             authHost.Close();
+            accHost.Close();
         }
     }
 }
