@@ -5,16 +5,20 @@ using System.Text;
 using System.Threading.Tasks;
 using ContractClient;
 using ContractClient.Contracts;
+using AccountRelationsProvider.Model;
+using System.ServiceModel;
 
-namespace AccountUpdateProvider.ServiceImplementation
+namespace AccountRelationsProvider.ServiceImplementation
 {
-    public class AccountUpdateServiceprovider : IAccountUpdate, IDisposable
+    public class AccountRelationsServiceProvider : IRelations, IDisposable
     {
         DbMain.EFDbContext.ChatEntities db;
         DbMain.EFDbContext.User curUser;
-        public AccountUpdateServiceprovider()
+        public readonly IRelationsCallback Callback;
+        public AccountRelationsServiceProvider()
         {
             Console.WriteLine($"AccountUpdateServiceprovider new id= {this.GetHashCode()}");
+            Callback = OperationContext.Current.GetCallbackChannel<IRelationsCallback>();
         }
 
         public OperationResult<bool> Authentication(string token)
@@ -31,6 +35,8 @@ namespace AccountUpdateProvider.ServiceImplementation
                         return new OperationResult<bool>(true);
                     }
                     access.User.NetworkStatusId = (int)NetworkStatus.OnLine;
+                    db.SaveChanges();
+                    UserRelationsMain.OnlineUsers.TryAdd(access.User.Login, this);
                     return new OperationResult<bool>(false, false, "Faild authorization");
                 }
             }
@@ -41,6 +47,15 @@ namespace AccountUpdateProvider.ServiceImplementation
             }
         }
 
+        private List<String> GetUsers(DbMain.EFDbContext.ChatEntities db, RelationStatus relation)
+        {
+            var user = db.Users.FirstOrDefault(x => x.Id == curUser.Id);
+            List<String> result = user.Contacts.Where(x => (RelationStatus)x.RelationTypeId == relation).Select(x => x.User1.Login).ToList();
+            result.AddRange(user.Contacts1.Where(x => (RelationStatus)x.RelationTypeId == relation).Select(x => x.User.Login).ToList());
+            return result;
+            // var convers = db.Contacts.Where(x => (x.AdderId == curUser.Id || x.InvitedId == curUser.Id) && (RelationStatus)x.RelationTypeId == relation).ToList();
+            // var friends = convers.Select(x => x.AdderId == curUser.Id ? x.User1.Login : x.User.Login).ToList();
+        }
 
         public OperationResult<bool> ChangeNetworkStatus(NetworkStatus status)
         {
@@ -50,8 +65,18 @@ namespace AccountUpdateProvider.ServiceImplementation
             {
                 using (db = new DbMain.EFDbContext.ChatEntities())
                 {
-                    db.Users.FirstOrDefault(x => x.Id == curUser.Id).NetworkStatusId = (int)status;
-                    return db.SaveChanges() == 1 ? new OperationResult<bool>(true) : new OperationResult<bool>(false, false, "DB Error");
+
+                    var user = db.Users.FirstOrDefault(x => x.Id == curUser.Id);
+                    user.NetworkStatusId = (int)status;
+                    var friends = GetUsers(db, RelationStatus.Friendship);
+                    var res = db.SaveChanges();
+                    if (res == 1)
+                    {
+                        UserRelationsMain.UserNetworkStatusChange(friends, curUser.Login, status);
+                        return new OperationResult<bool>(true);
+                    }
+
+                    return new OperationResult<bool>(false, false, "DB Error");
                 }
             }
             catch (Exception ex)
@@ -154,7 +179,7 @@ namespace AccountUpdateProvider.ServiceImplementation
                                 break;
                         }
                     }
-                    if (contact == null)
+                    else
                     {
                         contact = new DbMain.EFDbContext.Contact()
                         {
@@ -263,8 +288,8 @@ namespace AccountUpdateProvider.ServiceImplementation
 
         public void Dispose()
         {
-            Console.WriteLine($"AccountUpdateServiceprovider Disposed id= {this.GetHashCode()}");
-
+            var res = UserRelationsMain.OnlineUsers.TryRemove(curUser.Login, out AccountRelationsServiceProvider serviceprovider);
+            Console.WriteLine($"AccountUpdateServiceprovider Disposed id= {this.GetHashCode()}, login {curUser.Login}, result - {res}");
         }
     }
 }

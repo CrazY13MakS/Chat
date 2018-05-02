@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatServiceProvider", "Chat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbMain", "DbMain\DbMain.csproj", "{83BE18B1-4543-4779-9A6F-F1DBD19DD933}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountUpdateProvider", "AccountUpdateProvider\AccountUpdateProvider.csproj", "{9EA9F434-9243-4A9A-85D9-ECAA53B9C1D9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountRelationsProvider", "AccountUpdateProvider\AccountRelationsProvider.csproj", "{9EA9F434-9243-4A9A-85D9-ECAA53B9C1D9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

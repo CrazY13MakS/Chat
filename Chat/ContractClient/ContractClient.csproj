@@ -43,10 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Contracts\IAccountUpdate.cs" />
+    <Compile Include="Contracts\IRelations.cs" />
     <Compile Include="Contracts\IAuthService.cs" />
     <Compile Include="Contracts\IChatService.cs" />
     <Compile Include="Contracts\IChatClient.cs" />
+    <Compile Include="Contracts\IRelationsCallback.cs" />
     <Compile Include="Conversation.cs" />
     <Compile Include="ConversationMemberStatus.cs" />
     <Compile Include="ConversationReply.cs" />

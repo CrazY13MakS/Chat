@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using System.ServiceModel;
 namespace ContractClient.Contracts
 {
-    [ServiceContract( ProtectionLevel = System.Net.Security.ProtectionLevel.EncryptAndSign, SessionMode = SessionMode.Required)]
-    public interface IAccountUpdate
+    [ServiceContract(CallbackContract = typeof(IChatClient), ProtectionLevel = System.Net.Security.ProtectionLevel.EncryptAndSign, SessionMode = SessionMode.Required)]
+    public interface IRelations
     {
 
         [OperationContract(IsInitiating = true)]

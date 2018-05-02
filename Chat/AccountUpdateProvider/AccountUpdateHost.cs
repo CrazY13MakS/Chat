@@ -5,14 +5,14 @@ using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AccountUpdateProvider
+namespace AccountRelationsProvider
 {
     public class AccountUpdateHost
     {
         ServiceHost host;
         public AccountUpdateHost()
         {
-            host = new ServiceHost(typeof(AccountUpdateProvider.ServiceImplementation.AccountUpdateServiceprovider));
+            host = new ServiceHost(typeof(AccountRelationsProvider.ServiceImplementation.AccountRelationsServiceProvider));
         }
         public void Open()
         {

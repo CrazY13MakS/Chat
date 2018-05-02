@@ -41,10 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountUpdateCustomer.cs" />
+    <Compile Include="AccountRelationsCallback.cs" />
+    <Compile Include="AccountRelationsCustomer.cs" />
     <Compile Include="ChatCustomerCallbackService.cs" />
     <Compile Include="ChatCustomerService.cs" />
     <Compile Include="ClientAuthSercive.cs" />
+    <Compile Include="MainModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserAuth.cs" />
   </ItemGroup>

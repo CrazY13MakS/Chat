@@ -7,13 +7,14 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using ClientContractImplement;
-namespace ClientModel
+
+namespace ClientContractImplement
 {
     public class ModelMain : INotifyPropertyChanged
     {
         ChatCustomerCallbackService callbackService;
         ChatCustomerService chat;
+        
         public ModelMain(String token)
         {
             callbackService = new ChatCustomerCallbackService();

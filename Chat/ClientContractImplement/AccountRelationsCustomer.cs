@@ -9,31 +9,35 @@ using ContractClient;
 using ContractClient.Contracts;
 namespace ClientContractImplement
 {
-    public class AccountUpdateCustomer : IDisposable
+    public class AccountRelationsCustomer : IDisposable
     {
         //Uri address = new Uri("http://localhost:4000/Auth");
         //NetTcpBinding binding = new NetTcpBinding();
-        ChannelFactory<IAccountUpdate> factory = null;
-        IAccountUpdate channel;
-        public AccountUpdateCustomer()
+        DuplexChannelFactory<IRelations> factory = null;
+        IRelations channel;
+        InstanceContext context;
+        private readonly String connectionString = "ClientAccUpdateEndPoint";
+        public AccountRelationsCustomer(String token, IRelationsCallback callback)
         {
-            factory = new ChannelFactory<IAccountUpdate>("ClientAccUpdateEndPoint");
-            factory.Faulted += Factory_Faulted;
-            channel = factory.CreateChannel();
-            channel.Authentication("f1c67506-060c-456b-992f-83109a1c520014:01:09");
-        }
-        public AccountUpdateCustomer(String token)
-        {
-            factory = new ChannelFactory<IAccountUpdate>("ClientAccUpdateEndPoint");
+            context = new InstanceContext(callback);
+            factory = new DuplexChannelFactory<IRelations>(context,connectionString);
             factory.Faulted += Factory_Faulted;
             channel = factory.CreateChannel();
             channel.Authentication(token);
         }
+        //public AccountRelationsCustomer(String token)
+        //{
+        //    factory = new DuplexChannelFactory<IRelations>("ClientAccUpdateEndPoint");
+        //    factory.Faulted += Factory_Faulted;
+        //    channel = factory.CreateChannel();
+        //    channel.Authentication(token);
+        //}
 
         private void Factory_Faulted(object sender, EventArgs e)
         {
             try
             {
+                factory = new DuplexChannelFactory<IRelations>(context, connectionString);
                 channel = factory.CreateChannel();
             }
             catch (Exception ex)

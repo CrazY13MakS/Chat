@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using AuthServiceProvider;
 using DbMain.EFDbContext;
-using AccountUpdateProvider;
-using AccountUpdateProvider.ServiceImplementation;
+using AccountRelationsProvider;
+using AccountRelationsProvider.ServiceImplementation;
 using AuthServiceProvider.ServiceImplementation;
 
 namespace ServicesProvider
@@ -20,7 +20,7 @@ namespace ServicesProvider
             authHost.Open();
             accHost.Open();
 
-            AccountUpdateServiceprovider account = new AccountUpdateServiceprovider();
+            AccountRelationsServiceProvider account = new AccountRelationsServiceProvider();
             AuthService auth = new AuthService();
           var res1=  auth.LogIn("temp@temp.com", "!QAZ2wsx");
            var res2= account.Authentication(res1);

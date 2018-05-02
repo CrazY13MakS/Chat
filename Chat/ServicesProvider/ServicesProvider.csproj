@@ -53,9 +53,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AccountUpdateProvider\AccountUpdateProvider.csproj">
+    <ProjectReference Include="..\AccountUpdateProvider\AccountRelationsProvider.csproj">
       <Project>{9ea9f434-9243-4a9a-85d9-ecaa53b9c1d9}</Project>
-      <Name>AccountUpdateProvider</Name>
+      <Name>AccountRelationsProvider</Name>
     </ProjectReference>
     <ProjectReference Include="..\AuthServiceHost\AuthServiceProvider.csproj">
       <Project>{5d77105f-7cc7-40ae-b9e1-65c9789301ea}</Project>

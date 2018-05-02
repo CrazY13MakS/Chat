@@ -12,7 +12,7 @@ namespace ChatClient.ViewModel
 {
     class FindFriendsVM : ViewModelBase
     {
-        ClientContractImplement.AccountUpdateCustomer account = new ClientContractImplement.AccountUpdateCustomer(App.Token);
+       // ClientContractImplement.AccountRelationsCustomer account = new ClientContractImplement.AccountRelationsCustomer(App.Token, );
         String _searchQuery;
         public String SearchQuery
         {
@@ -79,8 +79,8 @@ namespace ChatClient.ViewModel
 
         private void ExecuteFindCommand(object parametr)
         {
-            var res = account.FindUsers(SearchQuery);
-            Users = new ObservableCollection<User>(res.Response);
+           // var res = account.FindUsers(SearchQuery);
+           // Users = new ObservableCollection<User>(res.Response);
 
         }
 
@@ -105,7 +105,7 @@ namespace ChatClient.ViewModel
 
         private void ExecuteSendFriendRequestCommand(object parametr)
         {
-            var res = account.FriendshipRequest("hello", SelectedUser.Login);
+          //  var res = account.FriendshipRequest("hello", SelectedUser.Login);
 
         }
 
