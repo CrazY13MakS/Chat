@@ -16,14 +16,14 @@ namespace AccountUpdateProvider
         }
         public void Open()
         {
-            Console.WriteLine("Auth host started");
+            Console.WriteLine("AccountUpdateHost host started");
             //host.AddServiceEndpoint(new EndpointAddress("net.tcp://localhost:4000/Auth"),)
             //  host.AddServiceEndpoint(typeof(IAuthService), new NetTcpBinding(), "net.tcp://localhost:4000/Auth");
             host.Open();
         }
         public void Close()
         {
-            Console.WriteLine("Auth host closed");
+            Console.WriteLine("AccountUpdateHost host closed");
             host.Close();
         }
     }

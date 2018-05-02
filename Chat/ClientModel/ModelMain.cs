@@ -18,7 +18,9 @@ namespace ClientModel
         {
             callbackService = new ChatCustomerCallbackService();
             chat = new ChatCustomerService(token, callbackService);
+            Author = chat.Authentication();
         }
+
         public delegate void ErrorHandler(String action, string message);
         public event ErrorHandler Error;
 
@@ -34,6 +36,27 @@ namespace ClientModel
                 if (_conversations != value)
                 {
                     _conversations = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
+        ObservableCollection<User> _contacts;
+        public ObservableCollection<User> Contacts
+        {
+            get
+            {
+                if(_contacts==null)
+                {
+                   
+                }
+                return _contacts;
+            }
+            set
+            {
+                if (_contacts != value)
+                {
+                    _contacts = value;
                     RaisePropertyChanged();
                 }
             }

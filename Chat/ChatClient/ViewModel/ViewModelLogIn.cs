@@ -120,9 +120,10 @@ namespace ChatClient.ViewModel
 
         private void ExecuteSendVerifCodeCommand(object parametr)
         {
+            ButtonSendContent = "Sending...";
             timer = new DispatcherTimer();
             timer.Interval = new TimeSpan(0, 0, 0, 1);
-            timer.Tick += TimerForVerificationCodeSending_Tick; ;
+            timer.Tick += TimerForVerificationCodeSending_Tick;
             // timerEnd = DateTime.Now.AddSeconds(ClientAuthSercive.SecondsDelay);
             delaySendCode = ClientAuthSercive.SecondsDelay;
             timer.Start();
@@ -224,6 +225,7 @@ namespace ChatClient.ViewModel
             else
             {
                 Message = "Success";
+                App.Token = res.Response;
                 OpenMainAndCloseThis();
             }
         }

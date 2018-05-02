@@ -8,13 +8,13 @@ using ContractClient.Contracts;
 
 namespace AccountUpdateProvider.ServiceImplementation
 {
-    public class AccountUpdateServiceprovider : IAccountUpdate
+    public class AccountUpdateServiceprovider : IAccountUpdate, IDisposable
     {
         DbMain.EFDbContext.ChatEntities db;
         DbMain.EFDbContext.User curUser;
         public AccountUpdateServiceprovider()
         {
-
+            Console.WriteLine($"AccountUpdateServiceprovider new id= {this.GetHashCode()}");
         }
 
         public OperationResult<bool> Authentication(string token)
@@ -30,6 +30,7 @@ namespace AccountUpdateProvider.ServiceImplementation
                         curUser = access.User;
                         return new OperationResult<bool>(true);
                     }
+                    access.User.NetworkStatusId = (int)NetworkStatus.OnLine;
                     return new OperationResult<bool>(false, false, "Faild authorization");
                 }
             }
@@ -101,10 +102,97 @@ namespace AccountUpdateProvider.ServiceImplementation
                 return new OperationResult<List<User>>(new List<User>(), false, "Internal server error");
             }
         }
+        private User DbUserToCustomerUser(DbMain.EFDbContext.User user, int conversationId)
+        {
+            return new User()
+            {
+                Login = user.Login,
+                Name = user.Name,
+                ConversationId = conversationId,
+                Icon = user.Icon,
+                NetworkStatus = NetworkStatus.Unknown
+            };
+        }
+        //private long CreateConversation(int authorId, int? partnerId, String name = "name", String description = "description",ConversationType conversationType= ConversationType.Dialog )
+        //{
+        //   DbMain.EFDbContext.Conversation conversation = new DbMain.EFDbContext.Conversation()
+        //   {
 
+        //   }
+        //}
         public OperationResult<User> FriendshipRequest(string body, string userLogin)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (db = new DbMain.EFDbContext.ChatEntities())
+                {
+                    var invited = db.Users.FirstOrDefault(x => x.Login == userLogin);
+                    var contact = db.Contacts.FirstOrDefault(x => (x.InvitedId == curUser.Id && x.AdderId == invited.Id) || (x.InvitedId == invited.Id && x.AdderId == curUser.Id));
+                    if (contact != null)
+                    {
+                        RelationStatus status = (RelationStatus)contact.RelationTypeId;
+                        switch (status)
+                        {
+                            case RelationStatus.Friendship:
+                                return new OperationResult<User>(null, false, "Friendship already confirmed");
+                            case RelationStatus.FriendshipRequestSent:
+                                return new OperationResult<User>(null, false, "Friendship already FriendshipRequestSent");
+
+                            case RelationStatus.FrienshipRequestRecive:
+                                return new OperationResult<User>(null, false, "Friendship already FrienshipRequestRecive");
+
+                            case RelationStatus.BlockedByMe:
+                                return new OperationResult<User>(null, false, "User BlockedByMe");
+
+                            case RelationStatus.BlockedByPartner:
+                                return new OperationResult<User>(null, false, "user BlockedByPartner");
+
+                            case RelationStatus.BlockedBoth:
+                                return new OperationResult<User>(null, false, "Blocked Both");
+
+                            default:
+                                break;
+                        }
+                    }
+                    if (contact == null)
+                    {
+                        contact = new DbMain.EFDbContext.Contact()
+                        {
+                            AdderId = curUser.Id,
+                            InvitedId = invited.Id
+                        };
+                        contact.Conversation = new DbMain.EFDbContext.Conversation()
+                        {
+                            AuthorId = curUser.Id,
+                            ConversationTypeId = (int)ConversationType.Dialog,
+                            Description = "Dialog",
+                            PartnerId = invited.Id,
+                            Name = $"{curUser.Name} - {invited.Name}"
+                        };
+                        db.Contacts.Add(contact);
+                    }
+
+                    contact.RelationTypeId = (int)RelationStatus.FriendshipRequestSent;
+                    if (db.SaveChanges() > 0)
+                    {
+                        return new OperationResult<User>(new User
+                        {
+                            ConversationId = contact.Conversation.Id,
+                            Login = userLogin,
+                            Name = invited.Name,
+                            RelationStatus = RelationStatus.FriendshipRequestSent,
+                            Icon = invited.Icon,
+                            NetworkStatus = NetworkStatus.Unknown
+                        });
+                    }
+                    return new OperationResult<User>(null, false, "Internal error. Try again later");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return new OperationResult<User>(null, false, "Internal error");
+            }
         }
 
         public OperationResult<List<User>> GetBlockedUsers()
@@ -171,6 +259,12 @@ namespace AccountUpdateProvider.ServiceImplementation
 
                 return new OperationResult<bool>(false, false, "Internal error. Try again later");
             }
+        }
+
+        public void Dispose()
+        {
+            Console.WriteLine($"AccountUpdateServiceprovider Disposed id= {this.GetHashCode()}");
+
         }
     }
 }

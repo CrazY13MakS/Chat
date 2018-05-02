@@ -9,12 +9,12 @@ namespace ContractClient
     [Serializable]
     public enum RelationStatus
     {
-        None = 1,
-        Friendship = 2,
-        FriendshipRequestSent = 3,
-        FrienshipRequestRecive = 4,
-        BlockedByMe = 5,
-        BlockedByPartner = 6,
-        BlockedBoth = 7
+        None ,
+        Friendship ,
+        FriendshipRequestSent ,
+        FrienshipRequestRecive ,
+        BlockedByMe ,
+        BlockedByPartner ,
+        BlockedBoth 
     }
 }

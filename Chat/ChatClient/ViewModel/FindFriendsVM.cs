@@ -10,7 +10,7 @@ using ContractClient;
 
 namespace ChatClient.ViewModel
 {
-    class FindFriendsVM:ViewModelBase
+    class FindFriendsVM : ViewModelBase
     {
         ClientContractImplement.AccountUpdateCustomer account = new ClientContractImplement.AccountUpdateCustomer(App.Token);
         String _searchQuery;
@@ -47,6 +47,21 @@ namespace ChatClient.ViewModel
             }
         }
 
+        private User _selectedUser;
+
+        public User SelectedUser
+        {
+            get { return _selectedUser; }
+            set
+            {
+                if (_selectedUser == value)
+                {
+                    return;
+                }
+                _selectedUser = value;
+                OnPropertyChanged();
+            }
+        }
 
 
         RelayCommand _findCommand;
@@ -61,17 +76,42 @@ namespace ChatClient.ViewModel
                 return _findCommand;
             }
         }
-        
+
         private void ExecuteFindCommand(object parametr)
         {
-            var res  = account.FindUsers(SearchQuery);
-            Users = new ObservableCollection<User>( res.Response);
-            
+            var res = account.FindUsers(SearchQuery);
+            Users = new ObservableCollection<User>(res.Response);
+
         }
 
         private bool CanExecuteFindCommand(object parametr)
         {
             return !String.IsNullOrWhiteSpace(SearchQuery);
+        }
+
+
+        RelayCommand _sendFriendRequestCommand;
+        public ICommand SendFriendRequestCommand
+        {
+            get
+            {
+                if (_sendFriendRequestCommand == null)
+                {
+                    _sendFriendRequestCommand = new RelayCommand(ExecuteFindCommand, CanExecuteFindCommand);
+                }
+                return _sendFriendRequestCommand;
+            }
+        }
+
+        private void ExecuteSendFriendRequestCommand(object parametr)
+        {
+            var res = account.FriendshipRequest("hello", SelectedUser.Login);
+
+        }
+
+        private bool CanExecuteSendFriendRequestCommand(object parametr)
+        {
+            return SelectedUser != null && SelectedUser.RelationStatus != RelationStatus.None;
         }
     }
 }

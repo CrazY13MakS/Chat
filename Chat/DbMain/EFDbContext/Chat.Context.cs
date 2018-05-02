@@ -39,5 +39,6 @@ namespace DbMain.EFDbContext
         public virtual DbSet<NetworkStatus> NetworkStatuses { get; set; }
         public virtual DbSet<RelationshipType> RelationshipTypes { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<BlokedUser> BlokedUsers { get; set; }
     }
 }

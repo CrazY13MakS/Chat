@@ -6,11 +6,12 @@
         xmlns:local="clr-namespace:ChatClient.View"
         xmlns:cCtrl="clr-namespace:ChatClient.View.ChatControls"
         mc:Ignorable="d"
-        Title="ChatMainWindow" Height="450" Width="800">    
+        Title="ChatMainWindow" Height="450" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="43*"/>
-            <ColumnDefinition Width="155*"/>
+            <ColumnDefinition Width="86*"/>
+            <ColumnDefinition Width="91*"/>
+            <ColumnDefinition Width="219*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="150"/>
@@ -27,6 +28,7 @@
                 </Ellipse.Fill>
             </Ellipse>
         </Grid>
+        <ListBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Contacts}" DisplayMemberPath="Name"></ListBox>
         <StackPanel Grid.Row="1" >
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <ListBox>

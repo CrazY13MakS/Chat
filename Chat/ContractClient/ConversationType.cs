@@ -6,13 +6,10 @@ using System.Threading.Tasks;
 
 namespace ContractClient
 {
-    public enum ConversationMemberStatus
+    public enum ConversationType
     {
-        None,
-        Admin,
-        Active,
-        Blocked,
-        ReadOnly,
-        LeftConversation
+        Dialog,
+        OpenConversation,
+        PrivateConversation
     }
 }
