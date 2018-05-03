@@ -9,9 +9,9 @@ using ContractClient;
 
 namespace ChatClient.ViewModel
 {
-    class ChatMainWindowViewModel:ViewModelBase
+    class ChatMainWindowViewModel : ViewModelBase
     {
-        ClientModel.ModelMain model = new ClientModel.ModelMain(App.Token);
+        ModelMain model = new ModelMain(App.Token);
 
         public ObservableCollection<Conversation> Conversations
         {
@@ -34,6 +34,13 @@ namespace ChatClient.ViewModel
             get
             {
                 return model.Author;
+            }
+        }
+        public ObservableCollection<User> FriendshipNotAllowed
+        {
+            get
+            {
+                return model.FriendshipNotAllowed as ObservableCollection<User>;
             }
         }
     }

@@ -20,12 +20,12 @@ namespace ServicesProvider
             authHost.Open();
             accHost.Open();
 
-            AccountRelationsServiceProvider account = new AccountRelationsServiceProvider();
-            AuthService auth = new AuthService();
-          var res1=  auth.LogIn("temp@temp.com", "!QAZ2wsx");
-           var res2= account.Authentication(res1);
-            var res3 = account.FriendshipRequest("sadasd", "crazy13maks");
-
+        //    AccountRelationsServiceProvider account = new AccountRelationsServiceProvider();
+        //    AuthService auth = new AuthService();
+        //  var res1=  auth.LogIn("temp@temp.com", "!QAZ2wsx");
+        //   var res2= account.Authentication(res1);
+        //    var res3 = account.FriendshipRequest("sadasd", "crazy13maks");
+        //
 
             //    AuthServiceProvider.Model.UserAccess a = new AuthServiceProvider.Model.UserAccess();
             //    var res =  a.Registration("crazy13maks@gmail.com", "crazy13maks", "!QAZ2wsx");

@@ -29,6 +29,7 @@
             </Ellipse>
         </Grid>
         <ListBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Contacts}" DisplayMemberPath="Name"></ListBox>
+        <ListBox Grid.Row="1" Grid.Column="2" ItemsSource="{Binding FriendshipNotAllowed}" DisplayMemberPath="Name"></ListBox>
         <StackPanel Grid.Row="1" >
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <ListBox>
@@ -40,5 +41,6 @@
                 </ListBox>
             </ScrollViewer>
         </StackPanel>
+        <Button Click="Button_Click"></Button>
     </Grid>
 </Window>

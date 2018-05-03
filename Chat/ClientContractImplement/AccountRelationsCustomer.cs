@@ -112,7 +112,40 @@ namespace ClientContractImplement
             }
         }
 
-
+        public OperationResult<List<User>> GetFriends()
+        {
+            try
+            {
+                return channel.GetFriends();
+            }
+            catch (CommunicationException ex)
+            {
+                ReloadChannel();
+                var res = channel.GetFriends();
+                if (!res.IsOk)
+                {
+                    res = new OperationResult<List<User>>(new List<User>(), false, ex.Message);
+                }
+                return res;
+            }
+        }
+        public OperationResult<List<User>> GetNotAlowedFriends()
+        {
+            try
+            {
+                return channel.GetNotAllowedFriends();
+            }
+            catch (CommunicationException ex)
+            {
+                ReloadChannel();
+                var res = channel.GetNotAllowedFriends();
+                if (!res.IsOk)
+                {
+                    res = new OperationResult<List<User>>(new List<User>(), false, ex.Message);
+                }
+                return res;
+            }
+        }
         public OperationResult<bool> UpdateProfile(UserExt user)
         {
             try

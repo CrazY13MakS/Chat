@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.ServiceModel;
 namespace ContractClient.Contracts
 {
-    [ServiceContract(CallbackContract = typeof(IChatClient), ProtectionLevel = System.Net.Security.ProtectionLevel.EncryptAndSign, SessionMode = SessionMode.Required)]
+    [ServiceContract(CallbackContract = typeof(IRelationsCallback), ProtectionLevel = System.Net.Security.ProtectionLevel.EncryptAndSign, SessionMode = SessionMode.Required)]
     public interface IRelations
     {
 
@@ -47,6 +47,10 @@ namespace ContractClient.Contracts
         [OperationContract(IsInitiating = false)]
         OperationResult<List<User>> GetBlockedUsers();
 
+        [OperationContract(IsInitiating = false)]
+        OperationResult<List<User>> GetFriends();
 
+        [OperationContract(IsInitiating = false)]
+        OperationResult<List<User>> GetNotAllowedFriends();
     }
 }

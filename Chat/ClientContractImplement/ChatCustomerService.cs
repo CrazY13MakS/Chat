@@ -47,7 +47,7 @@ namespace ClientContractImplement
             _token = token;
             InstanceContext context = new InstanceContext(client);
             duplexChannelFactory = new DuplexChannelFactory<IChatService>(context, "ClientMessageServiceEndPoint");
-            chatService = duplexChannelFactory.CreateChannel();
+          //  chatService = duplexChannelFactory.CreateChannel();
            // User = chatService.Authentication(token);
         }
         public UserExt Authentication()

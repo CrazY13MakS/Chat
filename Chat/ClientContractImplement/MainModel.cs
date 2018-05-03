@@ -10,18 +10,31 @@ using System.Threading.Tasks;
 
 namespace ClientContractImplement
 {
-    public class ModelMain : INotifyPropertyChanged
+    public class ModelMain : INotifyPropertyChanged, IRelationsCallbackModel
     {
         ChatCustomerCallbackService callbackService;
         ChatCustomerService chat;
-        
+
+        AccountRelationsCustomer relationsCustomer;
+        AccountRelationsCallback relationsCallback;
+
         public ModelMain(String token)
         {
             callbackService = new ChatCustomerCallbackService();
             chat = new ChatCustomerService(token, callbackService);
-            Author = chat.Authentication();
+          //  Author = chat.Authentication();
+
+            relationsCallback = new AccountRelationsCallback(this);
+            relationsCustomer = new AccountRelationsCustomer(token, relationsCallback);
+
+            Contacts = new ObservableCollection<User>(relationsCustomer.GetFriends().Response);
+            _friendshipNotAllowed = new ObservableCollection<User>(relationsCustomer.GetNotAlowedFriends().Response);
         }
 
+        private async void UpdateContacts()
+        {
+            // Contacts = relationsCustomer
+        }
         public delegate void ErrorHandler(String action, string message);
         public event ErrorHandler Error;
 
@@ -78,6 +91,11 @@ namespace ClientContractImplement
                 }
             }
         }
+        private ObservableCollection<User> _friendshipNotAllowed;
+
+        public Collection<User> Friends { get => _contacts; }
+
+        public Collection<User> FriendshipNotAllowed { get => _friendshipNotAllowed; }
 
         public void SendMessage(String body, long conversationId)
         {

@@ -291,5 +291,91 @@ namespace AccountRelationsProvider.ServiceImplementation
             var res = UserRelationsMain.OnlineUsers.TryRemove(curUser.Login, out AccountRelationsServiceProvider serviceprovider);
             Console.WriteLine($"AccountUpdateServiceprovider Disposed id= {this.GetHashCode()}, login {curUser.Login}, result - {res}");
         }
+
+        public OperationResult<List<User>> GetFriends()
+        {
+            Console.WriteLine("AccountUpdateServiceprovider  GetFriends");
+
+            try
+            {
+                using (db = new DbMain.EFDbContext.ChatEntities())
+                {
+
+                    var friendsLogins = GetUsers(db, RelationStatus.Friendship);
+                    var friends = db.Users.Where(x => friendsLogins.Contains(x.Login)).ToList();
+
+                    var user = db.Users.FirstOrDefault(x => x.Id == curUser.Id);
+                    var friendsToLocal = friends.Select(x => new User
+                    {
+                        Login = x.Login,
+                        Name = x.Name,
+                        Icon = x.Icon,
+                        RelationStatus = RelationStatus.Friendship,
+                        NetworkStatus = (NetworkStatus)x.NetworkStatusId,
+                        ConversationId = db.Conversations.FirstOrDefault(c => (c.AuthorId == x.Id && c.PartnerId == user.Id) || (c.PartnerId == x.Id && c.AuthorId == user.Id)).Id
+                    }).ToList();
+                    return new OperationResult<List<User>>(friendsToLocal);
+                }
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult<List<User>>(new List<User>(), false, "Internal error. Try again later");
+            }
+        }
+        private List<User> FromUserDbToUserClient(List<String> logins,  DbMain.EFDbContext.ChatEntities db)
+        {
+            var users = db.Users.Where(x => logins.Contains(x.Login)).ToList();
+
+            var user = db.Users.FirstOrDefault(x => x.Id == curUser.Id);
+            var usersToLocal = users.Select(x => new User
+            {
+                Login = x.Login,
+                Name = x.Name,
+                Icon = x.Icon,
+                NetworkStatus = (NetworkStatus)x.NetworkStatusId,
+                ConversationId = db.Conversations.FirstOrDefault(c => (c.AuthorId == x.Id && c.PartnerId == user.Id) || (c.PartnerId == x.Id && c.AuthorId == user.Id)).Id
+            }).ToList();
+            usersToLocal.ForEach(x =>
+            {
+                var cont1 = user.Contacts.FirstOrDefault(y => y.User1.Login == x.Login);
+                if (cont1 != null)
+                {
+                    x.RelationStatus = (RelationStatus)cont1.RelationTypeId;
+                    return;
+                }
+                var cont2 = user.Contacts1.FirstOrDefault(y => y.User1.Login == x.Login);
+                if (cont2 != null)
+                {
+                    x.RelationStatus = (RelationStatus)cont2.RelationTypeId;
+                    return;
+                }
+                x.RelationStatus = RelationStatus.None;
+            });
+
+            return usersToLocal;
+        }
+        public OperationResult<List<User>> GetNotAllowedFriends()
+        {
+            Console.WriteLine("AccountUpdateServiceprovider  GetNotAllowedFriends");
+
+            try
+            {
+                using (db = new DbMain.EFDbContext.ChatEntities())
+                {
+
+                    var friendsLogins = GetUsers(db, RelationStatus.FriendshipRequestSent);
+                    friendsLogins.AddRange(GetUsers(db, RelationStatus.FrienshipRequestRecive));
+
+                  var res =  FromUserDbToUserClient(friendsLogins, db);
+
+                  
+                    return new OperationResult<List<User>>(res);
+                }
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult<List<User>>(new List<User>(), false, "Internal error. Try again later");
+            }
+        }
     }
 }
