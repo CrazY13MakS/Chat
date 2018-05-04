@@ -18,7 +18,7 @@ namespace AccountRelationsProvider.ServiceImplementation
         public AccountRelationsServiceProvider()
         {
             Console.WriteLine($"AccountUpdateServiceprovider new id= {this.GetHashCode()}");
-            Callback = OperationContext.Current.GetCallbackChannel<IRelationsCallback>();
+            //  Callback = OperationContext.Current.GetCallbackChannel<IRelationsCallback>();
         }
 
         public OperationResult<bool> Authentication(string token)
@@ -50,8 +50,8 @@ namespace AccountRelationsProvider.ServiceImplementation
         private List<String> GetUsers(DbMain.EFDbContext.ChatEntities db, RelationStatus relation)
         {
             var user = db.Users.FirstOrDefault(x => x.Id == curUser.Id);
-            List<String> result = user.Contacts.Where(x => (RelationStatus)x.RelationTypeId == relation).Select(x => x.User1.Login).ToList();
-            result.AddRange(user.Contacts1.Where(x => (RelationStatus)x.RelationTypeId == relation).Select(x => x.User.Login).ToList());
+            List<String> result = user.Contacts.Where(x => x.RelationTypeId == (int)relation).Select(x => x.User1.Login).ToList();
+            result.AddRange(user.Contacts1.Where(x => x.RelationTypeId == (int)relation).Select(x => x.User.Login).ToList());
             return result;
             // var convers = db.Contacts.Where(x => (x.AdderId == curUser.Id || x.InvitedId == curUser.Id) && (RelationStatus)x.RelationTypeId == relation).ToList();
             // var friends = convers.Select(x => x.AdderId == curUser.Id ? x.User1.Login : x.User.Login).ToList();
@@ -322,7 +322,7 @@ namespace AccountRelationsProvider.ServiceImplementation
                 return new OperationResult<List<User>>(new List<User>(), false, "Internal error. Try again later");
             }
         }
-        private List<User> FromUserDbToUserClient(List<String> logins,  DbMain.EFDbContext.ChatEntities db)
+        private List<User> FromUserDbToUserClient(List<String> logins, DbMain.EFDbContext.ChatEntities db)
         {
             var users = db.Users.Where(x => logins.Contains(x.Login)).ToList();
 
@@ -337,16 +337,28 @@ namespace AccountRelationsProvider.ServiceImplementation
             }).ToList();
             usersToLocal.ForEach(x =>
             {
-                var cont1 = user.Contacts.FirstOrDefault(y => y.User1.Login == x.Login);
+                var cont1 = user.Contacts.FirstOrDefault(y => y.User1.Login == x.Login || y.User.Login == x.Login);
                 if (cont1 != null)
                 {
                     x.RelationStatus = (RelationStatus)cont1.RelationTypeId;
                     return;
                 }
-                var cont2 = user.Contacts1.FirstOrDefault(y => y.User1.Login == x.Login);
+                var cont2 = user.Contacts1.FirstOrDefault(y => y.User.Login == x.Login);
                 if (cont2 != null)
                 {
                     x.RelationStatus = (RelationStatus)cont2.RelationTypeId;
+                    if (x.RelationStatus == RelationStatus.BlockedByMe)
+                    {
+                        x.RelationStatus = RelationStatus.BlockedByPartner;
+                    }
+                    else if (x.RelationStatus == RelationStatus.FriendshipRequestSent)
+                    {
+                        x.RelationStatus = RelationStatus.FrienshipRequestRecive;
+                    }
+                    else if (x.RelationStatus == RelationStatus.FrienshipRequestRecive)
+                    {
+                        x.RelationStatus = RelationStatus.FriendshipRequestSent;
+                    }
                     return;
                 }
                 x.RelationStatus = RelationStatus.None;
@@ -366,9 +378,9 @@ namespace AccountRelationsProvider.ServiceImplementation
                     var friendsLogins = GetUsers(db, RelationStatus.FriendshipRequestSent);
                     friendsLogins.AddRange(GetUsers(db, RelationStatus.FrienshipRequestRecive));
 
-                  var res =  FromUserDbToUserClient(friendsLogins, db);
+                    var res = FromUserDbToUserClient(friendsLogins, db);
 
-                  
+
                     return new OperationResult<List<User>>(res);
                 }
             }

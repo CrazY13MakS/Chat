@@ -17,10 +17,12 @@ namespace ClientContractImplement
         IRelations channel;
         InstanceContext context;
         private readonly String connectionString = "ClientAccUpdateEndPoint";
+        private readonly String token;
         public AccountRelationsCustomer(String token, IRelationsCallback callback)
         {
+            this.token = token;
             context = new InstanceContext(callback);
-            factory = new DuplexChannelFactory<IRelations>(context,connectionString);
+            factory = new DuplexChannelFactory<IRelations>(context, connectionString);
             factory.Faulted += Factory_Faulted;
             channel = factory.CreateChannel();
             channel.Authentication(token);
@@ -72,7 +74,9 @@ namespace ClientContractImplement
         }
         private void ReloadChannel()
         {
-            channel = factory.CreateChannel();
+            //channel = factory.CreateChannel();
+            Factory_Faulted(this, EventArgs.Empty);
+            channel.Authentication(token);
         }
 
         public OperationResult<bool> ChangeNetworkStatus(NetworkStatus status)
@@ -164,63 +168,19 @@ namespace ClientContractImplement
             }
         }
 
+        public OperationResult<bool> ChangeRelationType(String login, RelationStatus status)
+        {
+            try
+            {
+                return channel.ChangeRelationType(login, status);
+            }
+            catch (CommunicationException ex)
+            {
+                ReloadChannel();
+                return new OperationResult<bool>(false, false, "Connection error");
+            }
+        }
 
-        //OperationResult<bool> FrienshipResponse(String login, bool isConfirmed)
-        //{
-        //    try
-        //    {
-        //        return channel.FrienshipResponse(login, isConfirmed);
-        //    }
-        //    catch (CommunicationException ex)
-        //    {
-        //        ReloadChannel();
-        //        var res = FrienshipResponse(login, isConfirmed);
-        //        if (!res.IsOk)
-        //        {
-        //            res = new OperationResult<bool>(false, false, ex.Message);
-        //        }
-        //        return res;
-        //    }
-        //}
-
-
-        //OperationResult<bool> BlockUser(String login)
-        //{
-        //    try
-        //    {
-        //        return channel.BlockUser(login);
-        //    }
-        //    catch (CommunicationException ex)
-        //    {
-        //        ReloadChannel();
-        //        var res = channel.BlockUser(login);
-        //        if (!res.IsOk)
-        //        {
-        //            res = new OperationResult<bool>(false, false, ex.Message);
-        //        }
-        //        return res;
-        //    }
-        //}
-
-
-        //OperationResult<bool> UnBlockUser(String login)
-        //{
-        //    try
-        //    {
-        //        return channel.UnBlockUser(login);
-        //    }
-        //    catch (CommunicationException ex)
-        //    {
-        //        ReloadChannel();
-
-        //        var res = UnBlockUser(login);
-        //        if (!res.IsOk)
-        //        {
-        //            res = new OperationResult<bool>(false, false, ex.Message);
-        //        }
-        //        return res;
-        //    }
-        //}
 
     }
 }

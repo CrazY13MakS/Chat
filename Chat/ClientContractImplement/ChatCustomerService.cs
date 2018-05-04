@@ -42,7 +42,7 @@ namespace ClientContractImplement
         IChatService chatService;
         DuplexChannelFactory<IChatService> duplexChannelFactory;
         private readonly String _token;
-        public ChatCustomerService(String token, IChatClient client)
+        public ChatCustomerService(String token, IChatCallback client)
         {
             _token = token;
             InstanceContext context = new InstanceContext(client);

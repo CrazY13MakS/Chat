@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ContractClient.Contracts
 {
-    [ServiceContract(CallbackContract = typeof(IChatClient), ProtectionLevel = System.Net.Security.ProtectionLevel.EncryptAndSign, SessionMode = SessionMode.Required)]
+    [ServiceContract(CallbackContract = typeof(IChatCallback), ProtectionLevel = System.Net.Security.ProtectionLevel.EncryptAndSign, SessionMode = SessionMode.Required)]
     public interface IChatService
     {
         /// <summary>

@@ -22,7 +22,7 @@ namespace ClientContractImplement
         {
             callbackService = new ChatCustomerCallbackService();
             chat = new ChatCustomerService(token, callbackService);
-          //  Author = chat.Authentication();
+            //  Author = chat.Authentication();
 
             relationsCallback = new AccountRelationsCallback(this);
             relationsCustomer = new AccountRelationsCustomer(token, relationsCallback);
@@ -117,6 +117,59 @@ namespace ClientContractImplement
 
         }
 
+
+        public void ChangeRelationStatus(String login, RelationStatus status)
+        {
+            switch (status)
+            {
+                case RelationStatus.None:
+
+                    break;
+                case RelationStatus.Friendship:
+                    ConfirmFriendship(login);
+                    break;
+                case RelationStatus.FriendshipRequestSent:
+                    break;
+                case RelationStatus.FrienshipRequestRecive:
+                    break;
+                case RelationStatus.BlockedByMe:
+                    break;
+                case RelationStatus.BlockedByPartner:
+                    break;
+                case RelationStatus.BlockedBoth:
+                    break;
+                default:
+                    break;
+            }
+        }
+        private void ConfirmFriendship(String login)
+        {
+            var res = relationsCustomer.ChangeRelationType(login, RelationStatus.Friendship);
+            if (res.IsOk)
+            {
+                var user = FriendshipNotAllowed.FirstOrDefault(x => x.Login == login);
+                Contacts.Add(user);
+                FriendshipNotAllowed.Remove(user);
+            }
+            else
+            {
+                Error.Invoke("Confirm friendship", res.ErrorMessage);
+            }
+        }
+        private void RemoveFriendship(String login)
+        {
+            var res = relationsCustomer.ChangeRelationType(login, RelationStatus.FrienshipRequestRecive);
+            if (res.IsOk)
+            {
+                var user = FriendshipNotAllowed.FirstOrDefault(x => x.Login == login);
+                Contacts.Add(user);
+                FriendshipNotAllowed.Remove(user);
+            }
+            else
+            {
+                Error.Invoke("Confirm friendship", res.ErrorMessage);
+            }
+        }
 
 
 

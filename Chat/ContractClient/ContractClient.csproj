@@ -46,7 +46,7 @@
     <Compile Include="Contracts\IRelations.cs" />
     <Compile Include="Contracts\IAuthService.cs" />
     <Compile Include="Contracts\IChatService.cs" />
-    <Compile Include="Contracts\IChatClient.cs" />
+    <Compile Include="Contracts\IChatCallback.cs" />
     <Compile Include="Contracts\IRelationsCallback.cs" />
     <Compile Include="Conversation.cs" />
     <Compile Include="ConversationMemberStatus.cs" />

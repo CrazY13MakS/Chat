@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace ContractClient.Contracts
 {
     [ServiceContract]
-   public interface IChatClient
+   public interface IChatCallback
     {
         void IncomingMessage(String body, String login, String conversationId, DateTime sendingtime);
         void FriendshipRequest(User user);
