@@ -56,5 +56,31 @@
             </ScrollViewer>
         </StackPanel>
         <Button Click="Button_Click"></Button>
+        <TabControl Grid.Column="2">
+            <TabItem Header="laalla">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="197*"/>
+                        <ColumnDefinition Width="67*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="4*"/>
+                        <RowDefinition Height="17*"/>
+                    </Grid.RowDefinitions>
+                    <TextBox Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    <Button Content="Find" Grid.Column="1" Command="{Binding FindCommand}"/>
+                    <ListBox Grid.Row="1"  ItemsSource="{Binding Users}">
+
+
+                    </ListBox>
+                    <StackPanel Grid.Row="1" Grid.Column="1">
+                        <TextBlock Text="{Binding Name}"/>
+                        <TextBlock Text="{Binding Login}"/>
+                        <TextBlock Text="{Binding RelationStatus}"/>
+                    </StackPanel>
+                </Grid>
+
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>

@@ -237,8 +237,9 @@ namespace ChatClient.ViewModel
 
         private void OpenMainAndCloseThis()///Open new window
         {
-            App.DisplayWindowHelper.ShowPresentation(new ChatMainWindowViewModel());
-         //   App.DisplayWindowHelper.ShowPresentation(new FindFriendsVM());
+            var mainvm = new ChatMainWindowViewModel();
+            App.DisplayWindowHelper.ShowPresentation(mainvm);
+           // App.DisplayWindowHelper.ShowPresentation(new FindFriendsVM(mainvm.ModelMain));
 
             App.DisplayWindowHelper.ClosePresentation(this);
         }

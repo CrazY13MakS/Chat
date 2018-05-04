@@ -7,12 +7,22 @@ using System.Windows.Input;
 using System.Collections.ObjectModel;
 using ChatClient.Infrastructure;
 using ContractClient;
+using ContractClient.Contracts;
 
 namespace ChatClient.ViewModel
 {
     class FindFriendsVM : ViewModelBase
     {
-       // ClientContractImplement.AccountRelationsCustomer account = new ClientContractImplement.AccountRelationsCustomer(App.Token, );
+        IRelations service;
+        public FindFriendsVM(IRelations relations)
+        {
+            service = relations;
+        }
+        Action<object> addFriend;
+        public FindFriendsVM(Action<object> addFriend)
+        {
+            this.addFriend = addFriend;
+        }
         String _searchQuery;
         public String SearchQuery
         {
@@ -79,8 +89,8 @@ namespace ChatClient.ViewModel
 
         private void ExecuteFindCommand(object parametr)
         {
-           // var res = account.FindUsers(SearchQuery);
-           // Users = new ObservableCollection<User>(res.Response);
+            var res = service.FindUsers(SearchQuery);
+            Users = new ObservableCollection<User>(res.Response);
 
         }
 
@@ -105,7 +115,8 @@ namespace ChatClient.ViewModel
 
         private void ExecuteSendFriendRequestCommand(object parametr)
         {
-          //  var res = account.FriendshipRequest("hello", SelectedUser.Login);
+            // var res = service.FriendshipRequest("hello", SelectedUser.Login);
+            addFriend(parametr);
 
         }
 

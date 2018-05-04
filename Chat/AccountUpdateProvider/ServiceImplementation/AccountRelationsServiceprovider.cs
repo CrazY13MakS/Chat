@@ -93,32 +93,34 @@ namespace AccountRelationsProvider.ServiceImplementation
                 using (db = new DbMain.EFDbContext.ChatEntities())
                 {
                     var user = db.Users.FirstOrDefault(x => x.Id == curUser.Id);
-                    var list = db.Users.Where(x => x.Login.Contains(param) || x.Name.Contains(param)).Select(x => new User()
-                    {
-                        Login = x.Login,
-                        Name = x.Name,
-                        ConversationId = -1,
-                        Icon = x.Icon,
-                        NetworkStatus = NetworkStatus.Unknown
-                    }).ToList();
+                    var logins = db.Users.Where(x => x.Login.Contains(param) || x.Name.Contains(param)).Select(x => x.Login).ToList();
+                    var users = FromUserDbToUserClient(logins, db);
+                    //var list = db.Users.Where(x => x.Login.Contains(param) || x.Name.Contains(param)).Select(x => new User()
+                    //{
+                    //    Login = x.Login,
+                    //    Name = x.Name,
+                    //    ConversationId = -1,
+                    //    Icon = x.Icon,
+                    //    NetworkStatus = NetworkStatus.Unknown
+                    //}).ToList();
 
-                    list.ForEach(x =>
-                    {
-                        var cont1 = user.Contacts.FirstOrDefault(y => y.User1.Login == x.Login);
-                        if (cont1 != null)
-                        {
-                            x.RelationStatus = (RelationStatus)cont1.RelationTypeId;
-                            return;
-                        }
-                        var cont2 = user.Contacts1.FirstOrDefault(y => y.User1.Login == x.Login);
-                        if (cont2 != null)
-                        {
-                            x.RelationStatus = (RelationStatus)cont2.RelationTypeId;
-                            return;
-                        }
-                        x.RelationStatus = RelationStatus.None;
-                    });
-                    return new OperationResult<List<User>>(list);
+                    //list.ForEach(x =>
+                    //{
+                    //    var cont1 = user.Contacts.FirstOrDefault(y => y.User1.Login == x.Login);
+                    //    if (cont1 != null)
+                    //    {
+                    //        x.RelationStatus = (RelationStatus)cont1.RelationTypeId;
+                    //        return;
+                    //    }
+                    //    var cont2 = user.Contacts1.FirstOrDefault(y => y.User1.Login == x.Login);
+                    //    if (cont2 != null)
+                    //    {
+                    //        x.RelationStatus = (RelationStatus)cont2.RelationTypeId;
+                    //        return;
+                    //    }
+                    //    x.RelationStatus = RelationStatus.None;
+                    //});
+                    return new OperationResult<List<User>>(users);
 
                 }
             }
@@ -333,18 +335,19 @@ namespace AccountRelationsProvider.ServiceImplementation
                 Name = x.Name,
                 Icon = x.Icon,
                 NetworkStatus = (NetworkStatus)x.NetworkStatusId,
-                ConversationId = db.Conversations.FirstOrDefault(c => (c.AuthorId == x.Id && c.PartnerId == user.Id) || (c.PartnerId == x.Id && c.AuthorId == user.Id)).Id
+               // ConversationId = db.Conversations.FirstOrDefault(c => (c.AuthorId == x.Id && c.PartnerId == user.Id) || (c.PartnerId == x.Id && c.AuthorId == user.Id))?.Id
             }).ToList();
             usersToLocal.ForEach(x =>
             {
+                
                 var cont1 = user.Contacts.FirstOrDefault(y => y.User1.Login == x.Login || y.User.Login == x.Login);
                 if (cont1 != null)
                 {
                     x.RelationStatus = (RelationStatus)cont1.RelationTypeId;
-                    return;
+
                 }
                 var cont2 = user.Contacts1.FirstOrDefault(y => y.User.Login == x.Login);
-                if (cont2 != null)
+                if (cont1 == null && cont2 != null)
                 {
                     x.RelationStatus = (RelationStatus)cont2.RelationTypeId;
                     if (x.RelationStatus == RelationStatus.BlockedByMe)
@@ -359,9 +362,15 @@ namespace AccountRelationsProvider.ServiceImplementation
                     {
                         x.RelationStatus = RelationStatus.FriendshipRequestSent;
                     }
-                    return;
                 }
-                x.RelationStatus = RelationStatus.None;
+                if (x.RelationStatus != RelationStatus.Friendship)
+                {
+                    x.NetworkStatus = NetworkStatus.Unknown;
+                }
+               if(x.RelationStatus!= RelationStatus.None)
+                {
+
+                }
             });
 
             return usersToLocal;

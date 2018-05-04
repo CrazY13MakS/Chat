@@ -75,6 +75,13 @@ namespace ClientContractImplement
                 }
             }
         }
+
+        public List<User> FindUsers(String searchQuery)
+        {
+            var res = relationsCustomer.FindUsers(searchQuery);
+            return res.Response;
+        }
+
         UserExt _author;
         public UserExt Author
         {

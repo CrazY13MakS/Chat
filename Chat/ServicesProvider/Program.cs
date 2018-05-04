@@ -19,7 +19,10 @@ namespace ServicesProvider
             AccountUpdateHost accHost = new AccountUpdateHost();
             authHost.Open();
             accHost.Open();
+            while (true)
+            {
 
+            }
 
 
              AccountRelationsServiceProvider account = new AccountRelationsServiceProvider();
