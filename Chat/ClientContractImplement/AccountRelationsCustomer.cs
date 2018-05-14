@@ -133,16 +133,16 @@ namespace ClientContractImplement
                 return res;
             }
         }
-        public OperationResult<List<User>> GetNotAlowedFriends()
+        public OperationResult<List<User>> GetContactsByRelationStatus(RelationStatus relationStatus)
         {
             try
             {
-                return channel.GetNotAllowedFriends();
+                return channel.GetContactsByRelationStatus(relationStatus);
             }
             catch (CommunicationException ex)
             {
                 ReloadChannel();
-                var res = channel.GetNotAllowedFriends();
+                var res = channel.GetContactsByRelationStatus();
                 if (!res.IsOk)
                 {
                     res = new OperationResult<List<User>>(new List<User>(), false, ex.Message);

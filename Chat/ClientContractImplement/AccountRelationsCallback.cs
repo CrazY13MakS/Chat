@@ -34,6 +34,8 @@ namespace ClientContractImplement
                     if (notAllowedFriend != null)
                     {
                         _callbackModel.FriendshipNotAllowed.Remove(notAllowedFriend);
+                        _callbackModel.FriendshipRequestReceive.Remove(notAllowedFriend);
+                        _callbackModel.FriendshipRequestSend.Remove(notAllowedFriend);
                     }
                     break;
                 case RelationStatus.Friendship:
@@ -42,6 +44,7 @@ namespace ClientContractImplement
                     {
                         _callbackModel.Friends.Add(notAllowedFriend);
                         _callbackModel.FriendshipNotAllowed.Remove(notAllowedFriend);
+                        _callbackModel.FriendshipRequestReceive.Remove(notAllowedFriend);
                     }
                     break;
                 case RelationStatus.FriendshipRequestSent:
@@ -50,7 +53,9 @@ namespace ClientContractImplement
                     {
                         _callbackModel.Friends.Remove(friend);
                         _callbackModel.FriendshipNotAllowed.Add(friend);
+                        _callbackModel.FriendshipRequestReceive.Add(friend);
                     }
+
                     break;
                 case RelationStatus.BlockedByMe:
                 case RelationStatus.BlockedByPartner:
@@ -69,10 +74,15 @@ namespace ClientContractImplement
             }
 
         }
-
+        private void RelationNone(String login)
+        {
+            var reqSent =
+            _callbackModel.FriendshipRequestReceive.Remove()
+        }
         public void FriendshipRequest(User user)
         {
             _callbackModel.FriendshipNotAllowed.Add(user);
+            _callbackModel.FriendshipRequestReceive.Add(user);
         }
 
         public void UserNetworkStatusChanged(string login, NetworkStatus status)

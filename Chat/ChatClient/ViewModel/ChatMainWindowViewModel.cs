@@ -48,8 +48,21 @@ namespace ChatClient.ViewModel
 
 
 
+        public ObservableCollection<User> FriendshipRequestUsers
+        {
+            get
+            {
+                return model.FriendshipNotAllowed as ObservableCollection<User>;
+            }
+        }
 
-
+        public ObservableCollection<User> FriendshipResponseUsers
+        {
+            get
+            {
+                return model.FriendshipNotAllowed as ObservableCollection<User>;
+            }
+        }
 
 
 
@@ -99,18 +112,18 @@ namespace ChatClient.ViewModel
             }
         }
 
-        ObservableCollection<User> _users;
-        public ObservableCollection<User> Users
+        ObservableCollection<User> _searchUsers;
+        public ObservableCollection<User> SearchUsers
         {
             get
             {
-                return _users;
+                return _searchUsers;
             }
             set
             {
-                if (_users != value)
+                if (_searchUsers != value)
                 {
-                    _users = value;
+                    _searchUsers = value;
                     OnPropertyChanged();
                 }
             }
@@ -149,7 +162,7 @@ namespace ChatClient.ViewModel
         private void ExecuteFindCommand(object parametr)
         {
             var res = model.FindUsers(SearchQuery);
-            Users = new ObservableCollection<User>(res);
+            SearchUsers = new ObservableCollection<User>(res);
 
         }
 

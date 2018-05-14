@@ -28,7 +28,7 @@ namespace ServicesProvider
              AccountRelationsServiceProvider account = new AccountRelationsServiceProvider();
            account.Authentication("2323b814-f0fb-4489-b3be-f87e84061fc410:02:30");
           var fr=  account.GetFriends();
-            var n = account.GetNotAllowedFriends();
+            var n = account.GetContactsByRelationStatus();
            //    AuthService auth = new AuthService();
            //  var res1=  auth.LogIn("temp@temp.com", "!QAZ2wsx");
            //   var res2= account.Authentication(res1);

@@ -375,7 +375,7 @@ namespace AccountRelationsProvider.ServiceImplementation
 
             return usersToLocal;
         }
-        public OperationResult<List<User>> GetNotAllowedFriends()
+        public OperationResult<List<User>> GetContactsByRelationStatus()
         {
             Console.WriteLine("AccountUpdateServiceprovider  GetNotAllowedFriends");
 

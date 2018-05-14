@@ -28,7 +28,7 @@ namespace ClientContractImplement
             relationsCustomer = new AccountRelationsCustomer(token, relationsCallback);
 
             Contacts = new ObservableCollection<User>(relationsCustomer.GetFriends().Response);
-            _friendshipNotAllowed = new ObservableCollection<User>(relationsCustomer.GetNotAlowedFriends().Response);
+            _friendshipNotAllowed = new ObservableCollection<User>(relationsCustomer.GetContactsByRelationStatus().Response);
         }
 
         private async void UpdateContacts()

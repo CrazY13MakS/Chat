@@ -60,6 +60,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="View\ChatControls\ContactPreview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\ChatControls\ConversationDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -91,6 +95,9 @@
     <Compile Include="ViewModel\FindFriendsVM.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="ViewModel\ViewModelLogIn.cs" />
+    <Compile Include="View\ChatControls\ContactPreview.xaml.cs">
+      <DependentUpon>ContactPreview.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\ChatControls\ConversationDialog.xaml.cs">
       <DependentUpon>ConversationDialog.xaml</DependentUpon>
     </Compile>

@@ -8,9 +8,13 @@ using System.Threading.Tasks;
 
 namespace ClientContractImplement
 {
-   public interface IRelationsCallbackModel
+    public interface IRelationsCallbackModel
     {
-        Collection<User> Friends { get;  }
-        Collection<User> FriendshipNotAllowed { get;  }
+        Collection<User> Friends { get; }
+        Collection<User> FriendshipNotAllowed { get; }
+        Collection<User> FriendshipRequestSend { get; }
+        Collection<User> FriendshipRequestReceive { get; }
+
+
     }
 }
