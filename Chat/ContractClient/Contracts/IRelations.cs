@@ -51,6 +51,6 @@ namespace ContractClient.Contracts
         OperationResult<List<User>> GetFriends();
 
         [OperationContract(IsInitiating = false)]
-        OperationResult<List<User>> GetContactsByRelationStatus(RelationStatus status);
+        OperationResult<List<User>> GetUsersByRelationStatus(RelationStatus status);
     }
 }

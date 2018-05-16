@@ -137,7 +137,7 @@ namespace ClientContractImplement
         {
             try
             {
-                return channel.GetContactsByRelationStatus(relationStatus);
+                return channel.GetUsersByRelationStatus(relationStatus);
             }
             catch (CommunicationException ex)
             {
