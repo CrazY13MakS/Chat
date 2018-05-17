@@ -28,7 +28,7 @@ namespace ClientContractImplement
             relationsCustomer = new AccountRelationsCustomer(token, relationsCallback);
 
             Contacts = new ObservableCollection<User>(relationsCustomer.GetFriends().Response);
-            _friendshipNotAllowed = new ObservableCollection<User>(relationsCustomer.GetContactsByRelationStatus().Response);
+            // _friendshipNotAllowed = new ObservableCollection<User>(relationsCustomer.GetContactsByRelationStatus().Response);
         }
 
         private async void UpdateContacts()
@@ -103,6 +103,10 @@ namespace ClientContractImplement
         public Collection<User> Friends { get => _contacts; }
 
         public Collection<User> FriendshipNotAllowed { get => _friendshipNotAllowed; }
+
+        public Collection<User> FriendshipRequestSend => throw new NotImplementedException();
+
+        public Collection<User> FriendshipRequestReceive => throw new NotImplementedException();
 
         public void SendMessage(String body, long conversationId)
         {

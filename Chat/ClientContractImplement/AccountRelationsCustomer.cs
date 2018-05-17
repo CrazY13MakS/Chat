@@ -133,7 +133,7 @@ namespace ClientContractImplement
                 return res;
             }
         }
-        public OperationResult<List<User>> GetContactsByRelationStatus(RelationStatus relationStatus)
+        public OperationResult<List<User>> GetUsersByRelationStatus(RelationStatus relationStatus)
         {
             try
             {
@@ -142,7 +142,7 @@ namespace ClientContractImplement
             catch (CommunicationException ex)
             {
                 ReloadChannel();
-                var res = channel.GetContactsByRelationStatus();
+                var res = channel.GetUsersByRelationStatus(relationStatus);
                 if (!res.IsOk)
                 {
                     res = new OperationResult<List<User>>(new List<User>(), false, ex.Message);

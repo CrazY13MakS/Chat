@@ -76,8 +76,8 @@ namespace ClientContractImplement
         }
         private void RelationNone(String login)
         {
-            var reqSent =
-            _callbackModel.FriendshipRequestReceive.Remove()
+           // var reqSent =
+           // _callbackModel.FriendshipRequestReceive.Remove()
         }
         public void FriendshipRequest(User user)
         {

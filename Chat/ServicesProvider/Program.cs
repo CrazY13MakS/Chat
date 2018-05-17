@@ -15,20 +15,25 @@ namespace ServicesProvider
     {
         static void Main(string[] args)
         {
-            AuthHost authHost = new AuthHost();
-            AccountUpdateHost accHost = new AccountUpdateHost();
-            authHost.Open();
-            accHost.Open();
-            while (true)
-            {
-
-            }
+          //  AuthHost authHost = new AuthHost();
+          //  AccountUpdateHost accHost = new AccountUpdateHost();
+          //  authHost.Open();
+          //  accHost.Open();
+          //  while (true)
+          //  {
+          //
+          //  }
 
 
              AccountRelationsServiceProvider account = new AccountRelationsServiceProvider();
-           account.Authentication("2323b814-f0fb-4489-b3be-f87e84061fc410:02:30");
-          var fr=  account.GetFriends();
-            var n = account.GetContactsByRelationStatus();
+         var user =   account.Authentication("2323b814-f0fb-4489-b3be-f87e84061fc410:02:30");
+          var fr=  account.GetUsersByRelationStatus( ContractClient.RelationStatus.Friendship);
+            var rr = account.GetUsersByRelationStatus(ContractClient.RelationStatus.FriendshipRequestSent);
+            var tt = account.GetUsersByRelationStatus(ContractClient.RelationStatus.FrienshipRequestRecive);
+           
+            
+            
+            // var n = account.GetContactsByRelationStatus();
            //    AuthService auth = new AuthService();
            //  var res1=  auth.LogIn("temp@temp.com", "!QAZ2wsx");
            //   var res2= account.Authentication(res1);
@@ -80,8 +85,8 @@ namespace ServicesProvider
          //  userAccess.Registration("temp3@temp.com", "temp3", "!QAZ2wsx");
             Console.ReadKey();
 
-            authHost.Close();
-            accHost.Close();
+        //    authHost.Close();
+          //  accHost.Close();
         }
     }
 }

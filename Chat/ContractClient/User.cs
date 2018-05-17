@@ -20,7 +20,7 @@ namespace ContractClient
         public byte[] Icon { get; set; }
 
         [DataMember]
-        public long ConversationId { get; set; }
+        public long? ConversationId { get; set; }
 
         [DataMember]
         public RelationStatus RelationStatus { get; set; }

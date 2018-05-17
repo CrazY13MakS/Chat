@@ -22,6 +22,10 @@ namespace AccountRelationsProvider.ServiceImplementation
             //  Callback = OperationContext.Current.GetCallbackChannel<IRelationsCallback>();
         }
 
+
+
+
+        #region IRelationsImplement
         public OperationResult<bool> Authentication(string token)
         {
             Console.WriteLine("AccountUpdateServiceprovider  Auth");
@@ -46,16 +50,6 @@ namespace AccountRelationsProvider.ServiceImplementation
 
                 return new OperationResult<bool>(false, false, "Internal error. Try again later");
             }
-        }
-
-        private List<String> GetUsers(DbMain.EFDbContext.ChatEntities db, RelationStatus relation)
-        {
-            var user = db.Users.FirstOrDefault(x => x.Id == curUser.Id);
-            List<String> result = user.Contacts.Where(x => x.RelationTypeId == (int)relation).Select(x => x.User1.Login).ToList();
-            result.AddRange(user.Contacts1.Where(x => x.RelationTypeId == (int)relation).Select(x => x.User.Login).ToList());
-            return result;
-            // var convers = db.Contacts.Where(x => (x.AdderId == curUser.Id || x.InvitedId == curUser.Id) && (RelationStatus)x.RelationTypeId == relation).ToList();
-            // var friends = convers.Select(x => x.AdderId == curUser.Id ? x.User1.Login : x.User.Login).ToList();
         }
 
         public OperationResult<bool> ChangeNetworkStatus(NetworkStatus status)
@@ -130,24 +124,7 @@ namespace AccountRelationsProvider.ServiceImplementation
                 return new OperationResult<List<User>>(new List<User>(), false, "Internal server error");
             }
         }
-        private User DbUserToCustomerUser(DbMain.EFDbContext.User user, int conversationId)
-        {
-            return new User()
-            {
-                Login = user.Login,
-                Name = user.Name,
-                ConversationId = conversationId,
-                Icon = user.Icon,
-                NetworkStatus = NetworkStatus.Unknown
-            };
-        }
-        //private long CreateConversation(int authorId, int? partnerId, String name = "name", String description = "description",ConversationType conversationType= ConversationType.Dialog )
-        //{
-        //   DbMain.EFDbContext.Conversation conversation = new DbMain.EFDbContext.Conversation()
-        //   {
 
-        //   }
-        //}
         public OperationResult<User> FriendshipRequest(string body, string userLogin)
         {
             try
@@ -223,13 +200,6 @@ namespace AccountRelationsProvider.ServiceImplementation
             }
         }
 
-        public OperationResult<List<User>> GetBlockedUsers()
-        {
-            throw new NotImplementedException();
-        }
-
-
-
         public OperationResult<bool> UpdateProfile(UserExt user)
         {
             throw new NotImplementedException();
@@ -289,13 +259,88 @@ namespace AccountRelationsProvider.ServiceImplementation
             }
         }
 
+        public OperationResult<List<User>> GetUsersByRelationStatus(RelationStatus relationStatus)
+        {
+            Console.WriteLine("AccountUpdateServiceprovider  GetNotAllowedFriends");
+
+            try
+            {
+                using (db = new DbMain.EFDbContext.ChatEntities())
+                {
+                    List<User> res = new List<User>();
+                    var contactsLogins = GetUsers(db, relationStatus);
+                    contactsLogins.AddRange(GetUsers(db, relationStatus));
+                    switch (relationStatus)
+                    {
+                      
+                        case RelationStatus.Friendship:
+                            res = GetFriends(db, contactsLogins);
+                            break;
+                        case RelationStatus.FriendshipRequestSent:
+                            res = GetFriendshipRequestSendUsers(db, contactsLogins);
+                            break;
+                        case RelationStatus.FrienshipRequestRecive:
+                            res = GetFriendshipRequestReceiveUsers(db, contactsLogins);
+                            break;
+                        case RelationStatus.BlockedByMe:
+                            res = GetBlockedUsers(db, contactsLogins);
+                            break;                
+                    } 
+                    return new OperationResult<List<User>>(res);
+                }
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult<List<User>>(new List<User>(), false, "Internal error. Try again later");
+            }
+        }
+        #endregion
+
+
+        private User DbUserToCustomerUser(DbMain.EFDbContext.User user, int conversationId)
+        {
+            return new User()
+            {
+                Login = user.Login,
+                Name = user.Name,
+                ConversationId = conversationId,
+                Icon = user.Icon,
+                NetworkStatus = NetworkStatus.Unknown
+            };
+        }
+        //private long CreateConversation(int authorId, int? partnerId, String name = "name", String description = "description",ConversationType conversationType= ConversationType.Dialog )
+        //{
+        //   DbMain.EFDbContext.Conversation conversation = new DbMain.EFDbContext.Conversation()
+        //   {
+
+        //   }
+        //}
+
+        private List<String> GetUsers(DbMain.EFDbContext.ChatEntities db, RelationStatus relation)
+        {
+            var user = db.Users.FirstOrDefault(x => x.Id == curUser.Id);
+            List<String> result = user.Contacts.Where(x => x.RelationTypeId == (int)relation).Select(x => x.User1.Login).ToList();
+            result.AddRange(user.Contacts1.Where(x => x.RelationTypeId == (int)relation).Select(x => x.User.Login).ToList());
+            return result;
+            // var convers = db.Contacts.Where(x => (x.AdderId == curUser.Id || x.InvitedId == curUser.Id) && (RelationStatus)x.RelationTypeId == relation).ToList();
+            // var friends = convers.Select(x => x.AdderId == curUser.Id ? x.User1.Login : x.User.Login).ToList();
+        }
+
+
+
+        public OperationResult<List<User>> GetBlockedUsers()
+        {
+            throw new NotImplementedException();
+        }
+
+
         public void Dispose()
         {
             var res = UserRelationsMain.OnlineUsers.TryRemove(curUser.Login, out AccountRelationsServiceProvider serviceprovider);
             Console.WriteLine($"AccountUpdateServiceprovider Disposed id= {this.GetHashCode()}, login {curUser.Login}, result - {res}");
         }
 
-        public OperationResult<List<User>> GetFriends()
+        private OperationResult<List<User>> GetFriends()
         {
             Console.WriteLine("AccountUpdateServiceprovider  GetFriends");
 
@@ -315,7 +360,7 @@ namespace AccountRelationsProvider.ServiceImplementation
                         Icon = x.Icon,
                         RelationStatus = RelationStatus.Friendship,
                         NetworkStatus = (NetworkStatus)x.NetworkStatusId,
-                        ConversationId = db.Conversations.FirstOrDefault(c => (c.AuthorId == x.Id && c.PartnerId == user.Id) || (c.PartnerId == x.Id && c.AuthorId == user.Id)).Id
+                        ConversationId = db.Conversations.FirstOrDefault(c => (c.AuthorId == x.Id && c.PartnerId == user.Id) || (c.PartnerId == x.Id && c.AuthorId == user.Id))?.Id
                     }).ToList();
                     return new OperationResult<List<User>>(friendsToLocal);
                 }
@@ -336,11 +381,10 @@ namespace AccountRelationsProvider.ServiceImplementation
                 Name = x.Name,
                 Icon = x.Icon,
                 NetworkStatus = (NetworkStatus)x.NetworkStatusId,
-               // ConversationId = db.Conversations.FirstOrDefault(c => (c.AuthorId == x.Id && c.PartnerId == user.Id) || (c.PartnerId == x.Id && c.AuthorId == user.Id))?.Id
+                ConversationId = db.Conversations.FirstOrDefault(c => (c.AuthorId == x.Id && c.PartnerId == user.Id) || (c.PartnerId == x.Id && c.AuthorId == user.Id))?.Id
             }).ToList();
             usersToLocal.ForEach(x =>
             {
-                
                 var cont1 = user.Contacts.FirstOrDefault(y => y.User1.Login == x.Login || y.User.Login == x.Login);
                 if (cont1 != null)
                 {
@@ -368,7 +412,7 @@ namespace AccountRelationsProvider.ServiceImplementation
                 {
                     x.NetworkStatus = NetworkStatus.Unknown;
                 }
-               if(x.RelationStatus!= RelationStatus.None)
+                if (x.RelationStatus != RelationStatus.None)
                 {
 
                 }
@@ -376,28 +420,7 @@ namespace AccountRelationsProvider.ServiceImplementation
 
             return usersToLocal;
         }
-        public OperationResult<List<User>> GetUsersByRelationStatus(RelationStatus relationStatus)
-        {
-            Console.WriteLine("AccountUpdateServiceprovider  GetNotAllowedFriends");
 
-            try
-            {
-                using (db = new DbMain.EFDbContext.ChatEntities())
-                {
-
-                    var friendsLogins = GetUsers(db, RelationStatus.FriendshipRequestSent);
-                    friendsLogins.AddRange(GetUsers(db, RelationStatus.FrienshipRequestRecive));
-                    var res = FromUserDbToUserClient(friendsLogins, db);
-
-
-                    return new OperationResult<List<User>>(res);
-                }
-            }
-            catch (Exception ex)
-            {
-                return new OperationResult<List<User>>(new List<User>(), false, "Internal error. Try again later");
-            }
-        }
         private List<User> GetFriends(DbMain.EFDbContext.ChatEntities db, List<String> logins)
         {
             var friends = db.Users.Where(x => logins.Contains(x.Login)).ToList();
@@ -416,25 +439,6 @@ namespace AccountRelationsProvider.ServiceImplementation
         private List<User> GetBlockedUsers(DbMain.EFDbContext.ChatEntities db, List<String> logins)
         {
             var users = db.Users.Where(x => logins.Contains(x.Login)).ToList();
-          //  var user = db.Users.FirstOrDefault(x => x.Id == curUser.Id);
-            var usersToLocal = users.Select(x => new User
-            {
-                Login = x.Login,
-                Name = x.Name,
-                Icon = x.Icon,
-                RelationStatus=db.Contacts
-                                          .FirstOrDefault(y=> 
-                                          (y.AdderId == x.Id && y.InvitedId == curUser.Id) 
-                                          || (y.AdderId == curUser.Id && y.InvitedId == x.Id))
-                                          .RelationTypeId==(int)RelationStatus.BlockedBoth?RelationStatus.BlockedBoth:RelationStatus.BlockedByMe,
-                NetworkStatus =  NetworkStatus.Unknown,
-                ConversationId = db.Conversations.FirstOrDefault(c => (c.AuthorId == x.Id && c.PartnerId == curUser.Id) || (c.PartnerId == x.Id && c.AuthorId == curUser.Id)).Id
-            }).ToList();            
-            return usersToLocal;
-        }
-        private List<User> GetBlockedUsers(DbMain.EFDbContext.ChatEntities db, List<String> logins)
-        {
-            var users = db.Users.Where(x => logins.Contains(x.Login)).ToList();
             //  var user = db.Users.FirstOrDefault(x => x.Id == curUser.Id);
             var usersToLocal = users.Select(x => new User
             {
@@ -449,6 +453,38 @@ namespace AccountRelationsProvider.ServiceImplementation
                 NetworkStatus = NetworkStatus.Unknown,
                 ConversationId = db.Conversations.FirstOrDefault(c => (c.AuthorId == x.Id && c.PartnerId == curUser.Id) || (c.PartnerId == x.Id && c.AuthorId == curUser.Id)).Id
             }).ToList();
+            return usersToLocal;
+        }
+        private List<User> GetFriendshipRequestSendUsers(DbMain.EFDbContext.ChatEntities db, List<String> logins)
+        {
+            var users = db.Users.Where(x => logins.Contains(x.Login)).ToList();
+            //  var user = db.Users.FirstOrDefault(x => x.Id == curUser.Id);
+            var usersToLocal = users.Select(x => new User
+            {
+                Login = x.Login,
+                Name = x.Name,
+                Icon = x.Icon,
+                RelationStatus = RelationStatus.FriendshipRequestSent,
+                NetworkStatus = NetworkStatus.Unknown,
+                ConversationId = db.Conversations.FirstOrDefault(c => (c.AuthorId == x.Id && c.PartnerId == curUser.Id) || (c.PartnerId == x.Id && c.AuthorId == curUser.Id))?.Id
+            }).ToList();
+
+            return usersToLocal;
+        }
+        private List<User> GetFriendshipRequestReceiveUsers(DbMain.EFDbContext.ChatEntities db, List<String> logins)
+        {
+            var users = db.Users.Where(x => logins.Contains(x.Login)).ToList();
+            //  var user = db.Users.FirstOrDefault(x => x.Id == curUser.Id);
+            var usersToLocal = users.Select(x => new User
+            {
+                Login = x.Login,
+                Name = x.Name,
+                Icon = x.Icon,
+                RelationStatus = RelationStatus.FrienshipRequestRecive,
+                NetworkStatus = NetworkStatus.Unknown,
+                ConversationId = db.Conversations.FirstOrDefault(c => (c.AuthorId == x.Id && c.PartnerId == curUser.Id) || (c.PartnerId == x.Id && c.AuthorId == curUser.Id))?.Id
+            }).ToList();
+
             return usersToLocal;
         }
     }

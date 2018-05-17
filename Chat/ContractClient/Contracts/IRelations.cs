@@ -10,6 +10,8 @@ namespace ContractClient.Contracts
     public interface IRelations
     {
 
+
+        // TODO: Send user on Auth
         [OperationContract(IsInitiating = true)]
         OperationResult<bool> Authentication(String token);
 
@@ -44,11 +46,11 @@ namespace ContractClient.Contracts
         //[OperationContract(IsInitiating = false)]
         //OperationResult<bool> UnBlockUser( String login);
 
-        [OperationContract(IsInitiating = false)]
-        OperationResult<List<User>> GetBlockedUsers();
+        //[OperationContract(IsInitiating = false)]
+        //OperationResult<List<User>> GetBlockedUsers();
 
-        [OperationContract(IsInitiating = false)]
-        OperationResult<List<User>> GetFriends();
+        //[OperationContract(IsInitiating = false)]
+        //OperationResult<List<User>> GetFriends();
 
         [OperationContract(IsInitiating = false)]
         OperationResult<List<User>> GetUsersByRelationStatus(RelationStatus status);
