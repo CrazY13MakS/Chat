@@ -13,7 +13,7 @@ namespace ContractClient.Contracts
 
         // TODO: Send user on Auth
         [OperationContract(IsInitiating = true)]
-        OperationResult<bool> Authentication(String token);
+        OperationResult<UserExt> Authentication(String token);
 
 
         /// <summary>

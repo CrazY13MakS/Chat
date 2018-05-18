@@ -16,7 +16,7 @@ namespace ContractClient
         public String Sity { get; set; }
 
         [DataMember]
-        public DateTime BirthDate { get; set; }
+        public DateTime? BirthDate { get; set; }
 
         [DataMember]
         public String Country { get; set; }

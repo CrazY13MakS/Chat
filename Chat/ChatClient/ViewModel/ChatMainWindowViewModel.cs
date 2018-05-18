@@ -13,7 +13,12 @@ namespace ChatClient.ViewModel
 {
     class ChatMainWindowViewModel : ViewModelBase
     {
-        ModelMain model = new ModelMain(App.Token);
+        ModelMain model;// = new ModelMain(App.Token);
+        public ChatMainWindowViewModel()
+        {
+            model= new ModelMain(App.Token);
+            model.Connect();
+        }
       //  public ModelMain ModelMain { get { return model; } }
         public ObservableCollection<Conversation> Conversations
         {
@@ -38,29 +43,29 @@ namespace ChatClient.ViewModel
                 return model.Author;
             }
         }
-        public ObservableCollection<User> FriendshipNotAllowed
+        //public ObservableCollection<User> FriendshipNotAllowed
+        //{
+        //    get
+        //    {
+        //        return model.FriendshipNotAllowed as ObservableCollection<User>;
+        //    }
+        //}
+
+
+
+        public ObservableCollection<User> FriendshipRequestReceive
         {
             get
             {
-                return model.FriendshipNotAllowed as ObservableCollection<User>;
+                return model.FriendshipRequestReceive as ObservableCollection<User>;
             }
         }
 
-
-
-        public ObservableCollection<User> FriendshipRequestUsers
+        public ObservableCollection<User> FriendshipRequestSent
         {
             get
             {
-                return model.FriendshipNotAllowed as ObservableCollection<User>;
-            }
-        }
-
-        public ObservableCollection<User> FriendshipResponseUsers
-        {
-            get
-            {
-                return model.FriendshipNotAllowed as ObservableCollection<User>;
+                return model.FriendshipRequestSend as ObservableCollection<User>;
             }
         }
 
@@ -88,9 +93,7 @@ namespace ChatClient.ViewModel
 
         private bool CanExecuteConfirmFriendshipCommand(object parametr)
         {
-            var user = parametr as User;
-
-            return user != null && user.RelationStatus == RelationStatus.FrienshipRequestRecive;
+            return parametr is User user && user.RelationStatus == RelationStatus.FrienshipRequestRecive;
         }
 
         #region searchTab
@@ -179,7 +182,7 @@ namespace ChatClient.ViewModel
             {
                 if (_sendFriendRequestCommand == null)
                 {
-                    _sendFriendRequestCommand = new RelayCommand(ExecuteFindCommand, CanExecuteFindCommand);
+                    _sendFriendRequestCommand = new RelayCommand(ExecuteSendFriendRequestCommand, CanExecuteSendFriendRequestCommand);
                 }
                 return _sendFriendRequestCommand;
             }
@@ -196,7 +199,7 @@ namespace ChatClient.ViewModel
 
         private bool CanExecuteSendFriendRequestCommand(object parametr)
         {
-            return SelectedUser != null && SelectedUser.RelationStatus != RelationStatus.None;
+            return parametr is User user && user.RelationStatus == RelationStatus.None;
         }
         #endregion
     }

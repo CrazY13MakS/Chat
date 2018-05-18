@@ -11,7 +11,7 @@ namespace ClientContractImplement
     public interface IRelationsCallbackModel
     {
         Collection<User> Friends { get; }
-        Collection<User> FriendshipNotAllowed { get; }
+       // Collection<User> FriendshipNotAllowed { get; }
         Collection<User> FriendshipRequestSend { get; }
         Collection<User> FriendshipRequestReceive { get; }
 

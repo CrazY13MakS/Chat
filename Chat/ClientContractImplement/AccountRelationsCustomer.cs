@@ -18,14 +18,28 @@ namespace ClientContractImplement
         InstanceContext context;
         private readonly String connectionString = "ClientAccUpdateEndPoint";
         private readonly String token;
+        private IRelationsCallback relationsCallback;
+        public UserExt Author { get; set; }
         public AccountRelationsCustomer(String token, IRelationsCallback callback)
         {
             this.token = token;
-            context = new InstanceContext(callback);
-            factory = new DuplexChannelFactory<IRelations>(context, connectionString);
-            factory.Faulted += Factory_Faulted;
-            channel = factory.CreateChannel();
-            channel.Authentication(token);
+            relationsCallback = callback;
+        }
+        public OperationResult<UserExt> Connect()
+        {
+            try
+            {
+                context = new InstanceContext(relationsCallback);
+                factory = new DuplexChannelFactory<IRelations>(context, connectionString);
+                factory.Faulted += Factory_Faulted;
+                channel = factory.CreateChannel();
+                var res = channel.Authentication(token);
+                return res;
+            }
+            catch (CommunicationException ex)
+            {
+                return new OperationResult<UserExt>(null, false, "Connection error");
+            }
         }
         //public AccountRelationsCustomer(String token)
         //{
@@ -116,23 +130,23 @@ namespace ClientContractImplement
             }
         }
 
-        public OperationResult<List<User>> GetFriends()
-        {
-            try
-            {
-                return channel.GetFriends();
-            }
-            catch (CommunicationException ex)
-            {
-                ReloadChannel();
-                var res = channel.GetFriends();
-                if (!res.IsOk)
-                {
-                    res = new OperationResult<List<User>>(new List<User>(), false, ex.Message);
-                }
-                return res;
-            }
-        }
+        //public OperationResult<List<User>> GetFriends()
+        //{
+        //    try
+        //    {
+        //        return channel.GetFriends();
+        //    }
+        //    catch (CommunicationException ex)
+        //    {
+        //        ReloadChannel();
+        //        var res = channel.GetFriends();
+        //        if (!res.IsOk)
+        //        {
+        //            res = new OperationResult<List<User>>(new List<User>(), false, ex.Message);
+        //        }
+        //        return res;
+        //    }
+        //}
         public OperationResult<List<User>> GetUsersByRelationStatus(RelationStatus relationStatus)
         {
             try

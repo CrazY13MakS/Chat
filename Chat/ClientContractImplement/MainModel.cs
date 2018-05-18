@@ -27,10 +27,30 @@ namespace ClientContractImplement
             relationsCallback = new AccountRelationsCallback(this);
             relationsCustomer = new AccountRelationsCustomer(token, relationsCallback);
 
-            Contacts = new ObservableCollection<User>(relationsCustomer.GetFriends().Response);
             // _friendshipNotAllowed = new ObservableCollection<User>(relationsCustomer.GetContactsByRelationStatus().Response);
         }
+        public void Connect()
+        {
+            var connect = relationsCustomer.Connect();
+            if (!connect.IsOk)
+            {
+                Error?.Invoke("Auth", "error auth");
+                return;
+            }
+            Author = connect.Response;
+            Contacts = new ObservableCollection<User>(relationsCustomer.GetUsersByRelationStatus(RelationStatus.Friendship).Response);
+            var receive = relationsCustomer.GetUsersByRelationStatus(RelationStatus.FrienshipRequestRecive);
+            if (receive.IsOk)
+            {
+                _friendshipRequestReceive = new ObservableCollection<User>(receive.Response);
+            }
+            var sent = relationsCustomer.GetUsersByRelationStatus(RelationStatus.FriendshipRequestSent);
+            if (sent.IsOk)
+            {
+                _friendshipRequestSend = new ObservableCollection<User>(sent.Response);
+            }
 
+        }
         private async void UpdateContacts()
         {
             // Contacts = relationsCustomer
@@ -98,15 +118,20 @@ namespace ClientContractImplement
                 }
             }
         }
-        private ObservableCollection<User> _friendshipNotAllowed;
+        // private ObservableCollection<User> _friendshipNotAllowed;
+
+        //  public Collection<User> FriendshipNotAllowed { get => _friendshipNotAllowed; }
 
         public Collection<User> Friends { get => _contacts; }
 
-        public Collection<User> FriendshipNotAllowed { get => _friendshipNotAllowed; }
 
-        public Collection<User> FriendshipRequestSend => throw new NotImplementedException();
+        private ObservableCollection<User> _friendshipRequestSend;
 
-        public Collection<User> FriendshipRequestReceive => throw new NotImplementedException();
+        public Collection<User> FriendshipRequestSend => _friendshipRequestSend;
+
+        private ObservableCollection<User> _friendshipRequestReceive;
+
+        public Collection<User> FriendshipRequestReceive => _friendshipRequestReceive;
 
         public void SendMessage(String body, long conversationId)
         {
@@ -133,24 +158,29 @@ namespace ClientContractImplement
         {
             switch (status)
             {
-                case RelationStatus.None:
-
+                case RelationStatus.FriendshipRequestSent:
+                    SendFriendshipRequest(login);
                     break;
                 case RelationStatus.Friendship:
                     ConfirmFriendship(login);
                     break;
-                case RelationStatus.FriendshipRequestSent:
-                    break;
                 case RelationStatus.FrienshipRequestRecive:
+                    RemoveFriendship(login);
                     break;
                 case RelationStatus.BlockedByMe:
                     break;
-                case RelationStatus.BlockedByPartner:
-                    break;
-                case RelationStatus.BlockedBoth:
-                    break;
-                default:
-                    break;
+            }
+        }
+        private void SendFriendshipRequest(String login)
+        {
+            var res = relationsCustomer.FriendshipRequest("Hello", login);
+            if (res.IsOk)
+            {
+                FriendshipRequestSend.Add(res.Response);
+            }
+            else
+            {
+                Error?.Invoke("Confirm friendship", res.ErrorMessage);
             }
         }
         private void ConfirmFriendship(String login)
@@ -158,13 +188,13 @@ namespace ClientContractImplement
             var res = relationsCustomer.ChangeRelationType(login, RelationStatus.Friendship);
             if (res.IsOk)
             {
-                var user = FriendshipNotAllowed.FirstOrDefault(x => x.Login == login);
+                var user = FriendshipRequestReceive.FirstOrDefault(x => x.Login == login);
                 Contacts.Add(user);
-                FriendshipNotAllowed.Remove(user);
+                FriendshipRequestReceive.Remove(user);
             }
             else
             {
-                Error.Invoke("Confirm friendship", res.ErrorMessage);
+                Error?.Invoke("Confirm friendship", res.ErrorMessage);
             }
         }
         private void RemoveFriendship(String login)
@@ -172,13 +202,39 @@ namespace ClientContractImplement
             var res = relationsCustomer.ChangeRelationType(login, RelationStatus.FrienshipRequestRecive);
             if (res.IsOk)
             {
-                var user = FriendshipNotAllowed.FirstOrDefault(x => x.Login == login);
-                Contacts.Add(user);
-                FriendshipNotAllowed.Remove(user);
+                var user = Contacts.FirstOrDefault(x => x.Login == login);
+                Contacts.Remove(user);
+                FriendshipRequestReceive.Remove(user);
             }
             else
             {
-                Error.Invoke("Confirm friendship", res.ErrorMessage);
+                Error.Invoke("Remove Friendship error", res.ErrorMessage);
+            }
+        }
+        private void BlockUser(String login)
+        {
+            var res = relationsCustomer.ChangeRelationType(login, RelationStatus.BlockedByMe);
+            if (res.IsOk)
+            {
+                var friend = Contacts.FirstOrDefault(x => x.Login == login);
+                if (friend != null)
+                {
+                    Contacts.Remove(friend);
+                }
+                var requestReceive = FriendshipRequestReceive.FirstOrDefault(x => x.Login == login);
+                if (requestReceive != null)
+                {
+                    FriendshipRequestReceive.Remove(requestReceive);
+                }
+                var requestSent = FriendshipRequestSend.FirstOrDefault(x => x.Login == login);
+                if (requestSent != null)
+                {
+                    FriendshipRequestSend.Remove(requestSent);
+                }
+            }
+            else
+            {
+                Error?.Invoke("BlockUserError error", res.ErrorMessage);
             }
         }
 

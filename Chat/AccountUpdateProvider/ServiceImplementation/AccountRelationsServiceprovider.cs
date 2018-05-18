@@ -25,8 +25,8 @@ namespace AccountRelationsProvider.ServiceImplementation
 
 
 
-        #region IRelationsImplement
-        public OperationResult<bool> Authentication(string token)
+        #region IRelations Implement
+        public OperationResult<UserExt> Authentication(string token)
         {
             Console.WriteLine("AccountUpdateServiceprovider  Auth");
             try
@@ -34,21 +34,32 @@ namespace AccountRelationsProvider.ServiceImplementation
                 using (db = new DbMain.EFDbContext.ChatEntities())
                 {
                     var access = db.AccessTokens.FirstOrDefault(x => x.IsActive && x.Token == token);
-                    if (access != null)
+                    if (access == null)
                     {
-                        curUser = access.User;
-                        return new OperationResult<bool>(true);
+                        return new OperationResult<UserExt>(null, false, "Faild authorization");
                     }
-                    access.User.NetworkStatusId = (int)NetworkStatus.OnLine;
+                    curUser = access.User;
+                    if ((NetworkStatus)access.User.NetworkStatusId != NetworkStatus.Hidden)
+                    {
+                        access.User.NetworkStatusId = (int)NetworkStatus.OnLine;
+                    }
                     db.SaveChanges();
-                    UserRelationsMain.OnlineUsers.TryAdd(access.User.Login, this);
-                    return new OperationResult<bool>(false, false, "Faild authorization");
+                    UserRelationsMain.OnlineUsers.TryAdd(curUser.Login, this);
+                    return new OperationResult<UserExt>(new UserExt()
+                    {
+                        BirthDate = curUser.Birthdate,
+                        Icon = curUser.Icon,
+                        Login = curUser.Login,
+                        Name = curUser.Name,
+                        NetworkStatus = (NetworkStatus)curUser.NetworkStatusId,
+                        Phone = curUser.Phone
+                    });
                 }
             }
             catch (Exception ex)
             {
 
-                return new OperationResult<bool>(false, false, "Internal error. Try again later");
+                return new OperationResult<UserExt>(null, false, "Internal error. Try again later");
             }
         }
 
@@ -63,7 +74,7 @@ namespace AccountRelationsProvider.ServiceImplementation
 
                     var user = db.Users.FirstOrDefault(x => x.Id == curUser.Id);
                     user.NetworkStatusId = (int)status;
-                    var friends = GetUsers(db, RelationStatus.Friendship);
+                    var friends = GetContacts(db, RelationStatus.Friendship);
                     var res = db.SaveChanges();
                     if (res == 1)
                     {
@@ -268,11 +279,12 @@ namespace AccountRelationsProvider.ServiceImplementation
                 using (db = new DbMain.EFDbContext.ChatEntities())
                 {
                     List<User> res = new List<User>();
-                    var contactsLogins = GetUsers(db, relationStatus);
-                    contactsLogins.AddRange(GetUsers(db, relationStatus));
+                    List<String> contactsLogins;
+                    contactsLogins = GetContacts(db, relationStatus);
+                    // contactsLogins.AddRange(GetUsers(db, relationStatus));
                     switch (relationStatus)
                     {
-                      
+
                         case RelationStatus.Friendship:
                             res = GetFriends(db, contactsLogins);
                             break;
@@ -284,8 +296,8 @@ namespace AccountRelationsProvider.ServiceImplementation
                             break;
                         case RelationStatus.BlockedByMe:
                             res = GetBlockedUsers(db, contactsLogins);
-                            break;                
-                    } 
+                            break;
+                    }
                     return new OperationResult<List<User>>(res);
                 }
             }
@@ -316,11 +328,43 @@ namespace AccountRelationsProvider.ServiceImplementation
         //   }
         //}
 
-        private List<String> GetUsers(DbMain.EFDbContext.ChatEntities db, RelationStatus relation)
+        private List<String> GetContacts(DbMain.EFDbContext.ChatEntities db, RelationStatus relation)
         {
             var user = db.Users.FirstOrDefault(x => x.Id == curUser.Id);
-            List<String> result = user.Contacts.Where(x => x.RelationTypeId == (int)relation).Select(x => x.User1.Login).ToList();
-            result.AddRange(user.Contacts1.Where(x => x.RelationTypeId == (int)relation).Select(x => x.User.Login).ToList());
+            List<String> result = new List<string>();
+            switch (relation)
+            {
+                case RelationStatus.BlockedBoth:
+                case RelationStatus.Friendship:
+                    result = user.Contacts.Where(x => x.RelationTypeId == (int)relation).Select(x => x.User1.Login).ToList();
+                    result.AddRange(user.Contacts1.Where(x => x.RelationTypeId == (int)relation).Select(x => x.User.Login).ToList());
+                    break;
+                case RelationStatus.FriendshipRequestSent:
+                    result.AddRange(user.Contacts.Where(x => x.RelationTypeId == (int)RelationStatus.FriendshipRequestSent).Select(x => x.User1.Login));
+                    result.AddRange(user.Contacts1.Where(x => x.RelationTypeId == (int)RelationStatus.FrienshipRequestRecive).Select(x => x.User.Login));
+                    break;
+                case RelationStatus.FrienshipRequestRecive:
+                    result.AddRange(user.Contacts.Where(x => x.RelationTypeId == (int)RelationStatus.FrienshipRequestRecive).Select(x => x.User1.Login));
+                    result.AddRange(user.Contacts1.Where(x => x.RelationTypeId == (int)RelationStatus.FriendshipRequestSent).Select(x => x.User.Login));
+                    break;
+                case RelationStatus.BlockedByMe:
+                    result.AddRange(user.Contacts.Where(x => x.RelationTypeId == (int)RelationStatus.BlockedByMe).Select(x => x.User1.Login));
+                    result.AddRange(user.Contacts1.Where(x => x.RelationTypeId == (int)RelationStatus.BlockedByPartner).Select(x => x.User.Login));
+                    break;
+                case RelationStatus.BlockedByPartner:
+                    result.AddRange(user.Contacts.Where(x => x.RelationTypeId == (int)RelationStatus.BlockedByPartner).Select(x => x.User1.Login));
+                    result.AddRange(user.Contacts1.Where(x => x.RelationTypeId == (int)RelationStatus.BlockedByMe).Select(x => x.User.Login));
+                    break;
+                default:
+                    break;
+            }
+        //  if (relation == RelationStatus.BlockedByMe || relation == RelationStatus.FriendshipRequestSent)
+        //  {
+        //      result.AddRange(user.Contacts.Where(x => x.RelationTypeId == (int)relation).Select(x => x.User1.Login));
+        //      result.AddRange(user.Contacts1.Where(x => x.RelationTypeId == (int)relation).Select(x => x.User1.Login))
+        //  }
+        //  result = user.Contacts.Where(x => x.RelationTypeId == (int)relation).Select(x => x.User1.Login).ToList();
+        //  result.AddRange(user.Contacts1.Where(x => x.RelationTypeId == (int)relation).Select(x => x.User.Login).ToList());
             return result;
             // var convers = db.Contacts.Where(x => (x.AdderId == curUser.Id || x.InvitedId == curUser.Id) && (RelationStatus)x.RelationTypeId == relation).ToList();
             // var friends = convers.Select(x => x.AdderId == curUser.Id ? x.User1.Login : x.User.Login).ToList();
@@ -349,7 +393,7 @@ namespace AccountRelationsProvider.ServiceImplementation
                 using (db = new DbMain.EFDbContext.ChatEntities())
                 {
 
-                    var friendsLogins = GetUsers(db, RelationStatus.Friendship);
+                    var friendsLogins = GetContacts(db, RelationStatus.Friendship);
                     var friends = db.Users.Where(x => friendsLogins.Contains(x.Login)).ToList();
 
                     var user = db.Users.FirstOrDefault(x => x.Id == curUser.Id);

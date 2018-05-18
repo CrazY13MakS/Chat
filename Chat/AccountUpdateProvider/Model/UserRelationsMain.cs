@@ -11,6 +11,10 @@ namespace AccountRelationsProvider.Model
     class UserRelationsMain
     {
         public static ConcurrentDictionary<String, ServiceImplementation.AccountRelationsServiceProvider> OnlineUsers { get; set; }
+        static UserRelationsMain()
+        {
+            OnlineUsers = new ConcurrentDictionary<string, ServiceImplementation.AccountRelationsServiceProvider>();
+        }
 
         public async static void SendFrienshipRequest(String invited, User author, String message)
         {
