@@ -20,7 +20,7 @@ namespace AccountRelationsProvider.Model
         {
             if (OnlineUsers.TryGetValue(invited, out AccountRelationsProvider.ServiceImplementation.AccountRelationsServiceProvider provider))
             {
-                await Task.Run(() => provider.Callback.FriendshipRequest(author));
+                await Task.Run(() => provider?.Callback.FriendshipRequest(author));
             }
         }
 
@@ -31,7 +31,7 @@ namespace AccountRelationsProvider.Model
             {
                 if (OnlineUsers.TryGetValue(item, out ServiceImplementation.AccountRelationsServiceProvider provider))
                 {
-                    await Task.Run(() => provider.Callback.UserNetworkStatusChanged(login, networkStatus));
+                    await Task.Run(() => provider?.Callback.UserNetworkStatusChanged(login, networkStatus));
                 }
             }
         }
@@ -39,7 +39,7 @@ namespace AccountRelationsProvider.Model
         {
             if (OnlineUsers.TryGetValue(invited, out AccountRelationsProvider.ServiceImplementation.AccountRelationsServiceProvider provider))
             {
-                await Task.Run(() => provider.Callback.ChangeRelationType(author, relationStatus));
+                await Task.Run(() => provider?.Callback.ChangeRelationType(author, relationStatus));
             }
         }
     }

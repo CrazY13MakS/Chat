@@ -95,6 +95,7 @@
     <Compile Include="ViewModel\FindFriendsVM.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="ViewModel\ViewModelLogIn.cs" />
+    <Compile Include="View\BindingProxy.cs" />
     <Compile Include="View\ChatControls\ContactPreview.xaml.cs">
       <DependentUpon>ContactPreview.xaml</DependentUpon>
     </Compile>

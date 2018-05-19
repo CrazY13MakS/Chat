@@ -19,17 +19,17 @@ namespace ServicesProvider
             AccountUpdateHost accHost = new AccountUpdateHost();
             authHost.Open();
             accHost.Open();
-            //  while (true)
-            //  {
-            //
-            //  }
+           //  while (true)
+           //  {
+           //
+           //  }
 
 
-           //     AccountRelationsServiceProvider account = new AccountRelationsServiceProvider();
-          //  var user =   account.Authentication("124ae10f-4204-4035-a99d-82aa98956cc120:27:25");
-           //  var fr=  account.GetUsersByRelationStatus( ContractClient.RelationStatus.Friendship);
-           //    var rr = account.GetUsersByRelationStatus(ContractClient.RelationStatus.FriendshipRequestSent);
-           //    var tt = account.GetUsersByRelationStatus(ContractClient.RelationStatus.FrienshipRequestRecive);
+            //     AccountRelationsServiceProvider account = new AccountRelationsServiceProvider();
+            //  var user =   account.Authentication("124ae10f-4204-4035-a99d-82aa98956cc120:27:25");
+            //  var fr=  account.GetUsersByRelationStatus( ContractClient.RelationStatus.Friendship);
+            //    var rr = account.GetUsersByRelationStatus(ContractClient.RelationStatus.FriendshipRequestSent);
+            //    var tt = account.GetUsersByRelationStatus(ContractClient.RelationStatus.FrienshipRequestRecive);
 
 
 
@@ -78,11 +78,18 @@ namespace ServicesProvider
 
             //}
             //   Console.ReadKey();
-            //  AuthServiceProvider.Model.UserAccess userAccess = new AuthServiceProvider.Model.UserAccess();
+             // AuthServiceProvider.Model.UserAccess userAccess = new AuthServiceProvider.Model.UserAccess();
             //  userAccess.Registration("crazy13maks@gmail.com", "crazy13maks", "!QAZ2wsx");
             //   userAccess.Registration("temp@temp.com", "temp1", "!QAZ2wsx");
             //  userAccess.Registration("temp2@temp.com", "temp2", "!QAZ2wsx");
             //  userAccess.Registration("temp3@temp.com", "temp3", "!QAZ2wsx");
+
+
+            //userAccess.Registration("temp4@temp.com", "temp4", "!QAZ2wsx");
+            //userAccess.Registration("temp5@temp.com", "temp5", "!QAZ2wsx");
+            //userAccess.Registration("temp6@temp.com", "temp6", "!QAZ2wsx");
+            //userAccess.Registration("temp7@temp.com", "temp7", "!QAZ2wsx");
+            //userAccess.Registration("temp8@temp.com", "temp8", "!QAZ2wsx");
             Console.ReadKey();
 
         authHost.Close();

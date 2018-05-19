@@ -16,10 +16,10 @@ namespace ChatClient.ViewModel
         ModelMain model;// = new ModelMain(App.Token);
         public ChatMainWindowViewModel()
         {
-            model= new ModelMain(App.Token);
+            model = new ModelMain(App.Token);
             model.Connect();
         }
-      //  public ModelMain ModelMain { get { return model; } }
+        //  public ModelMain ModelMain { get { return model; } }
         public ObservableCollection<Conversation> Conversations
         {
             get
@@ -72,29 +72,7 @@ namespace ChatClient.ViewModel
 
 
 
-        RelayCommand _confirmFriendship;
-        public ICommand ConfirmFriendshipCommand
-        {
-            get
-            {
-                if (_confirmFriendship == null)
-                {
-                    _confirmFriendship = new RelayCommand(ExecuteConfirmFriendshipCommand, CanExecuteConfirmFriendshipCommand);
-                }
-                return _confirmFriendship;
-            }
-        }
 
-        private void ExecuteConfirmFriendshipCommand(object parametr)
-        {
-            var user = parametr as User;
-            model.ChangeRelationStatus(user.Login, RelationStatus.Friendship);
-        }
-
-        private bool CanExecuteConfirmFriendshipCommand(object parametr)
-        {
-            return parametr is User user && user.RelationStatus == RelationStatus.FrienshipRequestRecive;
-        }
 
         #region searchTab
 
@@ -202,5 +180,156 @@ namespace ChatClient.ViewModel
             return parametr is User user && user.RelationStatus == RelationStatus.None;
         }
         #endregion
+
+
+        #region Change relation type
+
+        RelayCommand _confirmFriendship;
+        public ICommand ConfirmFriendshipCommand
+        {
+            get
+            {
+                if (_confirmFriendship == null)
+                {
+                    _confirmFriendship = new RelayCommand(ExecuteConfirmFriendshipCommand, CanExecuteConfirmFriendshipCommand);
+                }
+                return _confirmFriendship;
+            }
+        }
+
+        private void ExecuteConfirmFriendshipCommand(object parametr)
+        {
+            var user = parametr as User;
+            model.ChangeRelationStatus(user.Login, RelationStatus.Friendship);
+        }
+
+        private bool CanExecuteConfirmFriendshipCommand(object parametr)
+        {
+            return parametr is User user && user.RelationStatus == RelationStatus.FrienshipRequestRecive;
+        }
+
+        RelayCommand _removeFromFriends;
+        public ICommand RemoveFromFriendsCommand
+        {
+            get
+            {
+                if (_removeFromFriends == null)
+                {
+                    _removeFromFriends = new RelayCommand(ExecuteRemoveFromFriendsCommand, CanExecuteRemoveFromFriendsCommand);
+                }
+                return _removeFromFriends;
+            }
+        }
+
+        private void ExecuteRemoveFromFriendsCommand(object parametr)
+        {
+            var user = parametr as User;
+            model.RemoveFromFriends(user.Login);
+        }
+
+        private bool CanExecuteRemoveFromFriendsCommand(object parametr)
+        {
+            return parametr is User user && user.RelationStatus == RelationStatus.Friendship;
+        }
+
+
+
+
+        RelayCommand _removeRelationRequest;
+        public ICommand RemoveRelationRequestCommand
+        {
+            get
+            {
+                if (_removeRelationRequest == null)
+                {
+                    _removeRelationRequest = new RelayCommand(ExecuteRemoveRelationRequestCommand, CanExecuteRemoveRelationRequestCommand);
+                }
+                return _removeRelationRequest;
+            }
+        }
+
+        private void ExecuteRemoveRelationRequestCommand(object parametr)
+        {
+            var user = parametr as User;
+            model.RemoveFriendshipRequest(user.Login);
+        }
+
+        private bool CanExecuteRemoveRelationRequestCommand(object parametr)
+        {
+            return parametr is User user && (user.RelationStatus == RelationStatus.FriendshipRequestSent || user.RelationStatus == RelationStatus.FrienshipRequestRecive);
+        }
+
+        RelayCommand _blockUser;
+        public ICommand BlockUserCommand
+        {
+            get
+            {
+                if (_blockUser == null)
+                {
+                    _blockUser = new RelayCommand(ExecuteBlockUserCommand, CanExecuteBlockUserCommand);
+                }
+                return _blockUser;
+            }
+        }
+
+        private void ExecuteBlockUserCommand(object parametr)
+        {
+            var user = parametr as User;
+            model.BlockUser(user.Login);
+        }
+
+        private bool CanExecuteBlockUserCommand(object parametr)
+        {
+            return parametr is User user;
+        }
+
+
+        RelayCommand _unblockUser;
+        public ICommand UnBlockUserCommand
+        {
+            get
+            {
+                if (_unblockUser == null)
+                {
+                    _unblockUser = new RelayCommand(ExecuteUnBlockUserCommand, CanExecuteUnBlockUserCommand);
+                }
+                return _unblockUser;
+            }
+        }
+
+        private void ExecuteUnBlockUserCommand(object parametr)
+        {
+            var user = parametr as User;
+            model.UnblockUser(user.Login);
+        }
+
+        private bool CanExecuteUnBlockUserCommand(object parametr)
+        {
+            return parametr is User user&& (user.RelationStatus== RelationStatus.BlockedByMe|| user.RelationStatus== RelationStatus.BlockedBoth);
+        }
+
+
+        #endregion
+
+
+
+
+
+
+        RelayCommand _testCallback;
+        public ICommand TestCallback
+        {
+            get
+            {
+                if (_testCallback == null)
+                {
+                    _testCallback = new RelayCommand((x) =>
+                    {
+                        model.ChangeNetworkStatus(NetworkStatus.Busy);
+                    });
+                }
+                return _testCallback;
+            }
+        }
     }
 }

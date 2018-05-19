@@ -7,7 +7,7 @@
         xmlns:cCtrl="clr-namespace:ChatClient.View.ChatControls"
         xmlns:vm="clr-namespace:ChatClient.ViewModel"
         mc:Ignorable="d"
-        Title="{Binding Author.Login}" Height="450" Width="800">
+        Title="{Binding Author.Login}" Height="450" Width="800" x:Name="mv">
     <Window.Resources>
         <cCtrl:ConversationPreview x:Key="chatPreview"></cCtrl:ConversationPreview>
     </Window.Resources>
@@ -35,9 +35,19 @@
                 </Ellipse.Fill>
             </Ellipse>
         </Grid>
-        <ListBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Contacts}" DisplayMemberPath="Name"></ListBox>
+        <ListBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Contacts}" >
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="{Binding Name}"/>
+                        <TextBlock Text="{Binding Login}"/>
+                        <TextBlock Text="{Binding NetworkStatus}"/>
+                        <TextBlock Text="{Binding  RelationStatus}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
         <ListBox Grid.Row="1" Grid.Column="2" ItemsSource="{Binding FriendshipNotAllowed}">
-
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -62,7 +72,7 @@
                 </ListBox>
             </ScrollViewer>
         </StackPanel>
-        <Button Click="Button_Click"></Button>
+        <Button Command="{Binding TestCallback}"></Button>
         <TabControl Grid.Column="2">
             <TabItem Header="Search">
                 <Grid>
@@ -84,7 +94,7 @@
                         <TextBlock Text="{Binding Name}"/>
                         <TextBlock Text="{Binding Login}"/>
                         <TextBlock Text="{Binding RelationStatus}"/>
-                        <Button Content="Add" Command="{Binding DataContext.SendFriendRequestCommand,RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" CommandParameter="{Binding}" Grid.Column="1"/>
+                        <Button Content="Add" Command="{Binding ElementName=mv,Path=DataContext.ConfirmFriendshipCommand}" CommandParameter="{Binding}" Grid.Column="1"/>
 
                     </StackPanel>
                 </Grid>
@@ -92,10 +102,74 @@
             </TabItem>
             <TabItem Header="Contacts">
                 <Grid>
-                    <ListBox ItemsSource="{Binding Contacts}">
+                    <ListBox ItemsSource="{Binding Contacts}" x:Name="lstContacts"  Tag="{Binding DataContext, ElementName=root}">
+                        <ListBox.ContextMenu>
+                            <ContextMenu DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}">
+                                <MenuItem Header="Delete" Command="{Binding  DataContext.RemoveFromFriendsCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"/>
+                                <MenuItem Header="Block" Command="{Binding   DataContext.BlockUserCommand}" CommandParameter="{Binding PlacementTarget.DataContext, 
+                RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+                               
+                                <MenuItem Header="Foo" Command="{Binding RemoveRelationRequestCommand}" 
+                              CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}},
+                                Path=PlacementTarget.SelectedItem}"/>
+                            </ContextMenu>
+                        </ListBox.ContextMenu>
+                        <!--<ListBox.Resources>
+                            <local:BindingProxy x:Key="proxy" Data="{Binding}" />
+
+
+                            <ContextMenu x:Key="MyElementMenu">
+                                <MenuItem Header="Delete"  Command="{Binding Path=DataContext.RemoveFromFriendsCommand}" CommandParameter="{Binding Path=SelectedItem}"/>
+                                <MenuItem Header="Block"  Command="{Binding  Path=DataContext.BlockUserCommand}" CommandParameter="{Binding}"/>
+                                <MenuItem Header="Delete 2" Command="{Binding DataContext.RemoveFromFriendsCommand,RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" CommandParameter="{Binding ElementName=lstContacts,Path=SelectedValue}"/>
+                                <MenuItem Header="Delete 2" Command="{Binding  DataContext.RemoveFromFriendsCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}" CommandParameter="{Binding Source={StaticResource proxy}}"/>
+
+                            </ContextMenu>
+                            <Style TargetType="{x:Type ListBoxItem}">
+                                <Setter Property="ContextMenu" Value="{StaticResource MyElementMenu}"/>
+                            </Style>
+
+                        </ListBox.Resources>-->
+                        <!--<ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="ContextMenu">
+                                    <Setter.Value>
+                                        <ContextMenu DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}" >                                          
+                                            <MenuItem Header="Delete"  Command="{Binding Path=DataContext.RemoveFromFriendsCommand}" CommandParameter="{Binding Path=SelectedItem}"/>
+                                            <MenuItem Header="Block"  Command="{Binding  Path=DataContext.BlockUserCommand}" CommandParameter="{Binding}"/>
+                                            <MenuItem Header="Delete 2" Command="{Binding DataContext.RemoveFromFriendsCommand,RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" CommandParameter="{Binding Source={StaticResource proxy}}"/>
+                                            <MenuItem Header="Delete 3" Command="{Binding Path=DataContext.RemoveFromFriendsCommand,RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" CommandParameter="{Binding ElementName=lstContacts, Path=SelectedValue}"/>
+
+                                        </ContextMenu>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListBox.ItemContainerStyle>-->
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <cCtrl:ConversationPreview></cCtrl:ConversationPreview>
+                                <Grid>
+                                    <!--<Grid.ContextMenu>
+                                        <ContextMenu>
+
+                                            <MenuItem Header="Delete 2" Command="{Binding DataContext.RemoveFromFriendsCommand,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" CommandParameter="{Binding}"/>
+                                        </ContextMenu>
+
+                                    </Grid.ContextMenu>-->
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Ellipse Width="100" Height="100" >
+                                        <Ellipse.Fill>
+                                            <ImageBrush ImageSource="{Binding IconPathLocal}" Stretch="Fill"/>
+                                        </Ellipse.Fill>
+                                    </Ellipse>
+                                    <TextBlock Grid.Column="1" VerticalAlignment="Center" Height="50" Text="{Binding Name}"/>
+                                    <TextBlock Grid.Column="1" VerticalAlignment="Bottom" Height="50" Text="{Binding NetworkStatus}"/>
+                                    <!--<Button Content="Remove" Command="{Binding DataContext.RemoveFromFriendsCommand,RelativeSource={RelativeSource FindAncestor, AncestorType=Window} }" CommandParameter="{Binding}"/>-->
+
+                                </Grid>
+                                <!--<cCtrl:ConversationPreview></cCtrl:ConversationPreview>-->
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
@@ -113,7 +187,8 @@
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Text="{Binding Login}"/>
                                     <Button Content="Add" Command="{Binding DataContext.ConfirmFriendshipCommand,RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" CommandParameter="{Binding}" Grid.Column="1"/>
-
+                                    <Button Content="Block" Command="{Binding DataContext.BlockUserCommand,RelativeSource={RelativeSource FindAncestor, AncestorType=Window} }" CommandParameter="{Binding}"/>
+                                    <Button Content="Remove request" Command="{Binding DataContext.RemoveRelationRequestCommand,RelativeSource={RelativeSource FindAncestor, AncestorType=Window} }" CommandParameter="{Binding}"/>
 
                                 </Grid>
                             </DataTemplate>
@@ -132,7 +207,8 @@
                                         <ColumnDefinition Width="auto"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Text="{Binding Login}"/>
-                                    <Button Content="Add" Command="{Binding ConfirmFriendshipCommand}" CommandParameter="{Binding}" Grid.Column="1"/>
+                                    <Button Content="Remove request" Command="{Binding DataContext.RemoveRelationRequestCommand,RelativeSource={RelativeSource FindAncestor, AncestorType=Window} }" CommandParameter="{Binding}"/>
+                                    <Button Content="Block" Command="{Binding DataContext.BlockUserCommand,RelativeSource={RelativeSource FindAncestor, AncestorType=Window} }" CommandParameter="{Binding}"/>
 
                                 </Grid>
                             </DataTemplate>

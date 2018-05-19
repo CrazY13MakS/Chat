@@ -16,6 +16,7 @@
                 <ImageBrush ImageSource="{Binding IconPathLocal}" Stretch="Fill"/>
             </Ellipse.Fill>
         </Ellipse>
-        <TextBlock Grid.Column="1" VerticalAlignment="Center" Height="50" Text="{Binding Name}"/>        
+        <TextBlock Grid.Column="1" VerticalAlignment="Center" Height="50" Text="{Binding Name}"/>
+        <TextBlock Grid.Column="1" VerticalAlignment="Bottom" Height="50" Text="{Binding NetworkStatus}"/>
     </Grid>
 </UserControl>

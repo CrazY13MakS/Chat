@@ -6,7 +6,9 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace ClientContractImplement
 {
@@ -75,6 +77,33 @@ namespace ClientContractImplement
             }
         }
 
+        public void SendMessage(String body, long conversationId)
+        {
+            var conv = Conversations.FirstOrDefault(x => x.Id == conversationId);
+            if (conv == null)
+            {
+                Error.Invoke("Send message", "ConversationId not found error");
+            }
+            ConversationReply reply = new ConversationReply()
+            {
+                Author = Author.Login,
+                Body = body,
+                ConversationId = conversationId,
+                SendingTime = DateTime.UtcNow,
+                Status = ConversationReplyStatus.Sendidg
+            };
+            conv.Messages.Add(reply);
+
+
+        }
+
+        #region Relations
+
+
+
+
+
+
         ObservableCollection<User> _contacts;
         public ObservableCollection<User> Contacts
         {
@@ -96,11 +125,6 @@ namespace ClientContractImplement
             }
         }
 
-        public List<User> FindUsers(String searchQuery)
-        {
-            var res = relationsCustomer.FindUsers(searchQuery);
-            return res.Response;
-        }
 
         UserExt _author;
         public UserExt Author
@@ -118,6 +142,12 @@ namespace ClientContractImplement
                 }
             }
         }
+
+        public List<User> FindUsers(String searchQuery)
+        {
+            var res = relationsCustomer.FindUsers(searchQuery);
+            return res.Response;
+        }
         // private ObservableCollection<User> _friendshipNotAllowed;
 
         //  public Collection<User> FriendshipNotAllowed { get => _friendshipNotAllowed; }
@@ -133,26 +163,47 @@ namespace ClientContractImplement
 
         public Collection<User> FriendshipRequestReceive => _friendshipRequestReceive;
 
-        public void SendMessage(String body, long conversationId)
+        public async void AddFriend(String login)
         {
-            var conv = Conversations.FirstOrDefault(x => x.Id == conversationId);
-            if (conv == null)
-            {
-                Error.Invoke("Send message", "ConversationId not found error");
-            }
-            ConversationReply reply = new ConversationReply()
-            {
-                Author = Author.Login,
-                Body = body,
-                ConversationId = conversationId,
-                SendingTime = DateTime.UtcNow,
-                Status = ConversationReplyStatus.Sendidg
-            };
-            conv.Messages.Add(reply);
-
-
+            await Task.Run(() => SendFriendshipRequest(login));
+        }
+        public async void RemoveFromFriends(String login)
+        {
+            await Task.Run(() => RemoveFriendship(login));
+        }
+        public async void BlockUser(String login)
+        {
+            await Task.Run(() => AddToBlackList(login));
+        }
+        public async void UnblockUser(String login)
+        {
+            await Task.Run(() => RemoveRelationType(login));
+        }
+        public async void RemoveFriendshipRequest(String login)
+        {
+            await Task.Run(() => RemoveRelationType(login));
+        }
+        public void ChangeNetworkStatus(NetworkStatus status)
+        {
+            var res = relationsCustomer.ChangeNetworkStatus(status);
         }
 
+        NetworkStatus _status;
+        public NetworkStatus NetworkStatus
+        {
+            get
+            {
+                return _status;
+            }
+            set
+            {
+                if (_status != value)
+                {
+                    _status = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
 
         public void ChangeRelationStatus(String login, RelationStatus status)
         {
@@ -203,15 +254,19 @@ namespace ClientContractImplement
             if (res.IsOk)
             {
                 var user = Contacts.FirstOrDefault(x => x.Login == login);
-                Contacts.Remove(user);
-                FriendshipRequestReceive.Remove(user);
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                   Contacts.Remove(user);
+                FriendshipRequestReceive.Remove(user);                   
+                });
+               
             }
             else
             {
                 Error.Invoke("Remove Friendship error", res.ErrorMessage);
             }
         }
-        private void BlockUser(String login)
+        private void AddToBlackList(String login)
         {
             var res = relationsCustomer.ChangeRelationType(login, RelationStatus.BlockedByMe);
             if (res.IsOk)
@@ -237,7 +292,15 @@ namespace ClientContractImplement
                 Error?.Invoke("BlockUserError error", res.ErrorMessage);
             }
         }
-
+        private void RemoveRelationType(String login)
+        {
+            var res = relationsCustomer.ChangeRelationType(login, RelationStatus.None);
+            if (!res.IsOk)
+            {
+                Error?.Invoke("BlockUserError error", res.ErrorMessage);
+            }
+        }
+        #endregion
 
 
 
