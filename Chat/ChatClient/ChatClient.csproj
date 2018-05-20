@@ -90,6 +90,7 @@
     </Compile>
     <Compile Include="Infrastructure\DisplayHelper.cs" />
     <Compile Include="Infrastructure\ISecurePassword.cs" />
+    <Compile Include="Infrastructure\RelationTypeToVisibilityConverter.cs" />
     <Compile Include="Infrastructure\RelayCommand.cs" />
     <Compile Include="ViewModel\ChatMainWindowViewModel.cs" />
     <Compile Include="ViewModel\FindFriendsVM.cs" />

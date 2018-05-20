@@ -6,17 +6,30 @@
         xmlns:local="clr-namespace:ChatClient.View"
         xmlns:cCtrl="clr-namespace:ChatClient.View.ChatControls"
         xmlns:vm="clr-namespace:ChatClient.ViewModel"
+        xmlns:infr="clr-namespace:ChatClient.Infrastructure"
         mc:Ignorable="d"
         Title="{Binding Author.Login}" Height="450" Width="800" x:Name="mv">
     <Window.Resources>
         <cCtrl:ConversationPreview x:Key="chatPreview"></cCtrl:ConversationPreview>
+        <infr:RelationTypeToVisibilityConverter x:Key="relConv" FalseValue="Collapsed"></infr:RelationTypeToVisibilityConverter>
+        <DataTemplate x:Name="relBtn" x:Key="relBtnKey">
+            <StackPanel Orientation="Vertical">
+
+                <Button Content="Confirm" Command="{Binding ElementName=mv,Path=DataContext.ConfirmFriendshipCommand}" CommandParameter="{Binding}" Grid.Column="1" Visibility="{Binding RelationStatus, Converter={StaticResource relConv}, ConverterParameter=Confirm}"/>
+                <Button Content="Add" Command="{Binding ElementName=mv,Path=DataContext.SendFriendRequestCommand}" CommandParameter="{Binding}" Grid.Column="1" Visibility="{Binding RelationStatus, Converter={StaticResource relConv}, ConverterParameter=Add}"/>
+                <Button Content="Block" Command="{Binding ElementName=mv,Path=DataContext.BlockUserCommand}" CommandParameter="{Binding}" Grid.Column="1" Visibility="{Binding RelationStatus, Converter={StaticResource relConv}, ConverterParameter=Block}"/>
+                <Button Content="UnBlock" Command="{Binding ElementName=mv,Path=DataContext.UnBlockUserCommand}" CommandParameter="{Binding}" Grid.Column="1" Visibility="{Binding RelationStatus, Converter={StaticResource relConv}, ConverterParameter=UnBlock}"/>
+                <Button Content="Remove" Command="{Binding ElementName=mv,Path=DataContext.RemoveFromFriendsCommand}" CommandParameter="{Binding}" Grid.Column="1" Visibility="{Binding RelationStatus, Converter={StaticResource relConv}, ConverterParameter=Remove}"/>
+                <Button Content="Remove Request" Command="{Binding ElementName=mv,Path=DataContext.RemoveRelationRequestCommand}" CommandParameter="{Binding}" Grid.Column="1" Visibility="{Binding RelationStatus, Converter={StaticResource relConv}, ConverterParameter=RemoveRequest}"/>
+            </StackPanel>
+        </DataTemplate>
     </Window.Resources>
     <Window.DataContext>
         <vm:ChatMainWindowViewModel></vm:ChatMainWindowViewModel>
     </Window.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="86*"/>
+            <ColumnDefinition Width="auto" MinWidth="100"/>
             <ColumnDefinition Width="91*"/>
             <ColumnDefinition Width="219*"/>
         </Grid.ColumnDefinitions>
@@ -34,6 +47,7 @@
                     <ImageBrush ImageSource="{Binding IconPathLocal}" Stretch="Fill"/>
                 </Ellipse.Fill>
             </Ellipse>
+            <TextBlock Text="{Binding Author.Name}" Grid.Column="2" Foreground="Aqua"/>            
         </Grid>
         <ListBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Contacts}" >
             <ListBox.ItemTemplate>
@@ -72,34 +86,8 @@
                 </ListBox>
             </ScrollViewer>
         </StackPanel>
-        <Button Command="{Binding TestCallback}"></Button>
-        <TabControl Grid.Column="2">
-            <TabItem Header="Search">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="197*"/>
-                        <ColumnDefinition Width="67*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="4*"/>
-                        <RowDefinition Height="17*"/>
-                    </Grid.RowDefinitions>
-                    <TextBox Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                    <Button Content="Find" Grid.Column="1" Command="{Binding FindCommand}"/>
-                    <ListBox Grid.Row="1"  x:Name="searlList" ItemsSource="{Binding SearchUsers}">
-
-
-                    </ListBox>
-                    <StackPanel Grid.Row="1" Grid.Column="1" DataContext="{Binding ElementName=searlList, Path=SelectedItem}">
-                        <TextBlock Text="{Binding Name}"/>
-                        <TextBlock Text="{Binding Login}"/>
-                        <TextBlock Text="{Binding RelationStatus}"/>
-                        <Button Content="Add" Command="{Binding ElementName=mv,Path=DataContext.ConfirmFriendshipCommand}" CommandParameter="{Binding}" Grid.Column="1"/>
-
-                    </StackPanel>
-                </Grid>
-
-            </TabItem>
+      
+        <TabControl Grid.Row="1" >
             <TabItem Header="Contacts">
                 <Grid>
                     <ListBox ItemsSource="{Binding Contacts}" x:Name="lstContacts"  Tag="{Binding DataContext, ElementName=root}">
@@ -108,7 +96,7 @@
                                 <MenuItem Header="Delete" Command="{Binding  DataContext.RemoveFromFriendsCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"/>
                                 <MenuItem Header="Block" Command="{Binding   DataContext.BlockUserCommand}" CommandParameter="{Binding PlacementTarget.DataContext, 
                 RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
-                               
+
                                 <MenuItem Header="Foo" Command="{Binding RemoveRelationRequestCommand}" 
                               CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}},
                                 Path=PlacementTarget.SelectedItem}"/>
@@ -158,6 +146,7 @@
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="100"/>
                                         <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="auto"/>
                                     </Grid.ColumnDefinitions>
                                     <Ellipse Width="100" Height="100" >
                                         <Ellipse.Fill>
@@ -166,7 +155,18 @@
                                     </Ellipse>
                                     <TextBlock Grid.Column="1" VerticalAlignment="Center" Height="50" Text="{Binding Name}"/>
                                     <TextBlock Grid.Column="1" VerticalAlignment="Bottom" Height="50" Text="{Binding NetworkStatus}"/>
-                                    <!--<Button Content="Remove" Command="{Binding DataContext.RemoveFromFriendsCommand,RelativeSource={RelativeSource FindAncestor, AncestorType=Window} }" CommandParameter="{Binding}"/>-->
+
+                                    <StackPanel Orientation="Vertical" Grid.Column="2">
+
+                                        <Button Content="Confirm" Command="{Binding ElementName=mv,Path=DataContext.ConfirmFriendshipCommand}" CommandParameter="{Binding}" Grid.Column="1" Visibility="{Binding RelationStatus, Converter={StaticResource relConv}, ConverterParameter=Confirm}"/>
+                                        <Button Content="Add" Command="{Binding ElementName=mv,Path=DataContext.SendFriendRequestCommand}" CommandParameter="{Binding}" Grid.Column="1" Visibility="{Binding RelationStatus, Converter={StaticResource relConv}, ConverterParameter=Add}"/>
+                                        <Button Content="Block" Command="{Binding ElementName=mv,Path=DataContext.BlockUserCommand}" CommandParameter="{Binding}" Grid.Column="1" Visibility="{Binding RelationStatus, Converter={StaticResource relConv}, ConverterParameter=Block}"/>
+                                        <Button Content="UnBlock" Command="{Binding ElementName=mv,Path=DataContext.UnBlockUserCommand}" CommandParameter="{Binding}" Grid.Column="1" Visibility="{Binding RelationStatus, Converter={StaticResource relConv}, ConverterParameter=UnBlock}"/>
+                                        <Button Content="Remove" Command="{Binding ElementName=mv,Path=DataContext.RemoveFromFriendsCommand}" CommandParameter="{Binding}" Grid.Column="1" Visibility="{Binding RelationStatus, Converter={StaticResource relConv}, ConverterParameter=Remove}"/>
+                                        <Button Content="Remove Request" Command="{Binding ElementName=mv,Path=DataContext.RemoveRelationRequestCommand}" CommandParameter="{Binding}" Grid.Column="1" Visibility="{Binding RelationStatus, Converter={StaticResource relConv}, ConverterParameter=RemoveRequest}"/>
+                                    </StackPanel>
+                                    <!--<Button Content="Remove"  Grid.Column="2" Command="{Binding DataContext.RemoveFromFriendsCommand,RelativeSource={RelativeSource FindAncestor, AncestorType=Window} }" CommandParameter="{Binding}"/>
+                                <Button Content="Block" Grid.Column="3" Command="{Binding DataContext.BlockUserCommand,RelativeSource={RelativeSource FindAncestor, AncestorType=Window} }" CommandParameter="{Binding}"/>-->
 
                                 </Grid>
                                 <!--<cCtrl:ConversationPreview></cCtrl:ConversationPreview>-->
@@ -186,9 +186,15 @@
                                         <ColumnDefinition Width="auto"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Text="{Binding Login}"/>
-                                    <Button Content="Add" Command="{Binding DataContext.ConfirmFriendshipCommand,RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" CommandParameter="{Binding}" Grid.Column="1"/>
-                                    <Button Content="Block" Command="{Binding DataContext.BlockUserCommand,RelativeSource={RelativeSource FindAncestor, AncestorType=Window} }" CommandParameter="{Binding}"/>
-                                    <Button Content="Remove request" Command="{Binding DataContext.RemoveRelationRequestCommand,RelativeSource={RelativeSource FindAncestor, AncestorType=Window} }" CommandParameter="{Binding}"/>
+                                    <StackPanel Orientation="Vertical" Grid.Column="2">
+
+                                        <Button Content="Confirm" Command="{Binding ElementName=mv,Path=DataContext.ConfirmFriendshipCommand}" CommandParameter="{Binding}" Grid.Column="1" Visibility="{Binding RelationStatus, Converter={StaticResource relConv}, ConverterParameter=Confirm}"/>
+                                        <Button Content="Add" Command="{Binding ElementName=mv,Path=DataContext.SendFriendRequestCommand}" CommandParameter="{Binding}" Grid.Column="1" Visibility="{Binding RelationStatus, Converter={StaticResource relConv}, ConverterParameter=Add}"/>
+                                        <Button Content="Block" Command="{Binding ElementName=mv,Path=DataContext.BlockUserCommand}" CommandParameter="{Binding}" Grid.Column="1" Visibility="{Binding RelationStatus, Converter={StaticResource relConv}, ConverterParameter=Block}"/>
+                                        <Button Content="UnBlock" Command="{Binding ElementName=mv,Path=DataContext.UnBlockUserCommand}" CommandParameter="{Binding}" Grid.Column="1" Visibility="{Binding RelationStatus, Converter={StaticResource relConv}, ConverterParameter=UnBlock}"/>
+                                        <Button Content="Remove" Command="{Binding ElementName=mv,Path=DataContext.RemoveFromFriendsCommand}" CommandParameter="{Binding}" Grid.Column="1" Visibility="{Binding RelationStatus, Converter={StaticResource relConv}, ConverterParameter=Remove}"/>
+                                        <Button Content="Remove Request" Command="{Binding ElementName=mv,Path=DataContext.RemoveRelationRequestCommand}" CommandParameter="{Binding}" Grid.Column="1" Visibility="{Binding RelationStatus, Converter={StaticResource relConv}, ConverterParameter=RemoveRequest}"/>
+                                    </StackPanel>
 
                                 </Grid>
                             </DataTemplate>
@@ -215,6 +221,50 @@
                         </ListBox.ItemTemplate>
                     </ListBox>
                 </Grid>
+            </TabItem>
+            <TabItem Header="Search">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="197*"/>
+                        <ColumnDefinition Width="67*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="4*"/>
+                        <RowDefinition Height="17*"/>
+                    </Grid.RowDefinitions>
+                    <TextBox Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    <Button Content="Find" Grid.Column="1" Command="{Binding FindCommand}"/>
+                    <ListBox Grid.Row="1"  x:Name="searlList" ItemsSource="{Binding SearchUsers}">
+
+
+                    </ListBox>
+                    <StackPanel Grid.Row="1" Grid.Column="1" DataContext="{Binding ElementName=searlList, Path=SelectedItem}">
+                        <TextBlock Text="{Binding Name}"/>
+                        <TextBlock Text="{Binding Login}"/>
+                        <TextBlock Text="{Binding RelationStatus}"/>
+                        <StackPanel Orientation="Vertical">
+                            <Button Content="Confirm" Command="{Binding ElementName=mv,Path=DataContext.ConfirmFriendshipCommand}" CommandParameter="{Binding}" Grid.Column="1" Visibility="{Binding RelationStatus, Converter={StaticResource relConv}, ConverterParameter=Confirm}"/>
+                            <Button Content="Add" Command="{Binding ElementName=mv,Path=DataContext.SendFriendRequestCommand}" CommandParameter="{Binding}" Grid.Column="1" Visibility="{Binding RelationStatus, Converter={StaticResource relConv}, ConverterParameter=Add}"/>
+                            <Button Content="Block" Command="{Binding ElementName=mv,Path=DataContext.BlockUserCommand}" CommandParameter="{Binding}" Grid.Column="1" Visibility="{Binding RelationStatus, Converter={StaticResource relConv}, ConverterParameter=Block}"/>
+                            <Button Content="UnBlock" Command="{Binding ElementName=mv,Path=DataContext.UnBlockUserCommand}" CommandParameter="{Binding}" Grid.Column="1" Visibility="{Binding RelationStatus, Converter={StaticResource relConv}, ConverterParameter=UnBlock}"/>
+                            <Button Content="Remove" Command="{Binding ElementName=mv,Path=DataContext.RemoveFromFriendsCommand}" CommandParameter="{Binding}" Grid.Column="1" Visibility="{Binding RelationStatus, Converter={StaticResource relConv}, ConverterParameter=Remove}"/>
+                            <Button Content="Remove Request" Command="{Binding ElementName=mv,Path=DataContext.RemoveRelationRequestCommand}" CommandParameter="{Binding}" Grid.Column="1" Visibility="{Binding RelationStatus, Converter={StaticResource relConv}, ConverterParameter=RemoveRequest}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+
+            </TabItem>
+
+
+
+            <TabItem Header="Conversations">
+                <Grid>
+                    
+                    <ListBox Grid.Row="1"  x:Name="convList" ItemsSource="{Binding SearchUsers}">
+                    </ListBox>
+                   
+                </Grid>
+
             </TabItem>
         </TabControl>
     </Grid>

@@ -165,27 +165,108 @@ namespace ClientContractImplement
 
         public async void AddFriend(String login)
         {
-            await Task.Run(() => SendFriendshipRequest(login));
+            // await Task.Run(() => SendFriendshipRequest(login));
+
+            var res = await Task.Run(() => relationsCustomer.FriendshipRequest("Hello", login));
+            if (res.IsOk)
+            {
+                Application.Current.Dispatcher.Invoke(() => FriendshipRequestSend.Add(res.Response));
+            }
+            else
+            {
+                Error?.Invoke("Confirm friendship", res.ErrorMessage);
+            }
+
         }
         public async void RemoveFromFriends(String login)
         {
-            await Task.Run(() => RemoveFriendship(login));
+            // await Task.Run(() => RemoveFriendship(login));
+            var res = await Task.Run(() => relationsCustomer.ChangeRelationType(login, RelationStatus.FrienshipRequestRecive));
+            if (res.IsOk)
+            {
+                var user = Contacts.FirstOrDefault(x => x.Login == login);
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    user.RelationStatus = RelationStatus.FrienshipRequestRecive;
+                    Contacts.Remove(user);
+                    FriendshipRequestReceive.Add(user);
+                });
+
+            }
+            else
+            {
+                Error.Invoke("Remove Friendship error", res.ErrorMessage);
+            }
         }
         public async void BlockUser(String login)
         {
-            await Task.Run(() => AddToBlackList(login));
+            // await Task.Run(() => AddToBlackList(login)); 
+            var res = await Task.Run(() => relationsCustomer.ChangeRelationType(login, RelationStatus.BlockedByMe));
+            if (res.IsOk)
+            {
+                var friend = Contacts.FirstOrDefault(x => x.Login == login);
+                var requestReceive = FriendshipRequestReceive.FirstOrDefault(x => x.Login == login);
+                var requestSent = FriendshipRequestSend.FirstOrDefault(x => x.Login == login);
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    if (friend != null)
+                    {
+                        Contacts.Remove(friend);
+                    }
+                    if (requestReceive != null)
+                    {
+                        FriendshipRequestReceive.Remove(requestReceive);
+                    }
+                    if (requestSent != null)
+                    {
+                        FriendshipRequestSend.Remove(requestSent);
+                    }
+                });
+            }
+            else
+            {
+                Error?.Invoke("BlockUserError error", res.ErrorMessage);
+            }
         }
         public async void UnblockUser(String login)
         {
-            await Task.Run(() => RemoveRelationType(login));
+            // await Task.Run(() => RemoveRelationType(login));
+            var res = await Task.Run(() => relationsCustomer.ChangeRelationType(login, RelationStatus.None));
+            if (!res.IsOk)
+            {
+                Error?.Invoke("BlockUserError error", res.ErrorMessage);
+            }
         }
         public async void RemoveFriendshipRequest(String login)
         {
-            await Task.Run(() => RemoveRelationType(login));
+            //  await Task.Run(() => RemoveRelationType(login));
+            var res = await Task.Run(() => relationsCustomer.ChangeRelationType(login, RelationStatus.None));
+            if (!res.IsOk)
+            {
+
+                Error?.Invoke("BlockUserError error", res.ErrorMessage);
+            }
+            else
+            {
+                var requestReceive = FriendshipRequestReceive.FirstOrDefault(x => x.Login == login);
+                var requestSent = FriendshipRequestSend.FirstOrDefault(x => x.Login == login);
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    if (requestReceive != null)
+                    {
+                        FriendshipRequestReceive.Remove(requestReceive);
+                    }
+                    if (requestSent != null)
+                    {
+                        FriendshipRequestSend.Remove(requestSent);
+                    }
+                });
+            }
         }
         public void ChangeNetworkStatus(NetworkStatus status)
         {
             var res = relationsCustomer.ChangeNetworkStatus(status);
+
         }
 
         NetworkStatus _status;
@@ -240,6 +321,7 @@ namespace ClientContractImplement
             if (res.IsOk)
             {
                 var user = FriendshipRequestReceive.FirstOrDefault(x => x.Login == login);
+                user.RelationStatus = RelationStatus.Friendship;
                 Contacts.Add(user);
                 FriendshipRequestReceive.Remove(user);
             }
@@ -256,10 +338,10 @@ namespace ClientContractImplement
                 var user = Contacts.FirstOrDefault(x => x.Login == login);
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                   Contacts.Remove(user);
-                FriendshipRequestReceive.Remove(user);                   
+                    Contacts.Remove(user);
+                    FriendshipRequestReceive.Remove(user);
                 });
-               
+
             }
             else
             {
@@ -272,20 +354,23 @@ namespace ClientContractImplement
             if (res.IsOk)
             {
                 var friend = Contacts.FirstOrDefault(x => x.Login == login);
-                if (friend != null)
+                Application.Current.Dispatcher.Invoke(() =>
                 {
-                    Contacts.Remove(friend);
-                }
-                var requestReceive = FriendshipRequestReceive.FirstOrDefault(x => x.Login == login);
-                if (requestReceive != null)
-                {
-                    FriendshipRequestReceive.Remove(requestReceive);
-                }
-                var requestSent = FriendshipRequestSend.FirstOrDefault(x => x.Login == login);
-                if (requestSent != null)
-                {
-                    FriendshipRequestSend.Remove(requestSent);
-                }
+                    if (friend != null)
+                    {
+                        Contacts.Remove(friend);
+                    }
+                    var requestReceive = FriendshipRequestReceive.FirstOrDefault(x => x.Login == login);
+                    if (requestReceive != null)
+                    {
+                        FriendshipRequestReceive.Remove(requestReceive);
+                    }
+                    var requestSent = FriendshipRequestSend.FirstOrDefault(x => x.Login == login);
+                    if (requestSent != null)
+                    {
+                        FriendshipRequestSend.Remove(requestSent);
+                    }
+                });
             }
             else
             {

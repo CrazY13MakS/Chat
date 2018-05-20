@@ -280,7 +280,7 @@ namespace ChatClient.ViewModel
 
         private bool CanExecuteBlockUserCommand(object parametr)
         {
-            return parametr is User user;
+            return parametr is User user && user.RelationStatus != RelationStatus.BlockedByMe;
         }
 
 
@@ -305,7 +305,7 @@ namespace ChatClient.ViewModel
 
         private bool CanExecuteUnBlockUserCommand(object parametr)
         {
-            return parametr is User user&& (user.RelationStatus== RelationStatus.BlockedByMe|| user.RelationStatus== RelationStatus.BlockedBoth);
+            return parametr is User user && (user.RelationStatus == RelationStatus.BlockedByMe || user.RelationStatus == RelationStatus.BlockedBoth);
         }
 
 

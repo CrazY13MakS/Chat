@@ -241,6 +241,7 @@ namespace AccountRelationsProvider.ServiceImplementation
             {
                 using (db = new DbMain.EFDbContext.ChatEntities())
                 {
+                    RelationStatus statusForPartner = status;
                     if (login == curUser.Login)
                     {
                         return new OperationResult<bool>(false, false, "Login error");
@@ -292,21 +293,25 @@ namespace AccountRelationsProvider.ServiceImplementation
                                 else
                                 {
                                     contact.RelationTypeId = (int)RelationStatus.FriendshipRequestSent;
+                                    statusForPartner = RelationStatus.FriendshipRequestSent;
                                 }
                                 break;
                             case RelationStatus.BlockedByMe:
                                 if (contact.AdderId == curUser.Id && (RelationStatus)contact.RelationTypeId != RelationStatus.BlockedByPartner)
                                 {
                                     contact.RelationTypeId = (int)status;
+                                    statusForPartner = RelationStatus.BlockedByPartner;
                                 }
                                 else if (contact.AdderId == curUser.Id && contact.RelationTypeId == (int)RelationStatus.BlockedByPartner
                                     || contact.InvitedId == curUser.Id && contact.RelationTypeId == (int)RelationStatus.BlockedByMe)
                                 {
                                     contact.RelationTypeId = (int)RelationStatus.BlockedBoth;
+                                    statusForPartner = RelationStatus.BlockedBoth;
                                 }
                                 else if (contact.InvitedId == curUser.Id && (RelationStatus)contact.RelationTypeId != RelationStatus.BlockedByMe)
                                 {
                                     contact.RelationTypeId = (int)RelationStatus.BlockedByPartner;
+                                    statusForPartner = RelationStatus.BlockedByPartner;
                                 }
                                 break;
                         }
@@ -316,7 +321,7 @@ namespace AccountRelationsProvider.ServiceImplementation
                     {
                         return new OperationResult<bool>(false, false, "Faild");
                     }
-                    UserRelationsMain.RelationTypeChanged(user.Login, curUser.Login, status);
+                    UserRelationsMain.RelationTypeChanged(user.Login, curUser.Login, statusForPartner);
                     return new OperationResult<bool>(true);
                 }
             }

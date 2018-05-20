@@ -14,7 +14,7 @@ namespace ContractClient
         public byte[] Icon { get; set; }
         public String IconPathLocal { get; set; }
         public User Partner { get; set; }
-        public bool IsConversation { get; set; }
+        public bool IsOpenConversation { get; set; }
         public List<String> ParticipantsLogin { get; set; }
         public ConversationMemberStatus MyStatus { get; set; }
         public List<ConversationReply> Messages { get; set; }

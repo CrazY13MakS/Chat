@@ -36,7 +36,7 @@ namespace ChatClient
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             List<String> lst = new List<string>(){ "crazy13maks@gmail.com",
-                "temp@temp.com","temp2temp.com","temp3temp.com","temp4temp.com","temp5temp.com","temp6temp.com","temp7temp.com","temp8temp.com", };
+                "temp@temp.com","temp2@temp.com","temp3@temp.com","temp4@temp.com","temp5@temp.com","temp6@temp.com","temp7@temp.com","temp8@temp.com", };
             cb.ItemsSource = lst;
             cb.SelectedIndex = 0;
 

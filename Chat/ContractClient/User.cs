@@ -33,7 +33,23 @@ namespace ContractClient
         public long? ConversationId { get; set; }
 
         [DataMember]
-        public RelationStatus RelationStatus { get; set; }
+      //  public RelationStatus RelationStatus { get; set; }
+        RelationStatus _relationStatus;
+        public RelationStatus RelationStatus
+        {
+            get
+            {
+                return _relationStatus;
+            }
+            set
+            {
+                if (_relationStatus != value)
+                {
+                    _relationStatus = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
 
         [DataMember]
         NetworkStatus _networkStatus;

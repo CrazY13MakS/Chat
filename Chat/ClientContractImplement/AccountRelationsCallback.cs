@@ -57,7 +57,7 @@ namespace ClientContractImplement
                     }
                     else if (requestSent != null)
                     {
-                        _callbackModel.Friends.Add(requestReceive);
+                        _callbackModel.Friends.Add(requestSent);
                         _callbackModel.FriendshipRequestSend.Remove(requestSent);
                     }
                     break;

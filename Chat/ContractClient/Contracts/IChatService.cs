@@ -16,14 +16,14 @@ namespace ContractClient.Contracts
         /// <param name="token"></param>
         /// <returns></returns>
         [OperationContract(IsInitiating = true)]
-        UserExt Authentication(String token);
+        OperationResult<UserExt> Authentication(String token);
 
         /// <summary>
         /// Отключение от сервиса
         /// </summary>
         /// <returns></returns>
         [OperationContract(IsInitiating = false, IsTerminating = true)]
-        bool Disconnect();
+        OperationResult<bool> Disconnect();
 
         /// <summary>
         /// Отправка сообщения
@@ -32,30 +32,32 @@ namespace ContractClient.Contracts
         /// <param name="conversationId"></param>
         /// <returns></returns>
         [OperationContract(IsInitiating = false)]
-        ConversationReplyStatus SendMessage(String body, long conversationId);//-1 - не доставлено, >0 - номер сообщения в бд
+        OperationResult<bool> SendMessage(String body, long conversationId);//-1 - не доставлено, >0 - номер сообщения в бд
 
 
-        /// <summary>
-        /// Получить все сообщения с указанной даты
-        /// </summary>
-        /// <param name="lastSync"></param>
-        /// <returns></returns>
-        [OperationContract(IsInitiating =false)]
-        List<ConversationReply> UpdateAllConversationsSinceDate(DateTime lastSync);
+        ///// <summary>
+        ///// Получить все сообщения с указанной даты
+        ///// </summary>
+        ///// <param name="lastSync"></param>
+        ///// <returns></returns>
+        //[OperationContract(IsInitiating =false)]
+        //OperationResult<List<ConversationReply>> UpdateAllConversationsSinceDate(DateTime lastSync);
 
-        /// <summary>
-        /// Поулчить все сообщения
-        /// </summary>
-        /// <returns></returns>
-        [OperationContract(IsInitiating = false)]
-        List<ConversationReply> UpdateAllConversations();
 
-        /// <summary>
-        /// Измениить статус сообщения
-        /// </summary>
-        /// <returns></returns>
-        [OperationContract(IsInitiating =false)]
-        bool ChangeConversationReplyStatus();
+
+        ///// <summary>
+        ///// Поулчить все сообщения
+        ///// </summary>
+        ///// <returns></returns>
+        //[OperationContract(IsInitiating = false)]
+        //OperationResult<List<ConversationReply>> UpdateAllConversations();
+
+        ///// <summary>
+        ///// Измениить статус сообщения
+        ///// </summary>
+        ///// <returns></returns>
+        //[OperationContract(IsInitiating =false)]
+        //OperationResult<bool> ChangeConversationReplyStatus();
 
 
 
@@ -65,7 +67,18 @@ namespace ContractClient.Contracts
         /// </summary>
         /// <returns>Operation success</returns>
         [OperationContract(IsInitiating =false,IsTerminating =true)]
-        bool LogOut();
+        OperationResult<bool> LogOut();
 
+
+
+
+
+        [OperationContract(IsInitiating = false, IsTerminating = true)]
+        OperationResult<List<Conversation>> GetConversations();
+
+
+
+        [OperationContract(IsInitiating = false, IsTerminating = true)]
+        OperationResult<List<ConversationReply>> GetMessages(long conversationId);
     }
 }
