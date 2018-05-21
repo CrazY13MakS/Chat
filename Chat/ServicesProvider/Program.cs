@@ -19,11 +19,11 @@ namespace ServicesProvider
             AccountUpdateHost accHost = new AccountUpdateHost();
             authHost.Open();
             accHost.Open();
-            while (true)
-            {
-          
-            }
-
+           while (true)
+           {
+         
+           }
+       
 
             //     AccountRelationsServiceProvider account = new AccountRelationsServiceProvider();
             //  var user =   account.Authentication("124ae10f-4204-4035-a99d-82aa98956cc120:27:25");
@@ -44,30 +44,31 @@ namespace ServicesProvider
             //    var res =  a.Registration("crazy13maks@gmail.com", "crazy13maks", "!QAZ2wsx");
             //   Console.WriteLine(res.Item1);
             //var key = AuthServiceProvider.Model.PasswordCrypt.GetHashFromPassword("!QAZ2wsx");
-            //using (ChatEntities db = new ChatEntities())
-            //{
-            //    db.Database.Log = Console.WriteLine;
-            //    db.Users.Add(new User
-            //    {
-            //        Name = "test1",
-            //        Login = "test1",
-            //        PasswordHash = key.Item1,
-            //        PasswordSalt = key.Item2,
-            //        Email = "test1@gmail.com",
-            //        // NetworkStatusId=1
+           //using (ChatEntities db = new ChatEntities())
+           //{
+           //   var a =  db.Users.FirstOrDefault(x => x.Login == "crazy13maks");
+           //    //db.Database.Log = Console.WriteLine;
+           //    //db.Users.Add(new User
+           //    //{
+           //    //    Name = "test1",
+           //    //    Login = "test1",
+           //    //    PasswordHash = key.Item1,
+           //    //    PasswordSalt = key.Item2,
+           //    //    Email = "test1@gmail.com",
+           //    //    // NetworkStatusId=1
 
-            //    });
-            //    var r = db.Users.ToList();
-            //    try
-            //    {
+           //    //});
+           //    // var r = db.Users.ToList();
+           //    // try
+           //    // {
 
-            //        var count = db.SaveChanges();
-            //    }
-            //    catch (Exception ex)
-            //    {
+           //    //     var count = db.SaveChanges();
+           //    // }
+           //    // catch (Exception ex)
+           //    // {
 
-            //    }
-            //}
+           //    // }
+           // }
 
             //using (DbMain.EFDbContext.ChatEntities a = new DbMain.EFDbContext.ChatEntities())
             //{
@@ -78,7 +79,7 @@ namespace ServicesProvider
 
             //}
             //   Console.ReadKey();
-             // AuthServiceProvider.Model.UserAccess userAccess = new AuthServiceProvider.Model.UserAccess();
+            // AuthServiceProvider.Model.UserAccess userAccess = new AuthServiceProvider.Model.UserAccess();
             //  userAccess.Registration("crazy13maks@gmail.com", "crazy13maks", "!QAZ2wsx");
             //   userAccess.Registration("temp@temp.com", "temp1", "!QAZ2wsx");
             //  userAccess.Registration("temp2@temp.com", "temp2", "!QAZ2wsx");

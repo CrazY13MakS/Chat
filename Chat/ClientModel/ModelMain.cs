@@ -18,7 +18,7 @@ namespace ClientModel
         {
             callbackService = new ChatCustomerCallbackService();
             chat = new ChatCustomerService(token, callbackService);
-            Author = chat.Authentication();
+           // Author = chat.Authentication();
         }
 
         public delegate void ErrorHandler(String action, string message);

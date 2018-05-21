@@ -50,16 +50,16 @@ namespace ClientContractImplement
           //  chatService = duplexChannelFactory.CreateChannel();
            // User = chatService.Authentication(token);
         }
-        public UserExt Authentication()
-        {
-            return chatService.Authentication(_token);            
-        }
-
-        public async Task<bool> Disconnect()
-        {
-            bool res = await Task.Run(() => chatService.Disconnect());
-            return res;
-        }
+     //   public UserExt Authentication()
+     //   {
+     //       return chatService.Authentication(_token);            
+     //   }
+     //
+     //   public async Task<bool> Disconnect()
+     //   {
+     //       bool res = await Task.Run(() => chatService.Disconnect());
+     //       return res;
+     //   }
 
         public async void SendMessage(String body, long conversationId)
         {

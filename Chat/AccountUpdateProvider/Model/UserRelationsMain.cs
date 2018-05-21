@@ -24,14 +24,14 @@ namespace AccountRelationsProvider.Model
             }
         }
 
-        public async static void UserNetworkStatusChange(List<String> friends, String login, NetworkStatus networkStatus)
+        public async static void UserNetworkStatusChange(List<String> friends, String author, NetworkStatus networkStatus)
         {
 
             foreach (var item in friends)
             {
                 if (OnlineUsers.TryGetValue(item, out ServiceImplementation.AccountRelationsServiceProvider provider))
                 {
-                    await Task.Run(() => provider?.Callback.UserNetworkStatusChanged(login, networkStatus));
+                    await Task.Run(() => provider?.Callback.UserNetworkStatusChanged(author, networkStatus));
                 }
             }
         }

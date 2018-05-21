@@ -14,10 +14,12 @@ namespace ContractClient
         public byte[] Icon { get; set; }
         public String IconPathLocal { get; set; }
         public User Partner { get; set; }
-        public bool IsOpenConversation { get; set; }
+        public String PartnerLogin { get; set; }
+                                           //  public bool IsOpenConversation { get; set; }
+        public ConversationType ConversationType { get; set; }
         public List<String> ParticipantsLogin { get; set; }
         public ConversationMemberStatus MyStatus { get; set; }
         public List<ConversationReply> Messages { get; set; }
-        public DateTime LastChange { get; set; }
+        public DateTimeOffset LastChange { get; set; }
     }
 }

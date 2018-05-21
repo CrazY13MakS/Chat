@@ -9,37 +9,32 @@ namespace ChatServiceProvider
 {
     public class ChatService : IChatService
     {
-        public UserExt Authentication(string token)
+        public OperationResult<UserExt> Authentication(string token)
         {
             throw new NotImplementedException();
         }
 
-        public bool ChangeConversationReplyStatus()
+        public OperationResult<bool> Disconnect()
         {
             throw new NotImplementedException();
         }
 
-        public bool Disconnect()
+        public OperationResult<List<Conversation>> GetConversations()
         {
             throw new NotImplementedException();
         }
 
-        public bool LogOut()
+        public OperationResult<List<ConversationReply>> GetMessages(long conversationId)
         {
             throw new NotImplementedException();
         }
 
-        public ConversationReplyStatus SendMessage(string body, long conversationId)
+        public OperationResult<bool> LogOut()
         {
             throw new NotImplementedException();
         }
 
-        public List<ConversationReply> UpdateAllConversations()
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<ConversationReply> UpdateAllConversationsSinceDate(DateTime lastSync)
+        public OperationResult<bool> SendMessage(string body, long conversationId)
         {
             throw new NotImplementedException();
         }

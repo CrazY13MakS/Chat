@@ -66,19 +66,24 @@ namespace ContractClient.Contracts
         /// Remove token
         /// </summary>
         /// <returns>Operation success</returns>
-        [OperationContract(IsInitiating =false,IsTerminating =true)]
+        [OperationContract(IsInitiating =false,IsTerminating =false)]
         OperationResult<bool> LogOut();
 
 
 
 
 
-        [OperationContract(IsInitiating = false, IsTerminating = true)]
+        [OperationContract(IsInitiating = false)]
         OperationResult<List<Conversation>> GetConversations();
 
 
 
-        [OperationContract(IsInitiating = false, IsTerminating = true)]
+        [OperationContract(IsInitiating = false)]
         OperationResult<List<ConversationReply>> GetMessages(long conversationId);
+
+
+        [OperationContract(IsInitiating = false)]
+        OperationResult<Conversation> CreateDialog(String Login);
+
     }
 }

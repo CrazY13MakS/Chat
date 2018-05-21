@@ -12,14 +12,15 @@ namespace DbMain.EFDbContext
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-    
+    using System.Linq;
+
     public partial class ChatEntities : DbContext
     {
         public ChatEntities()
             : base("name=ChatEntities")
         {
         }
-    
+       
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();
