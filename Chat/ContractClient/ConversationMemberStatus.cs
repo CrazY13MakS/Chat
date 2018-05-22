@@ -13,6 +13,7 @@ namespace ContractClient
         Active,
         Blocked,
         ReadOnly,
-        LeftConversation
+        LeftConversation,
+        KickedOut
     }
 }

@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="84cc6c206b4f431a94f0e864b18b0fad" Name="Diagram1" DisplayType="true">
+      <Diagram DiagramId="9c9ea0b152544f5ca70aa3e696286770" Name="Diagram1">
         <EntityTypeShape EntityType="ChatModel.AccessToken" Width="1.5" PointX="7.5" PointY="9.75" IsExpanded="true" />
         <EntityTypeShape EntityType="ChatModel.City" Width="1.5" PointX="3" PointY="9.875" IsExpanded="true" />
         <EntityTypeShape EntityType="ChatModel.Contact" Width="1.5" PointX="10.5" PointY="9.375" IsExpanded="true" />
@@ -38,10 +38,6 @@
         <AssociationConnector Association="ChatModel.Conversations_fk2" ManuallyRouted="false" />
         <AssociationConnector Association="ChatModel.Users_fk1" ManuallyRouted="false" />
         <AssociationConnector Association="ChatModel.Users_fk2" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="ChatModel.BlokedUser" Width="1.5" PointX="7.5" PointY="20.75" />
-        <AssociationConnector Association="ChatModel.BlokedUsers_fk0" />
-        <AssociationConnector Association="ChatModel.BlokedUsers_fk1" />
-        <AssociationConnector Association="ChatModel.FK__Conversat__Recei__22401542" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

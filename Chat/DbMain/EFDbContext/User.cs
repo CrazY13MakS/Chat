@@ -28,6 +28,7 @@ namespace DbMain.EFDbContext
             this.Conversations1 = new HashSet<Conversation>();
             this.BlokedUsers = new HashSet<BlokedUser>();
             this.BlokedUsers1 = new HashSet<BlokedUser>();
+            this.ConversationReplies1 = new HashSet<ConversationReply>();
         }
     
         public long Id { get; set; }
@@ -70,5 +71,7 @@ namespace DbMain.EFDbContext
         public virtual ICollection<BlokedUser> BlokedUsers { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BlokedUser> BlokedUsers1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ConversationReply> ConversationReplies1 { get; set; }
     }
 }

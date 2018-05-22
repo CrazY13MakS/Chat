@@ -91,7 +91,7 @@ namespace ClientModel
                 Body = body,
                 ConversationId = conversationId,
                 SendingTime = DateTime.UtcNow,
-                Status = ConversationReplyStatus.Sendidg
+                Status = ConversationReplyStatus.Sending
             };
             conv.Messages.Add(reply);
 

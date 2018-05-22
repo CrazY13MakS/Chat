@@ -36,7 +36,7 @@ namespace ClientContractImplement
             var connect = relationsCustomer.Connect();
             if (!connect.IsOk)
             {
-                Error?.Invoke("Auth", "error auth");
+                Error?.Invoke("Auth", connect.ErrorMessage);
                 return;
             }
             Author = connect.Response;
@@ -60,6 +60,13 @@ namespace ClientContractImplement
         public delegate void ErrorHandler(String action, string message);
         public event ErrorHandler Error;
 
+        #region Chat
+
+
+
+
+        #endregion
+
         ObservableCollection<Conversation> _conversations;
         public ObservableCollection<Conversation> Conversations
         {
@@ -77,12 +84,17 @@ namespace ClientContractImplement
             }
         }
 
-        public void SendMessage(String body, long conversationId)
+
+
+
+
+        public async void SendMessage(String body, long conversationId)
         {
             var conv = Conversations.FirstOrDefault(x => x.Id == conversationId);
             if (conv == null)
             {
                 Error.Invoke("Send message", "ConversationId not found error");
+                return;
             }
             ConversationReply reply = new ConversationReply()
             {
@@ -90,10 +102,18 @@ namespace ClientContractImplement
                 Body = body,
                 ConversationId = conversationId,
                 SendingTime = DateTime.UtcNow,
-                Status = ConversationReplyStatus.Sendidg
+                Status = ConversationReplyStatus.Sending
             };
             conv.Messages.Add(reply);
-
+            var res = await Task.Run(() => chat.SendMessage(body, conversationId));
+            if (res.IsOk)
+            {
+                reply.Status = ConversationReplyStatus.Sent;
+            }
+            else
+            {
+                reply.Status = ConversationReplyStatus.SendingError;
+            }
 
         }
 

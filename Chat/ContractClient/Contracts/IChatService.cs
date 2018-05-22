@@ -85,5 +85,16 @@ namespace ContractClient.Contracts
         [OperationContract(IsInitiating = false)]
         OperationResult<Conversation> CreateDialog(String Login);
 
+
+        [OperationContract(IsInitiating = false)]
+        OperationResult<Conversation> CreateConversation(String Name, bool IsOpen=false);
+
+        [OperationContract(IsInitiating = false)]
+        OperationResult<bool> InviteFriendToConversation(String Login, long conversationId);
+
+        [OperationContract(IsInitiating = false)]
+        OperationResult<bool> LeaveConversation(long conversationId);
+
+
     }
 }

@@ -75,6 +75,15 @@ namespace ChatServiceProvider.ServiceImplementation
 
                     conv.ForEach((x) =>
                     {
+                        x.Messages  = db.ConversationReplies.Where(y => y.ConversationId == x.Id && (y.AuthorId == curUser.Id || y.ReceiverId == curUser.Id)).Select(y => new ConversationReply()
+                        {
+                            Author = y.User.Login,
+                            Body = y.Body,
+                            ConversationId = y.ConversationId,
+                            Id = y.Id,
+                            SendingTime = y.SendingTime,
+                            Status = (ConversationReplyStatus)y.ConversationReplyStatusId
+                        }).ToList();
                         if (x.ConversationType == ConversationType.Dialog)
                         {
                             var contact = db.Conversations.Include(y => y.User).Include(y => y.User1).FirstOrDefault(y => y.Id == x.Id);
@@ -123,42 +132,50 @@ namespace ChatServiceProvider.ServiceImplementation
                 using (DbMain.EFDbContext.ChatEntities db = new DbMain.EFDbContext.ChatEntities())
                 {
 
-                    var conversation = db.Conversations.FirstOrDefault(x => x.Id == conversationId);
-                    if (conversation == null)
+                    //var conversation = db.Conversations.FirstOrDefault(x => x.Id == conversationId);
+                    //if (conversation == null)
+                    //{
+                    //    return new OperationResult<List<ConversationReply>>(null, false, "Error conversation Id");
+                    //}
+                    //var member = conversation.ConversationMembers.FirstOrDefault(x => x.Id == curUser.Id);
+                    //if (member == null)
+                    //{
+                    //    return new OperationResult<List<ConversationReply>>(null, false, "Error conv not for you");
+                    //}
+                    //bool isBlocked=false;
+                    //switch ((ConversationMemberStatus)member.MemberStatusId)
+                    //{
+                    //    case ConversationMemberStatus.None:
+                    //    case ConversationMemberStatus.ReadOnly:                        
+                    //    case ConversationMemberStatus.LeftConversation:                           
+                    //    case ConversationMemberStatus.Blocked:
+                    //        isBlocked = true;
+                    //        break;
+                    //    default:
+                    //        break;
+                    //}
+                    //DateTimeOffset timeOffset= DateTimeOffset.UtcNow;
+                    //if (isBlocked)
+                    //{
+                    //    timeOffset = member.LastStatusChanged;
+                    //}
+                    //var mess = conversation.ConversationReplies.Where(x => x.SendingTime >= member.Joined&&x.SendingTime<timeOffset).Select(x=>new ConversationReply() {
+                    //     Author=x.User.Login,
+                    //      Body=x.Body,
+                    //       ConversationId=x.ConversationId,
+                    //        Id=x.Id,
+                    //         SendingTime=x.SendingTime,
+                    //          Status=(ConversationReplyStatus)x.ConversationReplyStatusId
+                    //}).ToList();
+                    var mess = db.ConversationReplies.Where(x => x.ConversationId == conversationId && (x.AuthorId == curUser.Id || x.ReceiverId == curUser.Id)).Select(x => new ConversationReply()
                     {
-                        return new OperationResult<List<ConversationReply>>(null, false, "Error conversation Id");
-                    }
-                    var member = conversation.ConversationMembers.FirstOrDefault(x => x.Id == curUser.Id);
-                    if (member == null)
-                    {
-                        return new OperationResult<List<ConversationReply>>(null, false, "Error conv not for you");
-                    }
-                    bool isBlocked=false;
-                    switch ((ConversationMemberStatus)member.MemberStatusId)
-                    {
-                        case ConversationMemberStatus.None:
-                        case ConversationMemberStatus.ReadOnly:                        
-                        case ConversationMemberStatus.LeftConversation:                           
-                        case ConversationMemberStatus.Blocked:
-                            isBlocked = true;
-                            break;
-                        default:
-                            break;
-                    }
-                    DateTimeOffset timeOffset= DateTimeOffset.UtcNow;
-                    if (isBlocked)
-                    {
-                        timeOffset = member.LastStatusChanged;
-                    }
-                    var mess = conversation.ConversationReplies.Where(x => x.SendingTime >= member.Joined&&x.SendingTime<timeOffset).Select(x=>new ConversationReply() {
-                         Author=x.User.Login,
-                          Body=x.Body,
-                           ConversationId=x.ConversationId,
-                            Id=x.Id,
-                             SendingTime=x.SendingTime,
-                              Status=(ConversationReplyStatus)x.ConversationReplyStatusId
+                        Author = x.User.Login,
+                        Body = x.Body,
+                        ConversationId = x.ConversationId,
+                        Id = x.Id,
+                        SendingTime = x.SendingTime,
+                        Status = (ConversationReplyStatus)x.ConversationReplyStatusId
                     }).ToList();
-
                     return new OperationResult<List<ConversationReply>>(mess);
                 }
             }
@@ -175,7 +192,68 @@ namespace ChatServiceProvider.ServiceImplementation
 
         public OperationResult<bool> SendMessage(string body, long conversationId)
         {
-            throw new NotImplementedException();
+            Console.WriteLine($"Send message from {curUser.Login} - to {conversationId}");
+            try
+            {
+                using (DbMain.EFDbContext.ChatEntities db = new DbMain.EFDbContext.ChatEntities())
+                {
+                    var conversationMemer = db.ConversationMembers.FirstOrDefault(x => x.MemberId == curUser.Id && x.ConversationId == conversationId);
+                    if (conversationMemer == null)
+                    {
+                        return new OperationResult<bool>(false, false, "You are din't chat user");
+                    }
+                    var status = (ConversationMemberStatus)conversationMemer.MemberStatusId;
+                    switch (status)
+                    {
+                        case ConversationMemberStatus.None:
+                        case ConversationMemberStatus.Blocked:
+                        case ConversationMemberStatus.ReadOnly:
+                        case ConversationMemberStatus.LeftConversation:
+                            return new OperationResult<bool>(false, false, $"You do not have permission to post to this Hangout. You status - {status}");
+                        default:
+                            break;
+                    }
+                    var conversation = conversationMemer.Conversation;
+                    conversation.LastChange = DateTimeOffset.UtcNow;
+                    DbMain.EFDbContext.ConversationReply reply = new DbMain.EFDbContext.ConversationReply()
+                    {
+                        AuthorId = curUser.Id,
+                        Body = body,
+                        ConversationId = conversationId,
+                        ConversationReplyStatusId = (int)ConversationReplyStatus.Sent
+                    };
+                    db.ConversationReplies.Add(reply);
+                    if (db.SaveChanges() > 0)
+                    {
+                        var members = conversation.ConversationMembers.Select(x => x.User.Id).ToList();
+                        members.Remove(curUser.Id);
+                        SendMessageToAllMembers(members, reply);
+                        return new OperationResult<bool>(true);
+                    }
+                    return new OperationResult<bool>(false, false, "Send message error");
+                }
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult<bool>(false, false, "Internal error");
+            }
+        }
+
+        private async void SendMessageToAllMembers(List<long> listUserId, DbMain.EFDbContext.ConversationReply reply)
+        {
+            await Task.Run(() =>
+            {
+                using (DbMain.EFDbContext.ChatEntities db = new DbMain.EFDbContext.ChatEntities())
+                {
+                    reply.ConversationReplyStatusId = (int)ConversationReplyStatus.Received;
+                    foreach (var item in listUserId)
+                    {
+                        reply.ReceiverId = item;
+                        db.ConversationReplies.Add(reply);
+                    }
+                    db.SaveChanges();
+                }
+            });
         }
 
         public void Dispose()
@@ -186,6 +264,133 @@ namespace ChatServiceProvider.ServiceImplementation
         public OperationResult<Conversation> CreateDialog(string Login)
         {
             throw new NotImplementedException();
+        }
+
+        public OperationResult<Conversation> CreateConversation(string Name, bool IsOpen = false)
+        {
+            Console.WriteLine("Create conversation");
+            try
+            {
+                using (DbMain.EFDbContext.ChatEntities db = new DbMain.EFDbContext.ChatEntities())
+                {
+                    DbMain.EFDbContext.Conversation conversation = new DbMain.EFDbContext.Conversation()
+                    {
+
+                        AuthorId = curUser.Id,
+                        Name = Name,
+                        ConversationTypeId = (int)(IsOpen ? ConversationType.OpenConversation : ConversationType.PrivateConversation)
+
+                    };
+                    db.Conversations.Add(conversation);
+                    if (db.SaveChanges() > 0)
+                    {
+                        return new OperationResult<Conversation>(new Conversation()
+                        {
+                            ConversationType = IsOpen ? ConversationType.OpenConversation : ConversationType.PrivateConversation,
+                            Id = conversation.Id,
+                            MyStatus = ConversationMemberStatus.Admin,
+                            Name = Name
+                        });
+                    }
+                    return new OperationResult<Conversation>(null, false, "Internal error");
+                }
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult<Conversation>(null, false, "Internal error");
+            }
+        }
+
+        public OperationResult<bool> InviteFriendToConversation(string Login, long conversationId)
+        {
+            Console.WriteLine("Invite to conversation");
+            try
+            {
+                using (DbMain.EFDbContext.ChatEntities db = new DbMain.EFDbContext.ChatEntities())
+                {
+                    var conv = db.Conversations.FirstOrDefault(x => x.Id == conversationId);
+                    if (conv == null)
+                    {
+                        return new OperationResult<bool>(false, false, "Conversation not found");
+                    }
+                    var member = conv.ConversationMembers.FirstOrDefault(x => x.MemberId == curUser.Id);
+                    if (member == null)
+                    {
+                        return new OperationResult<bool>(false, false, "You are not in conversation");
+
+                    }
+                    var invitedUser = db.Users.FirstOrDefault(x => x.Login == Login);
+                    if (invitedUser == null)
+                    {
+                        return new OperationResult<bool>(false, false, "User not found");
+                    }
+                    var contact = db.Contacts.FirstOrDefault(x => (x.AdderId == curUser.Id && x.InvitedId == invitedUser.Id) || (x.AdderId == invitedUser.Id && x.InvitedId == curUser.Id) && x.RelationTypeId == (int)RelationStatus.Friendship);
+                    if (contact == null)
+                    {
+                        return new OperationResult<bool>(false, false, "User not your friend");
+                    }
+                    var convStatus = (ConversationType)conv.ConversationTypeId;
+                    var memberStatus = (ConversationMemberStatus)member.MemberStatusId;
+                    switch (memberStatus)
+                    {
+                        case ConversationMemberStatus.None:
+
+                        case ConversationMemberStatus.Blocked:
+                        case ConversationMemberStatus.ReadOnly:
+                        case ConversationMemberStatus.LeftConversation:
+                            return new OperationResult<bool>(false, false, "No permission to add users");
+                        default:
+                            break;
+                    }
+                    db.ConversationMembers.Add(new DbMain.EFDbContext.ConversationMember()
+                    {
+                        AddedId = curUser.Id,
+                        ConversationId = conversationId,
+                        MemberId = invitedUser.Id,
+                        MemberStatusId = (int)ConversationMemberStatus.Active
+                    });
+                    if (db.SaveChanges() > 0)
+                    {
+                        return new OperationResult<bool>(true);
+                    }
+                    return new OperationResult<bool>(false, false, "Internal error");
+                }
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult<bool>(false, false, "Internal error");
+            }
+        }
+
+        public OperationResult<bool> LeaveConversation(long conversationId)
+        {
+            try
+            {
+                using (DbMain.EFDbContext.ChatEntities db = new DbMain.EFDbContext.ChatEntities())
+                {
+                    var conv = db.Conversations.FirstOrDefault(x => x.Id == conversationId);
+                    if (conv == null)
+                    {
+                        return new OperationResult<bool>(false, false, "Conversation not found");
+                    }
+                    var member = conv.ConversationMembers.FirstOrDefault(x => x.MemberId == curUser.Id);
+                    if (member == null)
+                    {
+                        return new OperationResult<bool>(false, false, "You are not in conversation");
+
+                    }
+                    member.MemberStatusId = (int)ConversationMemberStatus.LeftConversation;
+                    if(db.SaveChanges()>0)
+                    {
+                        return new OperationResult<bool>(true);
+                    }
+                    return new OperationResult<bool>(false, false, "Internal error");
+                }
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult<bool>(false, false, "Internal error");
+            }
         }
     }
 }

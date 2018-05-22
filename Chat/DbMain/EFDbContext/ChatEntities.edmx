@@ -12,18 +12,7 @@
           <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserId" Type="bigint" Nullable="false" />
           <Property Name="Token" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="Created" Type="datetimeoffset" Precision="7" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="IsActive" Type="bit" Nullable="false" StoreGeneratedPattern="Identity" />
-        </EntityType>
-        <EntityType Name="BlokedUsers">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="AdderId" Type="bigint" Nullable="false" />
-          <Property Name="BlockedUserId" Type="bigint" Nullable="false" />
           <Property Name="Created" Type="datetimeoffset" Precision="7" Nullable="false" />
-          <Property Name="LastChange" Type="datetimeoffset" Precision="7" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Cities">
@@ -41,9 +30,9 @@
           <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="AdderId" Type="bigint" Nullable="false" />
           <Property Name="InvitedId" Type="bigint" Nullable="false" />
-          <Property Name="SendingDate" Type="datetimeoffset" Precision="7" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="SendingDate" Type="datetimeoffset" Precision="7" Nullable="false" />
           <Property Name="RelationTypeId" Type="int" Nullable="false" />
-          <Property Name="LastChangeDate" Type="datetimeoffset" Precision="7" StoreGeneratedPattern="Computed" />
+          <Property Name="LastChangeDate" Type="datetimeoffset" Precision="7" />
           <Property Name="ConversationId" Type="bigint" Nullable="false" />
         </EntityType>
         <EntityType Name="ConversationMembers">
@@ -54,8 +43,8 @@
           <Property Name="ConversationId" Type="bigint" Nullable="false" />
           <Property Name="MemberId" Type="bigint" Nullable="false" />
           <Property Name="AddedId" Type="bigint" />
-          <Property Name="Joined" Type="datetimeoffset" Precision="7" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="LastStatusChanged" Type="datetimeoffset" Precision="7" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="Joined" Type="datetimeoffset" Precision="7" Nullable="false" />
+          <Property Name="LastStatusChanged" Type="datetimeoffset" Precision="7" Nullable="false" />
           <Property Name="MemberStatusId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="ConversationMemberStatuses">
@@ -73,10 +62,9 @@
           <Property Name="AuthorId" Type="bigint" Nullable="false" />
           <Property Name="ConversationId" Type="bigint" Nullable="false" />
           <Property Name="Body" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="SendingTime" Type="datetimeoffset" Precision="7" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="SendingTime" Type="datetimeoffset" Precision="7" Nullable="false" />
           <Property Name="IsDeleted" Type="bit" Nullable="false" />
           <Property Name="ConversationReplyStatusId" Type="int" Nullable="false" />
-          <Property Name="ReceiverId" Type="bigint" />
         </EntityType>
         <EntityType Name="ConversationReplyStatuses">
           <Key>
@@ -94,8 +82,8 @@
           <Property Name="PartnerId" Type="bigint" />
           <Property Name="Name" Type="nvarchar" MaxLength="250" Nullable="false" />
           <Property Name="Description" Type="nvarchar" MaxLength="250" />
-          <Property Name="Created" Type="datetimeoffset" Precision="7" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="LastChange" Type="datetimeoffset" Precision="7" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="Created" Type="datetimeoffset" Precision="7" Nullable="false" />
+          <Property Name="LastChange" Type="datetimeoffset" Precision="7" Nullable="false" />
           <Property Name="Icon" Type="varbinary(max)" />
           <Property Name="ConversationTypeId" Type="int" Nullable="false" />
         </EntityType>
@@ -140,7 +128,7 @@
           </Key>
           <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Email" Type="nvarchar" MaxLength="250" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="150" Nullable="false" />
           <Property Name="Phone" Type="nvarchar" MaxLength="20" />
           <Property Name="PasswordHash" Type="binary" MaxLength="32" Nullable="false" />
           <Property Name="PasswordSalt" Type="binary" MaxLength="20" Nullable="false" />
@@ -150,9 +138,9 @@
           <Property Name="Icon" Type="varbinary(max)" />
           <Property Name="GenderId" Type="int" />
           <Property Name="Status" Type="nvarchar" MaxLength="100" />
-          <Property Name="LastEdit" Type="datetimeoffset" Precision="7" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="LastEdit" Type="datetimeoffset" Precision="7" Nullable="false" />
           <Property Name="Login" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="RegistrationDate" Type="datetimeoffset" Precision="7" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="RegistrationDate" Type="datetimeoffset" Precision="7" Nullable="false" />
           <Property Name="NetworkStatusId" Type="int" Nullable="false" />
         </EntityType>
         <Association Name="AccessTokens_fk0">
@@ -164,30 +152,6 @@
             </Principal>
             <Dependent Role="AccessTokens">
               <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="BlokedUsers_fk0">
-          <End Role="Users" Type="Self.Users" Multiplicity="1" />
-          <End Role="BlokedUsers" Type="Self.BlokedUsers" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="BlokedUsers">
-              <PropertyRef Name="AdderId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="BlokedUsers_fk1">
-          <End Role="Users" Type="Self.Users" Multiplicity="1" />
-          <End Role="BlokedUsers" Type="Self.BlokedUsers" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="BlokedUsers">
-              <PropertyRef Name="BlockedUserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -371,18 +335,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Conversat__Recei__22401542">
-          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
-          <End Role="ConversationReplies" Type="Self.ConversationReplies" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ConversationReplies">
-              <PropertyRef Name="ReceiverId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="Users_fk0">
           <End Role="Cities" Type="Self.Cities" Multiplicity="0..1" />
           <End Role="Users" Type="Self.Users" Multiplicity="*" />
@@ -421,7 +373,6 @@
         </Association>
         <EntityContainer Name="Хранилище ChatModelContainer">
           <EntitySet Name="AccessTokens" EntityType="Self.AccessTokens" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="BlokedUsers" EntityType="Self.BlokedUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Cities" EntityType="Self.Cities" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Contacts" EntityType="Self.Contacts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ConversationMembers" EntityType="Self.ConversationMembers" Schema="dbo" store:Type="Tables" />
@@ -438,14 +389,6 @@
           <AssociationSet Name="AccessTokens_fk0" Association="Self.AccessTokens_fk0">
             <End Role="Users" EntitySet="Users" />
             <End Role="AccessTokens" EntitySet="AccessTokens" />
-          </AssociationSet>
-          <AssociationSet Name="BlokedUsers_fk0" Association="Self.BlokedUsers_fk0">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="BlokedUsers" EntitySet="BlokedUsers" />
-          </AssociationSet>
-          <AssociationSet Name="BlokedUsers_fk1" Association="Self.BlokedUsers_fk1">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="BlokedUsers" EntitySet="BlokedUsers" />
           </AssociationSet>
           <AssociationSet Name="Cities_fk0" Association="Self.Cities_fk0">
             <End Role="Countries" EntitySet="Countries" />
@@ -507,10 +450,6 @@
             <End Role="ConversationTypes" EntitySet="ConversationTypes" />
             <End Role="Conversations" EntitySet="Conversations" />
           </AssociationSet>
-          <AssociationSet Name="FK__Conversat__Recei__22401542" Association="Self.FK__Conversat__Recei__22401542">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="ConversationReplies" EntitySet="ConversationReplies" />
-          </AssociationSet>
           <AssociationSet Name="Users_fk0" Association="Self.Users_fk0">
             <End Role="Cities" EntitySet="Cities" />
             <End Role="Users" EntitySet="Users" />
@@ -535,8 +474,8 @@
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="UserId" Type="Int64" Nullable="false" />
           <Property Name="Token" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="User" Relationship="Self.AccessTokens_fk0" FromRole="AccessTokens" ToRole="Users" />
         </EntityType>
         <EntityType Name="City">
@@ -556,9 +495,9 @@
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="AdderId" Type="Int64" Nullable="false" />
           <Property Name="InvitedId" Type="Int64" Nullable="false" />
-          <Property Name="SendingDate" Type="DateTimeOffset" Nullable="false" Precision="7" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SendingDate" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="RelationTypeId" Type="Int32" Nullable="false" />
-          <Property Name="LastChangeDate" Type="DateTimeOffset" Precision="7" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="LastChangeDate" Type="DateTimeOffset" Precision="7" />
           <Property Name="ConversationId" Type="Int64" Nullable="false" />
           <NavigationProperty Name="User" Relationship="Self.Contacts_fk0" FromRole="Contacts" ToRole="Users" />
           <NavigationProperty Name="User1" Relationship="Self.Contacts_fk1" FromRole="Contacts" ToRole="Users" />
@@ -573,8 +512,8 @@
           <Property Name="ConversationId" Type="Int64" Nullable="false" />
           <Property Name="MemberId" Type="Int64" Nullable="false" />
           <Property Name="AddedId" Type="Int64" />
-          <Property Name="Joined" Type="DateTimeOffset" Nullable="false" Precision="7" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="LastStatusChanged" Type="DateTimeOffset" Nullable="false" Precision="7" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="Joined" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="LastStatusChanged" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="MemberStatusId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Conversation" Relationship="Self.ConversationMembers_fk0" FromRole="ConversationMembers" ToRole="Conversations" />
           <NavigationProperty Name="User" Relationship="Self.ConversationMembers_fk1" FromRole="ConversationMembers" ToRole="Users" />
@@ -597,14 +536,14 @@
           <Property Name="AuthorId" Type="Int64" Nullable="false" />
           <Property Name="ConversationId" Type="Int64" Nullable="false" />
           <Property Name="Body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="SendingTime" Type="DateTimeOffset" Nullable="false" Precision="7" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SendingTime" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
           <Property Name="ConversationReplyStatusId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="User" Relationship="Self.ConversationReplies_fk0" FromRole="ConversationReplies" ToRole="Users" />
           <NavigationProperty Name="Conversation" Relationship="Self.ConversationReplies_fk1" FromRole="ConversationReplies" ToRole="Conversations" />
           <NavigationProperty Name="ConversationReplyStatus" Relationship="Self.ConversationReplies_fk2" FromRole="ConversationReplies" ToRole="ConversationReplyStatuses" />
-          <Property Name="ReceiverId" Type="Int64" />
-          <NavigationProperty Name="UserReceiver" Relationship="ChatModel.FK__Conversat__Recei__22401542" FromRole="ConversationReply" ToRole="User" />
+          <NavigationProperty Name="UserReseiver" />
+          <Property Name="ReceiverId" Type="Int64" Nullable="true" />
         </EntityType>
         <EntityType Name="ConversationReplyStatus">
           <Key>
@@ -623,10 +562,10 @@
           <Property Name="PartnerId" Type="Int64" />
           <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="LastChange" Type="DateTimeOffset" Nullable="false" Precision="7" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="LastChange" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="Icon" Type="Binary" MaxLength="Max" FixedLength="false" />
-          <Property Name="ConversationTypeId" Type="Int32" Nullable="false" DefaultValue="1" />
+          <Property Name="ConversationTypeId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Contacts" Relationship="Self.Contacts_fk3" FromRole="Conversations" ToRole="Contacts" />
           <NavigationProperty Name="ConversationMembers" Relationship="Self.ConversationMembers_fk0" FromRole="Conversations" ToRole="ConversationMembers" />
           <NavigationProperty Name="ConversationReplies" Relationship="Self.ConversationReplies_fk1" FromRole="Conversations" ToRole="ConversationReplies" />
@@ -680,7 +619,7 @@
           </Key>
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Email" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="PasswordHash" Type="Binary" MaxLength="32" FixedLength="true" Nullable="false" />
           <Property Name="PasswordSalt" Type="Binary" MaxLength="20" FixedLength="true" Nullable="false" />
@@ -690,10 +629,10 @@
           <Property Name="Icon" Type="Binary" MaxLength="Max" FixedLength="false" />
           <Property Name="GenderId" Type="Int32" />
           <Property Name="Status" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="LastEdit" Type="DateTimeOffset" Nullable="false" Precision="7" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="LastEdit" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="Login" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="RegistrationDate" Type="DateTimeOffset" Nullable="false" Precision="7" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="NetworkStatusId" Type="Int32" Nullable="false" DefaultValue="1" />
+          <Property Name="RegistrationDate" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="NetworkStatusId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="AccessTokens" Relationship="Self.AccessTokens_fk0" FromRole="Users" ToRole="AccessTokens" />
           <NavigationProperty Name="City" Relationship="Self.Users_fk0" FromRole="Users" ToRole="Cities" />
           <NavigationProperty Name="Contacts" Relationship="Self.Contacts_fk0" FromRole="Users" ToRole="Contacts" />
@@ -705,9 +644,6 @@
           <NavigationProperty Name="Conversations1" Relationship="Self.Conversations_fk1" FromRole="Users" ToRole="Conversations" />
           <NavigationProperty Name="Gender" Relationship="Self.Users_fk1" FromRole="Users" ToRole="Genders" />
           <NavigationProperty Name="NetworkStatus" Relationship="Self.Users_fk2" FromRole="Users" ToRole="NetworkStatuses" />
-          <NavigationProperty Name="BlokedUsers" Relationship="ChatModel.BlokedUsers_fk0" FromRole="User" ToRole="BlokedUser" />
-          <NavigationProperty Name="BlokedUsers1" Relationship="ChatModel.BlokedUsers_fk1" FromRole="User" ToRole="BlokedUser" />
-          <NavigationProperty Name="ConversationReplies1" Relationship="ChatModel.FK__Conversat__Recei__22401542" FromRole="User" ToRole="ConversationReply" />
         </EntityType>
         <Association Name="AccessTokens_fk0">
           <End Role="Users" Type="Self.User" Multiplicity="1" />
@@ -1028,69 +964,7 @@
             <End Role="NetworkStatuses" EntitySet="NetworkStatuses" />
             <End Role="Users" EntitySet="Users" />
           </AssociationSet>
-          <EntitySet Name="BlokedUsers" EntityType="ChatModel.BlokedUser" />
-          <AssociationSet Name="BlokedUsers_fk0" Association="ChatModel.BlokedUsers_fk0">
-            <End Role="User" EntitySet="Users" />
-            <End Role="BlokedUser" EntitySet="BlokedUsers" />
-          </AssociationSet>
-          <AssociationSet Name="BlokedUsers_fk1" Association="ChatModel.BlokedUsers_fk1">
-            <End Role="User" EntitySet="Users" />
-            <End Role="BlokedUser" EntitySet="BlokedUsers" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Conversat__Recei__22401542" Association="ChatModel.FK__Conversat__Recei__22401542">
-            <End Role="User" EntitySet="Users" />
-            <End Role="ConversationReply" EntitySet="ConversationReplies" />
-          </AssociationSet>
         </EntityContainer>
-        <EntityType Name="BlokedUser">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="AdderId" Type="Int64" Nullable="false" />
-          <Property Name="BlockedUserId" Type="Int64" Nullable="false" />
-          <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
-          <Property Name="LastChange" Type="DateTimeOffset" Nullable="false" Precision="7" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="User" Relationship="ChatModel.BlokedUsers_fk0" FromRole="BlokedUser" ToRole="User" />
-          <NavigationProperty Name="User1" Relationship="ChatModel.BlokedUsers_fk1" FromRole="BlokedUser" ToRole="User" />
-        </EntityType>
-        <Association Name="BlokedUsers_fk0">
-          <End Type="ChatModel.User" Role="User" Multiplicity="1" />
-          <End Type="ChatModel.BlokedUser" Role="BlokedUser" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="BlokedUser">
-              <PropertyRef Name="AdderId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="BlokedUsers_fk1">
-          <End Type="ChatModel.User" Role="User" Multiplicity="1" />
-          <End Type="ChatModel.BlokedUser" Role="BlokedUser" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="BlokedUser">
-              <PropertyRef Name="BlockedUserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Conversat__Recei__22401542">
-          <End Type="ChatModel.User" Role="User" Multiplicity="0..1" />
-          <End Type="ChatModel.ConversationReply" Role="ConversationReply" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ConversationReply">
-              <PropertyRef Name="ReceiverId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1154,7 +1028,6 @@
           <EntitySetMapping Name="ConversationReplies">
             <EntityTypeMapping TypeName="ChatModel.ConversationReply">
               <MappingFragment StoreEntitySet="ConversationReplies">
-                <ScalarProperty Name="ReceiverId" ColumnName="ReceiverId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="AuthorId" ColumnName="AuthorId" />
                 <ScalarProperty Name="ConversationId" ColumnName="ConversationId" />
@@ -1247,18 +1120,6 @@
                 <ScalarProperty Name="Login" ColumnName="Login" />
                 <ScalarProperty Name="RegistrationDate" ColumnName="RegistrationDate" />
                 <ScalarProperty Name="NetworkStatusId" ColumnName="NetworkStatusId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="BlokedUsers">
-            <EntityTypeMapping TypeName="ChatModel.BlokedUser">
-              <MappingFragment StoreEntitySet="BlokedUsers">
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="LastChange" ColumnName="LastChange" />
-                <ScalarProperty Name="Created" ColumnName="Created" />
-                <ScalarProperty Name="BlockedUserId" ColumnName="BlockedUserId" />
-                <ScalarProperty Name="AdderId" ColumnName="AdderId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -10,32 +10,17 @@ namespace ClientContractImplement
 {
     public class ChatCustomerCallbackService : IChatCallback
     {
-        public void AddingToConversation(Conversation conversation)
+        public void AddingToConversation(Conversation conversation, string authorLogin)
         {
             throw new NotImplementedException();
         }
 
-        public void BlockedByPartner(string login)
+        public void ConversationMemberStatusChanged(ConversationMemberStatus status, string authorLogin)
         {
             throw new NotImplementedException();
         }
 
-        public void DeleteFriendship(string login)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void FriendshipRequest(User user)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void IncomingMessage(string body, string login, string conversationId, DateTime sendingtime)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UserNetworkStatusChanged(string login, NetworkStatus status)
+        public void IncomingMessage(ConversationReply reply)
         {
             throw new NotImplementedException();
         }

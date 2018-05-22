@@ -331,43 +331,6 @@ namespace AccountRelationsProvider.ServiceImplementation
             }
         }
 
-
-
-        private void CreateContactAndDialog(DbMain.EFDbContext.ChatEntities db, out DbMain.EFDbContext.Contact contact, DbMain.EFDbContext.User user, RelationStatus status)
-        {
-            contact = new DbMain.EFDbContext.Contact()
-            {
-                AdderId = curUser.Id,
-                InvitedId = user.Id,
-                RelationTypeId = (int)status
-
-            };
-            DbMain.EFDbContext.Conversation conversation = new DbMain.EFDbContext.Conversation()
-            {
-                AuthorId = curUser.Id,
-                PartnerId = user.Id,
-                Name = "Dialog"
-            };
-            contact.Conversation = conversation;
-            DbMain.EFDbContext.ConversationMember member = new DbMain.EFDbContext.ConversationMember()
-            {
-                MemberId = curUser.Id,
-                Conversation = conversation,
-                MemberStatusId = (int)ConversationMemberStatus.Admin,
-            };
-            DbMain.EFDbContext.ConversationMember member2 = new DbMain.EFDbContext.ConversationMember()
-            {
-                MemberId = user.Id,
-                Conversation = conversation,
-                MemberStatusId = (int)(status != RelationStatus.BlockedByMe ? ConversationMemberStatus.Admin : ConversationMemberStatus.Blocked),
-                AddedId = curUser.Id
-            };
-            db.ConversationMembers.Add(member);
-            db.ConversationMembers.Add(member2);
-            db.Conversations.Add(conversation);
-            db.Contacts.Add(contact);
-        }
-
         public OperationResult<List<User>> GetUsersByRelationStatus(RelationStatus relationStatus)
         {
             Console.WriteLine($"AccountUpdateServiceprovider  GetUsersByRelationStatus. Login {curUser.Login}, staus - {relationStatus} ");
@@ -405,6 +368,40 @@ namespace AccountRelationsProvider.ServiceImplementation
             }
         }
         #endregion
+        private void CreateContactAndDialog(DbMain.EFDbContext.ChatEntities db, out DbMain.EFDbContext.Contact contact, DbMain.EFDbContext.User user, RelationStatus status)
+        {
+            contact = new DbMain.EFDbContext.Contact()
+            {
+                AdderId = curUser.Id,
+                InvitedId = user.Id,
+                RelationTypeId = (int)status
+
+            };
+            DbMain.EFDbContext.Conversation conversation = new DbMain.EFDbContext.Conversation()
+            {
+                AuthorId = curUser.Id,
+                PartnerId = user.Id,
+                Name = "Dialog"
+            };
+            contact.Conversation = conversation;
+            DbMain.EFDbContext.ConversationMember member = new DbMain.EFDbContext.ConversationMember()
+            {
+                MemberId = curUser.Id,
+                Conversation = conversation,
+                MemberStatusId = (int)ConversationMemberStatus.Admin,
+            };
+            DbMain.EFDbContext.ConversationMember member2 = new DbMain.EFDbContext.ConversationMember()
+            {
+                MemberId = user.Id,
+                Conversation = conversation,
+                MemberStatusId = (int)(status != RelationStatus.BlockedByMe ? ConversationMemberStatus.Admin : ConversationMemberStatus.Blocked),
+                AddedId = curUser.Id
+            };
+            db.ConversationMembers.Add(member);
+            db.ConversationMembers.Add(member2);
+            db.Conversations.Add(conversation);
+            db.Contacts.Add(contact);
+        }
 
 
         private User DbUserToCustomerUser(DbMain.EFDbContext.User user, long conversationId)
