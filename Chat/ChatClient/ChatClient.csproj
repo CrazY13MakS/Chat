@@ -106,6 +106,7 @@
     <Compile Include="View\ChatControls\ConversationPreview.xaml.cs">
       <DependentUpon>ConversationPreview.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\ChatControls\ListBoxExtenders.cs" />
     <Compile Include="View\ChatMainWindow.xaml.cs">
       <DependentUpon>ChatMainWindow.xaml</DependentUpon>
     </Compile>

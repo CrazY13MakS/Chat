@@ -18,6 +18,7 @@ namespace ClientContractImplement
         public event ErrorHandler Error;
         IChatService chatService;
         DuplexChannelFactory<IChatService> duplexChannelFactory;
+        private readonly String connectionString = "ClientMessageServiceEndPoint";
         private readonly String _token;
         IChatCallback _client;
         public ChatCustomerService(String token, IChatCallback client)
@@ -54,7 +55,7 @@ namespace ClientContractImplement
         public void Connect()
         {
             InstanceContext context = new InstanceContext(_client);
-            duplexChannelFactory = new DuplexChannelFactory<IChatService>(context, "ClientMessageServiceEndPoint");
+            duplexChannelFactory = new DuplexChannelFactory<IChatService>(context, connectionString);
             chatService = duplexChannelFactory.CreateChannel();
             OperationResult<UserExt> res;
             try
@@ -98,7 +99,7 @@ namespace ClientContractImplement
 
 
 
-        OperationResult<List<Conversation>> GetConversations()
+        public OperationResult<List<Conversation>> GetConversations()
         {
             try
             {
@@ -112,7 +113,7 @@ namespace ClientContractImplement
 
 
 
-        OperationResult<List<ConversationReply>> GetMessages(long conversationId)
+        public OperationResult<List<ConversationReply>> GetMessages(long conversationId)
         {
             try
             {
@@ -125,14 +126,13 @@ namespace ClientContractImplement
         }
 
 
-        OperationResult<Conversation> CreateDialog(String Login)
+        public OperationResult<Conversation> CreateDialog(String Login)
         {
             throw new NotImplementedException();
         }
 
 
-        [OperationContract(IsInitiating = false)]
-        OperationResult<Conversation> CreateConversation(String Name, bool IsOpen = false)
+        public OperationResult<Conversation> CreateConversation(String Name, bool IsOpen = false)
         {
             try
             {
@@ -144,8 +144,7 @@ namespace ClientContractImplement
             }
         }
 
-        [OperationContract(IsInitiating = false)]
-        OperationResult<bool> InviteFriendToConversation(String Login, long conversationId)
+        public OperationResult<bool> InviteFriendToConversation(String Login, long conversationId)
         {
             try
             {
@@ -157,8 +156,7 @@ namespace ClientContractImplement
             }
         }
 
-        [OperationContract(IsInitiating = false)]
-        OperationResult<bool> LeaveConversation(long conversationId)
+        public OperationResult<bool> LeaveConversation(long conversationId)
         {
             try
             {

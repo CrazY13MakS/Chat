@@ -8,7 +8,7 @@ using DbMain.EFDbContext;
 using AccountRelationsProvider;
 using AccountRelationsProvider.ServiceImplementation;
 using AuthServiceProvider.ServiceImplementation;
-
+using ChatServiceProvider;
 namespace ServicesProvider
 {
     class Program
@@ -17,13 +17,16 @@ namespace ServicesProvider
         {
             AuthHost authHost = new AuthHost();
             AccountUpdateHost accHost = new AccountUpdateHost();
+            ChatServiceHost chatServiceHost = new ChatServiceHost();
+
             authHost.Open();
             accHost.Open();
-           while (true)
-           {
-         
-           }
-       
+            chatServiceHost.Open();
+            while (true)
+            {
+
+            }
+
 
             //     AccountRelationsServiceProvider account = new AccountRelationsServiceProvider();
             //  var user =   account.Authentication("124ae10f-4204-4035-a99d-82aa98956cc120:27:25");
@@ -44,31 +47,31 @@ namespace ServicesProvider
             //    var res =  a.Registration("crazy13maks@gmail.com", "crazy13maks", "!QAZ2wsx");
             //   Console.WriteLine(res.Item1);
             //var key = AuthServiceProvider.Model.PasswordCrypt.GetHashFromPassword("!QAZ2wsx");
-           //using (ChatEntities db = new ChatEntities())
-           //{
-           //   var a =  db.Users.FirstOrDefault(x => x.Login == "crazy13maks");
-           //    //db.Database.Log = Console.WriteLine;
-           //    //db.Users.Add(new User
-           //    //{
-           //    //    Name = "test1",
-           //    //    Login = "test1",
-           //    //    PasswordHash = key.Item1,
-           //    //    PasswordSalt = key.Item2,
-           //    //    Email = "test1@gmail.com",
-           //    //    // NetworkStatusId=1
+            //using (ChatEntities db = new ChatEntities())
+            //{
+            //   var a =  db.Users.FirstOrDefault(x => x.Login == "crazy13maks");
+            //    //db.Database.Log = Console.WriteLine;
+            //    //db.Users.Add(new User
+            //    //{
+            //    //    Name = "test1",
+            //    //    Login = "test1",
+            //    //    PasswordHash = key.Item1,
+            //    //    PasswordSalt = key.Item2,
+            //    //    Email = "test1@gmail.com",
+            //    //    // NetworkStatusId=1
 
-           //    //});
-           //    // var r = db.Users.ToList();
-           //    // try
-           //    // {
+            //    //});
+            //    // var r = db.Users.ToList();
+            //    // try
+            //    // {
 
-           //    //     var count = db.SaveChanges();
-           //    // }
-           //    // catch (Exception ex)
-           //    // {
+            //    //     var count = db.SaveChanges();
+            //    // }
+            //    // catch (Exception ex)
+            //    // {
 
-           //    // }
-           // }
+            //    // }
+            // }
 
             //using (DbMain.EFDbContext.ChatEntities a = new DbMain.EFDbContext.ChatEntities())
             //{
@@ -93,8 +96,8 @@ namespace ServicesProvider
             //userAccess.Registration("temp8@temp.com", "temp8", "!QAZ2wsx");
             Console.ReadKey();
 
-        authHost.Close();
-        accHost.Close();
+            authHost.Close();
+            accHost.Close();
         }
     }
 }

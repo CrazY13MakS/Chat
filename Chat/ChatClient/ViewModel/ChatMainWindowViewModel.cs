@@ -28,14 +28,65 @@ namespace ChatClient.ViewModel
             }
         }
 
-        public ObservableCollection<User> Contacts
+        private Conversation _selectedConversation;
+
+        public Conversation SelectedConversation
+        {
+            get { return _selectedConversation; }
+            set
+            {
+                if (_selectedConversation == value)
+                {
+                    return;
+                }
+                _selectedConversation = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private String _message;
+
+        public String Message
+        {
+            get { return _message; }
+            set
+            {
+                if (_message == value)
+                {
+                    return;
+                }
+                _message = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+
+        RelayCommand _sendMessage;
+        public ICommand SendMessageCommand
         {
             get
             {
-
-                return model.Contacts;
+                if (_sendMessage == null)
+                {
+                    _sendMessage = new RelayCommand(ExecuteSendMessageCommand, CanExecuteSendMessageCommand);
+                }
+                return _sendMessage;
             }
         }
+
+        private void ExecuteSendMessageCommand(object parametr)
+        {
+            var conversation = parametr as Conversation;
+            model.SendMessage(Message, conversation.Id);
+        }
+
+        private bool CanExecuteSendMessageCommand(object parametr)
+        {
+            return !String.IsNullOrWhiteSpace(Message)&& parametr is Conversation conversation && (conversation.MyStatus == ConversationMemberStatus.Active || conversation.MyStatus == ConversationMemberStatus.Admin);
+        }
+
+
         public UserExt Author
         {
             get
@@ -51,7 +102,15 @@ namespace ChatClient.ViewModel
         //    }
         //}
 
+        #region Relation Data
+        public ObservableCollection<User> Contacts
+        {
+            get
+            {
 
+                return model.Contacts;
+            }
+        }
 
         public ObservableCollection<User> FriendshipRequestReceive
         {
@@ -68,7 +127,7 @@ namespace ChatClient.ViewModel
                 return model.FriendshipRequestSend as ObservableCollection<User>;
             }
         }
-
+        #endregion
 
 
 

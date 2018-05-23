@@ -52,6 +52,13 @@ namespace ClientContractImplement
                 _friendshipRequestSend = new ObservableCollection<User>(sent.Response);
             }
 
+            chat.Connect();
+            var conv = chat.GetConversations();
+            if (conv.IsOk)
+            {
+                Conversations = new ObservableCollection<Conversation>(conv.Response);
+            }
+
         }
         private async void UpdateContacts()
         {
@@ -65,7 +72,6 @@ namespace ClientContractImplement
 
 
 
-        #endregion
 
         ObservableCollection<Conversation> _conversations;
         public ObservableCollection<Conversation> Conversations
@@ -84,7 +90,49 @@ namespace ClientContractImplement
             }
         }
 
+        public void CreateConversation(String Name, bool IsOpen = false)
+        {
+            var res = chat.CreateConversation(Name, IsOpen);
+            if (res.IsOk)
+            {
+                Conversations.Add(res.Response);
+            }
+            else
+            {
+                Error?.Invoke("Create conversation", res.ErrorMessage);
+            }
+        }
 
+
+        public async void InviteFriendToConversation(String Login, long conversationId)
+        {
+            var res = await Task.Run(() => chat.InviteFriendToConversation(Login, conversationId));
+            if (res.IsOk)
+            {
+                Conversations.FirstOrDefault(x => x.Id == conversationId)?.ParticipantsLogin.Add(Login);
+            }
+            else
+            {
+                Error?.Invoke("Invite Friend To Conversation", res.ErrorMessage);
+            }
+        }
+
+        public async void LeaveConversation(long conversationId)
+        {
+            var res = await Task.Run(() => chat.LeaveConversation(conversationId));
+            if (res.IsOk)
+            {
+                var conv = Conversations.FirstOrDefault(x => x.Id == conversationId);
+                if (conv != null)
+                {
+                    conv.MyStatus = ConversationMemberStatus.LeftConversation;
+                }
+            }
+            else
+            {
+                Error?.Invoke("Invite Friend To Conversation", res.ErrorMessage);
+            }
+        }
 
 
 
@@ -101,7 +149,7 @@ namespace ClientContractImplement
                 Author = Author.Login,
                 Body = body,
                 ConversationId = conversationId,
-                SendingTime = DateTime.UtcNow,
+                SendingTime = DateTimeOffset.Now,
                 Status = ConversationReplyStatus.Sending
             };
             conv.Messages.Add(reply);
@@ -116,6 +164,7 @@ namespace ClientContractImplement
             }
 
         }
+        #endregion
 
         #region Relations
 

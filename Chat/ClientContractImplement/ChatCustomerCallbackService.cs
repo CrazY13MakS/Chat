@@ -12,17 +12,20 @@ namespace ClientContractImplement
     {
         public void AddingToConversation(Conversation conversation, string authorLogin)
         {
-            throw new NotImplementedException();
+            int a = 5;
+           // throw new NotImplementedException();
         }
 
         public void ConversationMemberStatusChanged(ConversationMemberStatus status, string authorLogin)
         {
-            throw new NotImplementedException();
+            int a = 5;
+           // throw new NotImplementedException();
         }
 
         public void IncomingMessage(ConversationReply reply)
         {
-            throw new NotImplementedException();
+            int a = 5;
+           // throw new NotImplementedException();
         }
     }
 }

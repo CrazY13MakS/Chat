@@ -7,11 +7,17 @@ using System.Threading.Tasks;
 
 namespace ContractClient.Contracts
 {
-    [ServiceContract]
-   public interface IChatCallback
+    [ServiceContract(ProtectionLevel = System.Net.Security.ProtectionLevel.EncryptAndSign, SessionMode = SessionMode.Required)]
+    public interface IChatCallback
     {
+        [OperationContract]
+
         void IncomingMessage(ConversationReply reply);
+        [OperationContract]
+
         void AddingToConversation(Conversation conversation, String authorLogin);
-        void ConversationMemberStatusChanged(ConversationMemberStatus status,String authorLogin);        
+        [OperationContract]
+
+        void ConversationMemberStatusChanged(ConversationMemberStatus status, String authorLogin);
     }
 }

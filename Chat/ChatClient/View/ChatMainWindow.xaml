@@ -61,20 +61,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <ListBox Grid.Row="1" Grid.Column="2" ItemsSource="{Binding FriendshipNotAllowed}">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="auto"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="{Binding Login}"/>
-                        <Button Content="Add" Command="{Binding DataContext.ConfirmFriendshipCommand,RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" CommandParameter="{Binding}" Grid.Column="1"/>
-                    </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <cCtrl:ConversationDialog Grid.Row="1" Grid.Column="2" DataContext="{Binding SelectedConversation}"></cCtrl:ConversationDialog>
         <StackPanel Grid.Row="1" >
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <ListBox>
@@ -267,5 +254,21 @@
 
             </TabItem>
         </TabControl>
+
+
+
+
+        <ListBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Conversations}" SelectedItem="{Binding SelectedConversation}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="0,10,0,0">
+                        <TextBlock Text="{Binding Name}"/>
+                        <TextBlock Text="{Binding MyStatus}"/>
+                        <TextBlock Text="{Binding Partner.Login}"/>                        
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        
     </Grid>
 </Window>

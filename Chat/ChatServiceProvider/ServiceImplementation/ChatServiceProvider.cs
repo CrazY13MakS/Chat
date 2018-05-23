@@ -75,15 +75,18 @@ namespace ChatServiceProvider.ServiceImplementation
 
                     conv.ForEach((x) =>
                     {
-                        x.Messages  = db.ConversationReplies.Where(y => y.ConversationId == x.Id && (y.AuthorId == curUser.Id || y.ReceiverId == curUser.Id)).Select(y => new ConversationReply()
-                        {
-                            Author = y.User.Login,
-                            Body = y.Body,
-                            ConversationId = y.ConversationId,
-                            Id = y.Id,
-                            SendingTime = y.SendingTime,
-                            Status = (ConversationReplyStatus)y.ConversationReplyStatusId
-                        }).ToList();
+                        x.Messages = new System.Collections.ObjectModel.ObservableCollection<ConversationReply>(
+                            db.ConversationReplies
+                            .Where(y => y.ConversationId == x.Id && (y.AuthorId == curUser.Id || y.ReceiverId == curUser.Id))
+                            .Select(y => new ConversationReply()
+                            {
+                                Author = y.User.Login,
+                                Body = y.Body,
+                                ConversationId = y.ConversationId,
+                                Id = y.Id,
+                                SendingTime = y.SendingTime,
+                                Status = (ConversationReplyStatus)y.ConversationReplyStatusId
+                            }));
                         if (x.ConversationType == ConversationType.Dialog)
                         {
                             var contact = db.Conversations.Include(y => y.User).Include(y => y.User1).FirstOrDefault(y => y.Id == x.Id);
@@ -245,11 +248,17 @@ namespace ChatServiceProvider.ServiceImplementation
             {
                 using (DbMain.EFDbContext.ChatEntities db = new DbMain.EFDbContext.ChatEntities())
                 {
-                    reply.ConversationReplyStatusId = (int)ConversationReplyStatus.Received;
+                    int status = (int)ConversationReplyStatus.Received;
                     foreach (var item in listUserId)
                     {
                         reply.ReceiverId = item;
-                        db.ConversationReplies.Add(reply);
+                        db.ConversationReplies.Add(new DbMain.EFDbContext.ConversationReply()
+                        {
+                            AuthorId = reply.AuthorId,
+                            Body = reply.Body,
+                            ConversationId = reply.ConversationId,
+                            ConversationReplyStatusId = status
+                        });
                     }
                     db.SaveChanges();
                 }
@@ -380,7 +389,7 @@ namespace ChatServiceProvider.ServiceImplementation
 
                     }
                     member.MemberStatusId = (int)ConversationMemberStatus.LeftConversation;
-                    if(db.SaveChanges()>0)
+                    if (db.SaveChanges() > 0)
                     {
                         return new OperationResult<bool>(true);
                     }

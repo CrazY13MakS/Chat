@@ -381,7 +381,9 @@ namespace AccountRelationsProvider.ServiceImplementation
             {
                 AuthorId = curUser.Id,
                 PartnerId = user.Id,
-                Name = "Dialog"
+                Name = $"Dialog: {curUser.Name} - {user.Name}",
+                 ConversationTypeId=(int)ConversationType.Dialog
+                
             };
             contact.Conversation = conversation;
             DbMain.EFDbContext.ConversationMember member = new DbMain.EFDbContext.ConversationMember()

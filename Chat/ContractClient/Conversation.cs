@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Collections.ObjectModel;
 namespace ContractClient
 {
     public class Conversation
@@ -19,7 +19,7 @@ namespace ContractClient
         public ConversationType ConversationType { get; set; }
         public List<String> ParticipantsLogin { get; set; }
         public ConversationMemberStatus MyStatus { get; set; }
-        public List<ConversationReply> Messages { get; set; }
+        public ObservableCollection<ConversationReply> Messages { get; set; }
         public DateTimeOffset LastChange { get; set; }
     }
 }
