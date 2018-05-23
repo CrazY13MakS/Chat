@@ -159,50 +159,37 @@ namespace AccountRelationsProvider.ServiceImplementation
                     if (contact != null)
                     {
                         RelationStatus status = (RelationStatus)contact.RelationTypeId;
+                        bool IsInitiator = contact.AdderId == curUser.Id;
+                        String message = String.Empty;
                         switch (status)
                         {
-                            case RelationStatus.Friendship:
-                                return new OperationResult<User>(null, false, "Friendship already confirmed");
-
-                            case RelationStatus.FriendshipRequestSent:
-                                return new OperationResult<User>(null, false, "Friendship already FriendshipRequestSent");
-
-                            case RelationStatus.FrienshipRequestRecive:
-                                return new OperationResult<User>(null, false, "Friendship already FrienshipRequestRecive");
-
-                            case RelationStatus.BlockedByMe:
-                                return new OperationResult<User>(null, false, "User BlockedByMe");
-
-                            case RelationStatus.BlockedByPartner:
-                                return new OperationResult<User>(null, false, "user BlockedByPartner");
-
-                            case RelationStatus.BlockedBoth:
-                                return new OperationResult<User>(null, false, "Blocked Both");
-
+                            case RelationStatus.Friendship: message = "Friendship already confirmed"; break;
+                            case RelationStatus.FriendshipRequestSent: message = IsInitiator ? "Friendship Request already Sent" : "Frienship Request already Recive"; break;
+                            case RelationStatus.FrienshipRequestRecive: message = IsInitiator ? "Frienship Request already Recive": "Friendship Request already Sent"; break;
+                            case RelationStatus.BlockedByMe: message = IsInitiator ? "You blocked partner" : "You are Blocked By Partner"; break;
+                            case RelationStatus.BlockedByPartner: message = IsInitiator ? "you are Blocked By Partner":"You blocked partner";break;
+                            case RelationStatus.BlockedBoth:message= "Blocked Both";break;
                             default:
                                 break;
+                        }
+                        if(!String.IsNullOrEmpty(message))
+                        {
+                            return new OperationResult<User>(null, false, message);
                         }
                     }
                     else
                     {
-                        //contact = new DbMain.EFDbContext.Contact()
-                        //{
-                        //    AdderId = curUser.Id,
-                        //    InvitedId = invited.Id
-                        //};
-                        //contact.Conversation = new DbMain.EFDbContext.Conversation()
-                        //{
-                        //    AuthorId = curUser.Id,
-                        //    ConversationTypeId = (int)ConversationType.Dialog,
-                        //    Description = "Dialog",
-                        //    PartnerId = invited.Id,
-                        //    Name = $"{curUser.Name} - {invited.Name}"
-                        //};
-                        //db.Contacts.Add(contact);
                         CreateContactAndDialog(db, out contact, invited, RelationStatus.FriendshipRequestSent);
                     }
 
+                    if(contact.AdderId == curUser.Id)
+                    {
                     contact.RelationTypeId = (int)RelationStatus.FriendshipRequestSent;
+                    }
+                    else
+                    {
+                        contact.RelationTypeId = (int)RelationStatus.FrienshipRequestRecive;
+                    }
                     if (db.SaveChanges() > 0)
                     {
                         UserRelationsMain.SendFrienshipRequest(invited.Login, new User()
@@ -229,7 +216,6 @@ namespace AccountRelationsProvider.ServiceImplementation
             }
             catch (Exception ex)
             {
-
                 return new OperationResult<User>(null, false, "Internal error");
             }
         }
@@ -255,7 +241,7 @@ namespace AccountRelationsProvider.ServiceImplementation
                     var user = db.Users.FirstOrDefault(x => x.Login == login);
                     if (user == null)
                     {
-                        return new OperationResult<bool>(false, false, "Login not found");
+                        return new OperationResult<bool>(false, false, "User not found");
                     }
                     var contact = db.Contacts.FirstOrDefault(x => (x.AdderId == curUser.Id && x.InvitedId == user.Id) || (x.InvitedId == curUser.Id && x.AdderId == user.Id));
                     if (contact != null && contact.RelationTypeId == (int)status)
@@ -322,6 +308,11 @@ namespace AccountRelationsProvider.ServiceImplementation
                         UserRelationsMain.UserNetworkStatusChange(new List<string>() { curUser.Login }, user.Login, (NetworkStatus)user.NetworkStatusId);
                         UserRelationsMain.UserNetworkStatusChange(new List<string>() { user.Login }, curUser.Login, (NetworkStatus)curUser.NetworkStatusId);
                     }
+                    else
+                    {
+                        UserRelationsMain.UserNetworkStatusChange(new List<string>() { curUser.Login }, user.Login, NetworkStatus.Unknown);
+                        UserRelationsMain.UserNetworkStatusChange(new List<string>() { user.Login }, curUser.Login, NetworkStatus.Unknown);
+                    }
                     return new OperationResult<bool>(true);
                 }
             }
@@ -382,8 +373,8 @@ namespace AccountRelationsProvider.ServiceImplementation
                 AuthorId = curUser.Id,
                 PartnerId = user.Id,
                 Name = $"Dialog: {curUser.Name} - {user.Name}",
-                 ConversationTypeId=(int)ConversationType.Dialog
-                
+                ConversationTypeId = (int)ConversationType.Dialog
+
             };
             contact.Conversation = conversation;
             DbMain.EFDbContext.ConversationMember member = new DbMain.EFDbContext.ConversationMember()
@@ -405,7 +396,7 @@ namespace AccountRelationsProvider.ServiceImplementation
             db.Contacts.Add(contact);
         }
 
-
+      
         private User DbUserToCustomerUser(DbMain.EFDbContext.User user, long conversationId)
         {
             return new User()

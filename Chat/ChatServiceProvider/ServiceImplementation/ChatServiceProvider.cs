@@ -46,7 +46,6 @@ namespace ChatServiceProvider.ServiceImplementation
             }
             catch (Exception ex)
             {
-
                 return new OperationResult<UserExt>(null, false, "Internal error. Try again later");
             }
         }
@@ -72,7 +71,9 @@ namespace ChatServiceProvider.ServiceImplementation
                         MyStatus = (ConversationMemberStatus)x.MemberStatusId,
                         Name = x.Conversation.Name
                     }).ToList();
-
+                    var user = db.Users.FirstOrDefault(x => x.Id == curUser.Id);
+                    var a = db.ConversationReplies.Where(x => x.ReceiverId == curUser.Id || x.AuthorId == curUser.Id).GroupBy(x => x.ConversationId).ToList();
+                   
                     conv.ForEach((x) =>
                     {
                         x.Messages = new System.Collections.ObjectModel.ObservableCollection<ConversationReply>(
@@ -251,13 +252,13 @@ namespace ChatServiceProvider.ServiceImplementation
                     int status = (int)ConversationReplyStatus.Received;
                     foreach (var item in listUserId)
                     {
-                        reply.ReceiverId = item;
                         db.ConversationReplies.Add(new DbMain.EFDbContext.ConversationReply()
                         {
                             AuthorId = reply.AuthorId,
                             Body = reply.Body,
                             ConversationId = reply.ConversationId,
-                            ConversationReplyStatusId = status
+                            ConversationReplyStatusId = status,
+                            ReceiverId=item
                         });
                     }
                     db.SaveChanges();
@@ -267,7 +268,7 @@ namespace ChatServiceProvider.ServiceImplementation
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+           //TODO throw new NotImplementedException();
         }
 
         public OperationResult<Conversation> CreateDialog(string Login)
