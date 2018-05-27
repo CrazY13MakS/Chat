@@ -16,7 +16,7 @@ namespace ClientModel
         ChatCustomerService chat;
         public ModelMain(String token)
         {
-            callbackService = new ChatCustomerCallbackService();
+          //  callbackService = new ChatCustomerCallbackService();
             chat = new ChatCustomerService(token, callbackService);
            // Author = chat.Authentication();
         }

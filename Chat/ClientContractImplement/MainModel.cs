@@ -12,7 +12,7 @@ using System.Windows;
 
 namespace ClientContractImplement
 {
-    public class ModelMain : INotifyPropertyChanged, IRelationsCallbackModel
+    public class ModelMain : INotifyPropertyChanged, IRelationsCallbackModel, IChatCallbackModel
     {
         ChatCustomerCallbackService callbackService;
         ChatCustomerService chat;
@@ -22,7 +22,7 @@ namespace ClientContractImplement
 
         public ModelMain(String token)
         {
-            callbackService = new ChatCustomerCallbackService();
+            callbackService = new ChatCustomerCallbackService(this);
             chat = new ChatCustomerService(token, callbackService);
             //  Author = chat.Authentication();
 
@@ -354,6 +354,8 @@ namespace ClientContractImplement
                 }
             }
         }
+
+        Collection<Conversation> IChatCallbackModel.Conversations => _conversations;
 
         public void ChangeRelationStatus(String login, RelationStatus status)
         {

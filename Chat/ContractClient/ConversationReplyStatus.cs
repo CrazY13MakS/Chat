@@ -13,7 +13,8 @@ namespace ContractClient
         AlreadyRead=2 ,
         Sending=3 ,
         Received=4,
-        SendingError=5  
+        SendingError=5,
+        SystemMessage=6
 
     }
 }

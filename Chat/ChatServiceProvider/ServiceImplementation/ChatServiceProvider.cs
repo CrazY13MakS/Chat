@@ -6,6 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using ContractClient;
 using ContractClient.Contracts;
+using ChatServiceProvider.Model;
+using System.ServiceModel;
+
 namespace ChatServiceProvider.ServiceImplementation
 {
     public class ChatServiceProvider : IChatService, IDisposable
@@ -13,6 +16,11 @@ namespace ChatServiceProvider.ServiceImplementation
         DbMain.EFDbContext.ChatEntities db;
         DbMain.EFDbContext.User curUser;
         public readonly IChatCallback Callback;
+        public ChatServiceProvider()
+        {
+            Console.WriteLine($"ChatServiceProvider new id= {this.GetHashCode()}");
+            Callback = OperationContext.Current.GetCallbackChannel<IChatCallback>();
+        }
 
         public OperationResult<UserExt> Authentication(string token)
         {
@@ -33,6 +41,7 @@ namespace ChatServiceProvider.ServiceImplementation
                     }
                     db.SaveChanges();
                     // UserRelationsMain.OnlineUsers.TryAdd(curUser.Login, this);
+                    ChatServiceCallbackModel.OnlineUsers.TryAdd(curUser.Id, this);
                     return new OperationResult<UserExt>(new UserExt()
                     {
                         BirthDate = curUser.Birthdate,
@@ -73,7 +82,7 @@ namespace ChatServiceProvider.ServiceImplementation
                     }).ToList();
                     var user = db.Users.FirstOrDefault(x => x.Id == curUser.Id);
                     var a = db.ConversationReplies.Where(x => x.ReceiverId == curUser.Id || x.AuthorId == curUser.Id).GroupBy(x => x.ConversationId).ToList();
-                   
+
                     conv.ForEach((x) =>
                     {
                         x.Messages = new System.Collections.ObjectModel.ObservableCollection<ConversationReply>(
@@ -103,10 +112,11 @@ namespace ChatServiceProvider.ServiceImplementation
                         else
                         {
                             var participants = db.ConversationMembers.Where(y => y.ConversationId == x.Id).Select(y => y.User.Login).ToList();
-                            participants.Remove(curUser.Login);
+                            //  participants.Remove(curUser.Login);
                             x.ParticipantsLogin = participants;
                         }
                     });
+
                     return new OperationResult<List<Conversation>>(conv);
                 }
             }
@@ -218,20 +228,29 @@ namespace ChatServiceProvider.ServiceImplementation
                             break;
                     }
                     var conversation = conversationMemer.Conversation;
-                    conversation.LastChange = DateTimeOffset.UtcNow;
+                    //  conversation.LastChange = DateTimeOffset.UtcNow;
                     DbMain.EFDbContext.ConversationReply reply = new DbMain.EFDbContext.ConversationReply()
                     {
                         AuthorId = curUser.Id,
                         Body = body,
                         ConversationId = conversationId,
-                        ConversationReplyStatusId = (int)ConversationReplyStatus.Sent
+                        ConversationReplyStatusId = (int)ConversationReplyStatus.Sent,
+                        ReceiverId = curUser.Id
                     };
                     db.ConversationReplies.Add(reply);
                     if (db.SaveChanges() > 0)
                     {
                         var members = conversation.ConversationMembers.Select(x => x.User.Id).ToList();
                         members.Remove(curUser.Id);
-                        SendMessageToAllMembers(members, reply);
+                        SendMessageToAllMembersInDB(members, reply);
+                        ChatServiceCallbackModel.SendMessage(members, new ConversationReply()
+                        {
+                            Author = curUser.Login,
+                            Body = body,
+                            ConversationId = conversationId,
+                            SendingTime = DateTimeOffset.UtcNow,
+                            Status = ConversationReplyStatus.Received
+                        });
                         return new OperationResult<bool>(true);
                     }
                     return new OperationResult<bool>(false, false, "Send message error");
@@ -243,7 +262,7 @@ namespace ChatServiceProvider.ServiceImplementation
             }
         }
 
-        private async void SendMessageToAllMembers(List<long> listUserId, DbMain.EFDbContext.ConversationReply reply)
+        private async void SendMessageToAllMembersInDB(IEnumerable<long> listUserId, DbMain.EFDbContext.ConversationReply reply)
         {
             await Task.Run(() =>
             {
@@ -258,7 +277,7 @@ namespace ChatServiceProvider.ServiceImplementation
                             Body = reply.Body,
                             ConversationId = reply.ConversationId,
                             ConversationReplyStatusId = status,
-                            ReceiverId=item
+                            ReceiverId = item
                         });
                     }
                     db.SaveChanges();
@@ -268,7 +287,7 @@ namespace ChatServiceProvider.ServiceImplementation
 
         public void Dispose()
         {
-           //TODO throw new NotImplementedException();
+            //TODO throw new NotImplementedException();
         }
 
         public OperationResult<Conversation> CreateDialog(string Login)

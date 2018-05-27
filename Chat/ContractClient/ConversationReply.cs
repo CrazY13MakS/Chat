@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ContractClient
 {
-    public class ConversationReply:INotifyPropertyChanged
+    public class ConversationReply : INotifyPropertyChanged
     {
 
         void RaisePropertyChanged([CallerMemberName]string propertyName = "")
@@ -22,6 +22,13 @@ namespace ContractClient
         public String Body { get; set; }
         public String Author { get; set; }
         public DateTimeOffset SendingTime { get; set; }
+
+        public DateTime LocalTime
+        {
+            get { return SendingTime.ToLocalTime().DateTime; }
+
+        }
+
         bool _isRead;
         public bool IsRead
         {
