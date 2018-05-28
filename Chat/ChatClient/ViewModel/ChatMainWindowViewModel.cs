@@ -20,6 +20,10 @@ namespace ChatClient.ViewModel
             model.Connect();
         }
         //  public ModelMain ModelMain { get { return model; } }
+
+
+
+        #region Conversations
         public ObservableCollection<Conversation> Conversations
         {
             get
@@ -41,6 +45,7 @@ namespace ChatClient.ViewModel
                 }
                 _selectedConversation = value;
                 OnPropertyChanged();
+                UpdateParticipantsList();
             }
         }
 
@@ -59,6 +64,13 @@ namespace ChatClient.ViewModel
                 OnPropertyChanged();
             }
         }
+
+
+
+
+
+
+
 
 
 
@@ -83,9 +95,142 @@ namespace ChatClient.ViewModel
 
         private bool CanExecuteSendMessageCommand(object parametr)
         {
-            return !String.IsNullOrWhiteSpace(Message)&& parametr is Conversation conversation && (conversation.MyStatus == ConversationMemberStatus.Active || conversation.MyStatus == ConversationMemberStatus.Admin);
+            return !String.IsNullOrWhiteSpace(Message) && parametr is Conversation conversation && (conversation.MyStatus == ConversationMemberStatus.Active || conversation.MyStatus == ConversationMemberStatus.Admin);
         }
 
+
+        List<String> _participantsList;
+        public List<String> ParticipantsList
+        {
+            get
+            {
+                return _participantsList;
+            }
+            set
+            {
+                if (_participantsList != value)
+                {
+                    _participantsList = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private void UpdateParticipantsList()
+        {
+            if (SelectedConversation != null&& SelectedConversation.ConversationType!= ConversationType.Dialog && SelectedConversation.ParticipantsLogin!=null)
+            {
+                ParticipantsList = new List<string>(Contacts.Select(x => x.Login).Except(SelectedConversation.ParticipantsLogin));
+            }
+            else
+            {
+                ParticipantsList = new List<string>();
+            }
+        }
+
+        RelayCommand _addParticipant;
+        public ICommand AddPartisipantCommand
+        {
+            get
+            {
+                if (_addParticipant == null)
+                {
+                    _addParticipant = new RelayCommand(ExecuteAddPartisipantsCommand, CanExecuteAddPartisipantsCommand);
+                }
+                return _addParticipant;
+            }
+        }
+
+        private void ExecuteAddPartisipantsCommand(object parametr)
+        {
+            bool res = Contacts.Any(x => x.Login == parametr as String);
+            bool res2 = !SelectedConversation.ParticipantsLogin.Contains(parametr as String);
+            if(res&&res2)
+            {
+                model.InviteFriendToConversation(parametr as String, SelectedConversation.Id);
+            }
+        }
+
+        private bool CanExecuteAddPartisipantsCommand(object parametr)
+        {
+            var login = parametr as String;
+            if(String.IsNullOrWhiteSpace(login))
+            {
+                return false;
+            }
+            bool res = SelectedConversation != null
+                &&((( SelectedConversation.MyStatus == ConversationMemberStatus.Active || SelectedConversation.MyStatus == ConversationMemberStatus.Admin)
+                        && SelectedConversation.ConversationType == ConversationType.OpenConversation)
+                        ||       (SelectedConversation.MyStatus == ConversationMemberStatus.Admin
+                                  && SelectedConversation.ConversationType == ConversationType.PrivateConversation)
+                        )
+                        && !SelectedConversation.ParticipantsLogin.Contains(login);
+            return res;
+        }
+
+
+        #region Create New Conversation
+        String _newConvName;
+        public String NewConversationName
+        {
+            get
+            {
+                return _newConvName;
+            }
+            set
+            {
+                if (_newConvName != value)
+                {
+                    _newConvName = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        bool _isOpenNewConversation;
+        public bool IsOpenNewConversation
+        {
+            get
+            {
+                return _isOpenNewConversation;
+            }
+            set
+            {
+                if (_isOpenNewConversation != value)
+                {
+                    _isOpenNewConversation = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
+        RelayCommand _createConversation;
+        public ICommand CreateConversationCommand
+        {
+            get
+            {
+                if (_createConversation == null)
+                {
+                    _createConversation = new RelayCommand(ExecuteCreateConversationCommand);
+                }
+                return _createConversation;
+            }
+        }
+
+        private void ExecuteCreateConversationCommand(object parametr)
+        {
+            model.CreateConversation(NewConversationName, IsOpenNewConversation);
+            IsOpenNewConversation = false;
+            NewConversationName = String.Empty;
+        }
+
+        private bool CanExecuteCreateConversationCommand(object parametr)
+        {
+            return !String.IsNullOrWhiteSpace(NewConversationName);
+        }
+        #endregion
+        #endregion
 
         public UserExt Author
         {

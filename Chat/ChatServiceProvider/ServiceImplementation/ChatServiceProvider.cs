@@ -116,7 +116,7 @@ namespace ChatServiceProvider.ServiceImplementation
                             x.ParticipantsLogin = participants;
                         }
                     });
-
+                    conv = conv.Where(x =>!( x.ConversationType == ConversationType.Dialog && x.Messages.Count == 0 &&( x.MyStatus == ConversationMemberStatus.Blocked || x.MyStatus == ConversationMemberStatus.None))).ToList();
                     return new OperationResult<List<Conversation>>(conv);
                 }
             }
@@ -287,6 +287,7 @@ namespace ChatServiceProvider.ServiceImplementation
 
         public void Dispose()
         {
+            ChatServiceCallbackModel.OnlineUsers.TryRemove(curUser.Id, out ChatServiceProvider provider);
             //TODO throw new NotImplementedException();
         }
 
@@ -310,7 +311,12 @@ namespace ChatServiceProvider.ServiceImplementation
                         ConversationTypeId = (int)(IsOpen ? ConversationType.OpenConversation : ConversationType.PrivateConversation)
 
                     };
+                    db.ConversationMembers.Add(new DbMain.EFDbContext.ConversationMember()
+                    { Conversation = conversation,
+                        MemberId = curUser.Id,
+                        MemberStatusId = (int)ConversationMemberStatus.Admin });
                     db.Conversations.Add(conversation);
+
                     if (db.SaveChanges() > 0)
                     {
                         return new OperationResult<Conversation>(new Conversation()

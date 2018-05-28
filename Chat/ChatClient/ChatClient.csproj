@@ -88,6 +88,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Infrastructure\ChatTypeToVisibilityConverter.cs" />
     <Compile Include="Infrastructure\DisplayHelper.cs" />
     <Compile Include="Infrastructure\ISecurePassword.cs" />
     <Compile Include="Infrastructure\RelationTypeToVisibilityConverter.cs" />
