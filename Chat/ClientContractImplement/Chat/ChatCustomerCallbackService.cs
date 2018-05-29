@@ -42,7 +42,7 @@ namespace ClientContractImplement
                 //        break;
                 //}
                 //conv.Messages.Add(reply);
-              
+
             }
         }
 
@@ -52,6 +52,7 @@ namespace ClientContractImplement
             if (conv != null)
             {
                 conv.Messages.Add(reply);
+                conv.NewMessagesCount++;
             }
         }
     }

@@ -10,11 +10,11 @@ namespace ContractClient.Contracts
     [ServiceContract(ProtectionLevel = System.Net.Security.ProtectionLevel.EncryptAndSign, SessionMode = SessionMode.Required)]
     public interface IRelationsCallback
     {
-        [OperationContract]
+        [OperationContract(IsOneWay = true)]
         void FriendshipRequest(User user);
-        [OperationContract]
+        [OperationContract(IsOneWay = true)]
         void UserNetworkStatusChanged(String login, NetworkStatus status);
-        [OperationContract]
+        [OperationContract(IsOneWay =true)]
         void ChangeRelationType(String login, RelationStatus relationStatus);
      //   [OperationContract]
 

@@ -96,5 +96,9 @@ namespace ContractClient.Contracts
         OperationResult<bool> LeaveConversation(long conversationId);
 
 
+        [OperationContract(IsInitiating = false)]
+        OperationResult<bool> ReadMessage(long MessageId);
+
+
     }
 }

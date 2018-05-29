@@ -16,7 +16,7 @@ namespace ChatServiceProvider.Model
             OnlineUsers = new ConcurrentDictionary<long, ServiceImplementation.ChatServiceProvider>();
         }
 
-        public async static void SendMessage(IEnumerable<long> users, ConversationReply reply)
+        public async static void SendMessageToGroup(IEnumerable<long> users, ConversationReply reply)
         {
             foreach (var item in users)
             {
@@ -25,6 +25,15 @@ namespace ChatServiceProvider.Model
                     await Task.Run(() => provider?.Callback.IncomingMessage(reply));
                 }
             }
+        }
+        public async static void SendMessageToUser(long user, ConversationReply reply)
+        {
+            
+                if (OnlineUsers.TryGetValue(user, out ServiceImplementation.ChatServiceProvider provider))
+                {
+                    await Task.Run(() => provider?.Callback.IncomingMessage(reply));
+                }
+            
         }
 
         public async static void AddingToConversation(String author, long invitedUser, Conversation conversation)

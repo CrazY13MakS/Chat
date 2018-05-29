@@ -57,6 +57,10 @@ namespace ClientContractImplement
             if (conv.IsOk)
             {
                 Conversations = new ObservableCollection<Conversation>(conv.Response);
+                foreach (var item in Conversations)
+                {
+                    item.NewMessagesCount = item.Messages.Count(x => x.Status == ConversationReplyStatus.Received);
+                }
             }
 
         }
@@ -133,7 +137,31 @@ namespace ClientContractImplement
                 Error?.Invoke("Invite Friend To Conversation", res.ErrorMessage);
             }
         }
+        public async void ReadMessage(long conversationId, long messageId)
+        {
 
+            var res = await Task.Run(() => Conversations.FirstOrDefault(x => x.Id == conversationId));
+            if (res != null)
+            {
+                var mes = res.Messages.FirstOrDefault(x => x.Id == messageId);
+                if (mes != null && mes.Status == ConversationReplyStatus.Received)
+                {
+                    var response = chat.ReadMessage(messageId);
+                    if (response.IsOk)
+                    {
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            mes.Status = ConversationReplyStatus.AlreadyRead;
+                            res.NewMessagesCount = res.Messages.Count(x => x.Status == ConversationReplyStatus.Received);
+                        });
+                    }
+                    else
+                    {
+                        Error?.Invoke("ReadMessage", response.ErrorMessage);
+                    }
+                }
+            }
+        }
 
 
         public async void SendMessage(String body, long conversationId)
@@ -164,6 +192,7 @@ namespace ClientContractImplement
             }
 
         }
+
         #endregion
 
         #region Relations
@@ -357,29 +386,35 @@ namespace ClientContractImplement
 
         Collection<Conversation> IChatCallbackModel.Conversations => _conversations;
 
-        public void ChangeRelationStatus(String login, RelationStatus status)
+        public async void ChangeRelationStatus(String login, RelationStatus status)
         {
-            switch (status)
+            await Task.Run(() =>
             {
-                case RelationStatus.FriendshipRequestSent:
-                    SendFriendshipRequest(login);
-                    break;
-                case RelationStatus.Friendship:
-                    ConfirmFriendship(login);
-                    break;
-                case RelationStatus.FrienshipRequestRecive:
-                    RemoveFriendship(login);
-                    break;
-                case RelationStatus.BlockedByMe:
-                    break;
-            }
+                switch (status)
+                {
+                    case RelationStatus.FriendshipRequestSent:
+                        SendFriendshipRequest(login);
+                        break;
+                    case RelationStatus.Friendship:
+                        ConfirmFriendship(login);
+                        break;
+                    case RelationStatus.FrienshipRequestRecive:
+                        RemoveFriendship(login);
+                        break;
+                    case RelationStatus.BlockedByMe:
+                        break;
+                }
+            });
         }
         private void SendFriendshipRequest(String login)
         {
             var res = relationsCustomer.FriendshipRequest("Hello", login);
             if (res.IsOk)
             {
-                FriendshipRequestSend.Add(res.Response);
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    FriendshipRequestSend.Add(res.Response);
+                });
             }
             else
             {
@@ -392,9 +427,12 @@ namespace ClientContractImplement
             if (res.IsOk)
             {
                 var user = FriendshipRequestReceive.FirstOrDefault(x => x.Login == login);
-                user.RelationStatus = RelationStatus.Friendship;
-                Contacts.Add(user);
-                FriendshipRequestReceive.Remove(user);
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    user.RelationStatus = RelationStatus.Friendship;
+                    Contacts.Add(user);
+                    FriendshipRequestReceive.Remove(user);
+                });
             }
             else
             {
@@ -454,6 +492,27 @@ namespace ClientContractImplement
             if (!res.IsOk)
             {
                 Error?.Invoke("BlockUserError error", res.ErrorMessage);
+            }
+            else
+            {
+                var friend = Contacts.FirstOrDefault(x => x.Login == login);
+                var receive = FriendshipRequestReceive.FirstOrDefault(x => x.Login == login);
+                var sent = FriendshipRequestSend.FirstOrDefault(x => x.Login == login);
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    if (friend != null)
+                    {
+                        Friends.Remove(friend);
+                    }
+                    if (receive != null)
+                    {
+                        FriendshipRequestReceive.Remove(receive);
+                    }
+                    if (sent != null)
+                    {
+                        FriendshipRequestSend.Remove(sent);
+                    }
+                });
             }
         }
         #endregion

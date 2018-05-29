@@ -99,6 +99,30 @@ namespace ChatClient.ViewModel
         }
 
 
+        RelayCommand _readMessage;
+        public ICommand ReadMessageCommand
+        {
+            get
+            {
+                if (_readMessage == null)
+                {
+                    _readMessage = new RelayCommand(ExecuteReadMessageCommand);
+                }
+                return _readMessage;
+            }
+        }
+
+        private void ExecuteReadMessageCommand(object parametr)
+        {
+            if (parametr is ConversationReply reply && reply.Status == ConversationReplyStatus.Received)
+            {
+                model.ReadMessage(reply.ConversationId, reply.Id);
+            }
+        }
+
+
+
+        #region Add Participants
         List<String> _participantsList;
         public List<String> ParticipantsList
         {
@@ -118,7 +142,7 @@ namespace ChatClient.ViewModel
 
         private void UpdateParticipantsList()
         {
-            if (SelectedConversation != null&& SelectedConversation.ConversationType!= ConversationType.Dialog && SelectedConversation.ParticipantsLogin!=null)
+            if (SelectedConversation != null && SelectedConversation.ConversationType != ConversationType.Dialog && SelectedConversation.ParticipantsLogin != null)
             {
                 ParticipantsList = new List<string>(Contacts.Select(x => x.Login).Except(SelectedConversation.ParticipantsLogin));
             }
@@ -145,7 +169,7 @@ namespace ChatClient.ViewModel
         {
             bool res = Contacts.Any(x => x.Login == parametr as String);
             bool res2 = !SelectedConversation.ParticipantsLogin.Contains(parametr as String);
-            if(res&&res2)
+            if (res && res2)
             {
                 model.InviteFriendToConversation(parametr as String, SelectedConversation.Id);
             }
@@ -154,21 +178,21 @@ namespace ChatClient.ViewModel
         private bool CanExecuteAddPartisipantsCommand(object parametr)
         {
             var login = parametr as String;
-            if(String.IsNullOrWhiteSpace(login))
+            if (String.IsNullOrWhiteSpace(login))
             {
                 return false;
             }
             bool res = SelectedConversation != null
-                &&((( SelectedConversation.MyStatus == ConversationMemberStatus.Active || SelectedConversation.MyStatus == ConversationMemberStatus.Admin)
+                && (((SelectedConversation.MyStatus == ConversationMemberStatus.Active || SelectedConversation.MyStatus == ConversationMemberStatus.Admin)
                         && SelectedConversation.ConversationType == ConversationType.OpenConversation)
-                        ||       (SelectedConversation.MyStatus == ConversationMemberStatus.Admin
+                        || (SelectedConversation.MyStatus == ConversationMemberStatus.Admin
                                   && SelectedConversation.ConversationType == ConversationType.PrivateConversation)
                         )
                         && !SelectedConversation.ParticipantsLogin.Contains(login);
             return res;
         }
 
-
+        #endregion
         #region Create New Conversation
         String _newConvName;
         public String NewConversationName

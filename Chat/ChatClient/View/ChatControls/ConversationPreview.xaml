@@ -5,18 +5,34 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ChatClient.View.ChatControls"
              mc:Ignorable="d" 
-             d:DesignHeight="150" d:DesignWidth="300">
+             d:DesignHeight="100" d:DesignWidth="150">
+    <UserControl.Resources>
+        <Style x:Key="NewMessages" TargetType="TextBlock">
+            <Setter Property="Visibility" Value="Visible"/>
+            <Setter Property="Background" Value="Orange"/>
+            <Setter Property="Foreground" Value="WhiteSmoke"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding NewMessagesCount}" Value="0">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="75"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Ellipse Width="100" Height="100" >
+        <Ellipse Width="75" Height="75" >
             <Ellipse.Fill>
                 <ImageBrush ImageSource="{Binding IconPathLocal}" Stretch="Fill"/>
             </Ellipse.Fill>
         </Ellipse>
-        <TextBlock Grid.Column="1" VerticalAlignment="Center" Height="50" Text="{Binding Name}"/>
-        <TextBlock Grid.Column="1" VerticalAlignment="Bottom" Height="50" Text="{Binding NetworkStatus}"/>
+        <TextBlock Grid.Column="1" VerticalAlignment="Center"  Text="{Binding Name}" TextWrapping="NoWrap"/>
+        <TextBlock Grid.Column="1" VerticalAlignment="Bottom"  Text="{Binding Partner.NetworkStatus}"/>
+
+        <TextBlock Grid.Column="1"  Style="{StaticResource ResourceKey=NewMessages}" Text="{Binding NewMessagesCount, Mode=OneWay}"/>
     </Grid>
 </UserControl>

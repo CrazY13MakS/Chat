@@ -8,7 +8,7 @@ using ContractClient;
 using ContractClient.Contracts;
 using ChatServiceProvider.Model;
 using System.ServiceModel;
-
+using System.Data.Entity;
 namespace ChatServiceProvider.ServiceImplementation
 {
     public class ChatServiceProvider : IChatService, IDisposable
@@ -87,7 +87,7 @@ namespace ChatServiceProvider.ServiceImplementation
                     {
                         x.Messages = new System.Collections.ObjectModel.ObservableCollection<ConversationReply>(
                             db.ConversationReplies
-                            .Where(y => y.ConversationId == x.Id && (y.AuthorId == curUser.Id || y.ReceiverId == curUser.Id))
+                            .Where(y => y.ConversationId == x.Id &&  y.ReceiverId == curUser.Id)
                             .Select(y => new ConversationReply()
                             {
                                 Author = y.User.Login,
@@ -116,7 +116,7 @@ namespace ChatServiceProvider.ServiceImplementation
                             x.ParticipantsLogin = participants;
                         }
                     });
-                    conv = conv.Where(x =>!( x.ConversationType == ConversationType.Dialog && x.Messages.Count == 0 &&( x.MyStatus == ConversationMemberStatus.Blocked || x.MyStatus == ConversationMemberStatus.None))).ToList();
+                    conv = conv.Where(x => !(x.ConversationType == ConversationType.Dialog && x.Messages.Count == 0 && (x.MyStatus == ConversationMemberStatus.Blocked || x.MyStatus == ConversationMemberStatus.None))).ToList();
                     return new OperationResult<List<Conversation>>(conv);
                 }
             }
@@ -242,15 +242,15 @@ namespace ChatServiceProvider.ServiceImplementation
                     {
                         var members = conversation.ConversationMembers.Select(x => x.User.Id).ToList();
                         members.Remove(curUser.Id);
-                        SendMessageToAllMembersInDB(members, reply);
-                        ChatServiceCallbackModel.SendMessage(members, new ConversationReply()
-                        {
-                            Author = curUser.Login,
-                            Body = body,
-                            ConversationId = conversationId,
-                            SendingTime = DateTimeOffset.UtcNow,
-                            Status = ConversationReplyStatus.Received
-                        });
+                        SendMessageToAllMembers(members, reply);
+                      //  ChatServiceCallbackModel.SendMessageToGroup(members, new ConversationReply()
+                      //{
+                      //    Author = curUser.Login,
+                      //    Body = body,
+                      //    ConversationId = conversationId,
+                      //    SendingTime = DateTimeOffset.UtcNow,
+                      //    Status = ConversationReplyStatus.Received
+                      //});
                         return new OperationResult<bool>(true);
                     }
                     return new OperationResult<bool>(false, false, "Send message error");
@@ -262,8 +262,10 @@ namespace ChatServiceProvider.ServiceImplementation
             }
         }
 
-        private async void SendMessageToAllMembersInDB(IEnumerable<long> listUserId, DbMain.EFDbContext.ConversationReply reply)
+        private async void SendMessageToAllMembers(IEnumerable<long> listUserId, DbMain.EFDbContext.ConversationReply reply)
         {
+            List<ConversationReply> conversationReplies = new List<ConversationReply>();
+            List<DbMain.EFDbContext.ConversationReply> dbReplies = new List<DbMain.EFDbContext.ConversationReply>();
             await Task.Run(() =>
             {
                 using (DbMain.EFDbContext.ChatEntities db = new DbMain.EFDbContext.ChatEntities())
@@ -271,18 +273,33 @@ namespace ChatServiceProvider.ServiceImplementation
                     int status = (int)ConversationReplyStatus.Received;
                     foreach (var item in listUserId)
                     {
-                        db.ConversationReplies.Add(new DbMain.EFDbContext.ConversationReply()
+                        var DBreply = new DbMain.EFDbContext.ConversationReply()
                         {
                             AuthorId = reply.AuthorId,
                             Body = reply.Body,
                             ConversationId = reply.ConversationId,
                             ConversationReplyStatusId = status,
                             ReceiverId = item
-                        });
+                        };
+                        db.ConversationReplies.Add(DBreply);
+                        dbReplies.Add(DBreply);
                     }
                     db.SaveChanges();
                 }
             });
+
+            for (int i = 0; i < listUserId.Count(); i++)
+            {
+                ChatServiceCallbackModel.SendMessageToUser(listUserId.ElementAt(i), new ConversationReply
+                {
+                    Author = curUser.Login,
+                    Body = reply.Body,
+                    ConversationId = reply.ConversationId,
+                    SendingTime = DateTimeOffset.UtcNow,
+                    Status = ConversationReplyStatus.Received,
+                    Id = dbReplies[i].Id
+                });
+            }
         }
 
         public void Dispose()
@@ -312,9 +329,11 @@ namespace ChatServiceProvider.ServiceImplementation
 
                     };
                     db.ConversationMembers.Add(new DbMain.EFDbContext.ConversationMember()
-                    { Conversation = conversation,
+                    {
+                        Conversation = conversation,
                         MemberId = curUser.Id,
-                        MemberStatusId = (int)ConversationMemberStatus.Admin });
+                        MemberStatusId = (int)ConversationMemberStatus.Admin
+                    });
                     db.Conversations.Add(conversation);
 
                     if (db.SaveChanges() > 0)
@@ -343,7 +362,7 @@ namespace ChatServiceProvider.ServiceImplementation
             {
                 using (DbMain.EFDbContext.ChatEntities db = new DbMain.EFDbContext.ChatEntities())
                 {
-                    var conv = db.Conversations.FirstOrDefault(x => x.Id == conversationId);
+                    var conv = db.Conversations.Include(x => x.ConversationMembers).FirstOrDefault(x => x.Id == conversationId);
                     if (conv == null)
                     {
                         return new OperationResult<bool>(false, false, "Conversation not found");
@@ -365,6 +384,10 @@ namespace ChatServiceProvider.ServiceImplementation
                         return new OperationResult<bool>(false, false, "User not your friend");
                     }
                     var convStatus = (ConversationType)conv.ConversationTypeId;
+                    if (convStatus == ConversationType.Dialog)
+                    {
+                        return new OperationResult<bool>(false, false, "Can't add users to Dialog");
+                    }
                     var memberStatus = (ConversationMemberStatus)member.MemberStatusId;
                     switch (memberStatus)
                     {
@@ -374,6 +397,12 @@ namespace ChatServiceProvider.ServiceImplementation
                         case ConversationMemberStatus.ReadOnly:
                         case ConversationMemberStatus.LeftConversation:
                             return new OperationResult<bool>(false, false, "No permission to add users");
+                        case ConversationMemberStatus.Active:
+                            if (convStatus == ConversationType.OpenConversation)
+                            {
+                                return new OperationResult<bool>(false, false, "No permission to add users");
+                            }
+                            break;
                         default:
                             break;
                     }
@@ -386,6 +415,23 @@ namespace ChatServiceProvider.ServiceImplementation
                     });
                     if (db.SaveChanges() > 0)
                     {
+                        var members = conv.ConversationMembers.Select(x => x.User.Id).ToList();
+                        members.Remove(curUser.Id);
+                        SendMessageToAllMembers(members, new DbMain.EFDbContext.ConversationReply()
+                        {
+                            AuthorId = curUser.Id,
+                            Body = $"{curUser.Name} Added {invitedUser.Name}",
+                            ConversationId = conversationId,
+                            ConversationReplyStatusId = (int)ConversationReplyStatus.SystemMessage
+                        });
+                        ChatServiceCallbackModel.SendMessageToGroup(members, new ConversationReply()
+                        {
+                            Author = curUser.Login,
+                            Body = $"{curUser.Name} Added {invitedUser.Name}",
+                            ConversationId = conversationId,
+                            SendingTime = DateTimeOffset.UtcNow,
+                            Status = ConversationReplyStatus.SystemMessage
+                        });
                         return new OperationResult<bool>(true);
                     }
                     return new OperationResult<bool>(false, false, "Internal error");
@@ -425,6 +471,30 @@ namespace ChatServiceProvider.ServiceImplementation
             catch (Exception ex)
             {
                 return new OperationResult<bool>(false, false, "Internal error");
+            }
+        }
+
+        public OperationResult<bool> ReadMessage(long MessageId)
+        {
+            try
+            {
+                using (DbMain.EFDbContext.ChatEntities db = new DbMain.EFDbContext.ChatEntities())
+                {
+                    var message = db.ConversationReplies.FirstOrDefault(x => x.Id == MessageId);
+                    if(message!=null)
+                    {
+                        message.ConversationReplyStatusId = (int)ConversationReplyStatus.AlreadyRead;
+                        if (db.SaveChanges() > 0)
+                        {
+                        return new OperationResult<bool>(true);
+                        }
+                    }
+                    return new OperationResult<bool>(false, false, "Internal Error");
+                }
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult<bool>(false, false, "Internal Error");
             }
         }
     }

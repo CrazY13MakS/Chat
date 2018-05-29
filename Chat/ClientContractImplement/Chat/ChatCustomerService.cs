@@ -167,6 +167,17 @@ namespace ClientContractImplement
                 return new OperationResult<bool>(false, false, ex.Message);
             }
         }
+        public OperationResult<bool> ReadMessage(long messageId)
+        {
+            try
+            {
+                return chatService.ReadMessage(messageId);
+            }
+            catch (CommunicationException ex)
+            {
+                return new OperationResult<bool>(false, false, ex.Message);
+            }
+        }
 
     }
 

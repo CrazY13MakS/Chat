@@ -165,14 +165,14 @@ namespace AccountRelationsProvider.ServiceImplementation
                         {
                             case RelationStatus.Friendship: message = "Friendship already confirmed"; break;
                             case RelationStatus.FriendshipRequestSent: message = IsInitiator ? "Friendship Request already Sent" : "Frienship Request already Recive"; break;
-                            case RelationStatus.FrienshipRequestRecive: message = IsInitiator ? "Frienship Request already Recive": "Friendship Request already Sent"; break;
+                            case RelationStatus.FrienshipRequestRecive: message = IsInitiator ? "Frienship Request already Recive" : "Friendship Request already Sent"; break;
                             case RelationStatus.BlockedByMe: message = IsInitiator ? "You blocked partner" : "You are Blocked By Partner"; break;
-                            case RelationStatus.BlockedByPartner: message = IsInitiator ? "you are Blocked By Partner":"You blocked partner";break;
-                            case RelationStatus.BlockedBoth:message= "Blocked Both";break;
+                            case RelationStatus.BlockedByPartner: message = IsInitiator ? "you are Blocked By Partner" : "You blocked partner"; break;
+                            case RelationStatus.BlockedBoth: message = "Blocked Both"; break;
                             default:
                                 break;
                         }
-                        if(!String.IsNullOrEmpty(message))
+                        if (!String.IsNullOrEmpty(message))
                         {
                             return new OperationResult<User>(null, false, message);
                         }
@@ -182,9 +182,9 @@ namespace AccountRelationsProvider.ServiceImplementation
                         CreateContactAndDialog(db, out contact, invited, RelationStatus.FriendshipRequestSent);
                     }
 
-                    if(contact.AdderId == curUser.Id)
+                    if (contact.AdderId == curUser.Id)
                     {
-                    contact.RelationTypeId = (int)RelationStatus.FriendshipRequestSent;
+                        contact.RelationTypeId = (int)RelationStatus.FriendshipRequestSent;
                     }
                     else
                     {
@@ -273,8 +273,8 @@ namespace AccountRelationsProvider.ServiceImplementation
                                 else
                                 {
                                     contact.RelationTypeId = (int)RelationStatus.FriendshipRequestSent;
-                                    statusForPartner = RelationStatus.FriendshipRequestSent;
                                 }
+                                statusForPartner = RelationStatus.FriendshipRequestSent;
                                 break;
                             case RelationStatus.BlockedByMe:
                                 if (contact.AdderId == curUser.Id && (RelationStatus)contact.RelationTypeId != RelationStatus.BlockedByPartner)
@@ -302,7 +302,6 @@ namespace AccountRelationsProvider.ServiceImplementation
                     {
                         return new OperationResult<bool>(false, false, "Faild");
                     }
-                    UserRelationsMain.RelationTypeChanged(user.Login, curUser.Login, statusForPartner);
                     if (status == RelationStatus.Friendship)
                     {
                         UserRelationsMain.UserNetworkStatusChange(new List<string>() { curUser.Login }, user.Login, (NetworkStatus)user.NetworkStatusId);
@@ -313,6 +312,7 @@ namespace AccountRelationsProvider.ServiceImplementation
                         UserRelationsMain.UserNetworkStatusChange(new List<string>() { curUser.Login }, user.Login, NetworkStatus.Unknown);
                         UserRelationsMain.UserNetworkStatusChange(new List<string>() { user.Login }, curUser.Login, NetworkStatus.Unknown);
                     }
+                    UserRelationsMain.RelationTypeChanged(user.Login, curUser.Login, statusForPartner);
                     return new OperationResult<bool>(true);
                 }
             }
@@ -396,7 +396,7 @@ namespace AccountRelationsProvider.ServiceImplementation
             db.Contacts.Add(contact);
         }
 
-      
+
         private User DbUserToCustomerUser(DbMain.EFDbContext.User user, long conversationId)
         {
             return new User()

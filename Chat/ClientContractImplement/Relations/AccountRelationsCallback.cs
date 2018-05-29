@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using ContractClient;
 
 namespace ClientContractImplement
@@ -115,7 +117,10 @@ namespace ClientContractImplement
             var user = _callbackModel.Friends.FirstOrDefault(x => x.Login == login);
             if (user != null)
             {
-                user.NetworkStatus = status;
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    user.NetworkStatus = status;
+                });
             }
         }
     }
