@@ -45,7 +45,7 @@ namespace ChatClient.View.ChatControls
         public ConversationPreview()
         {
             InitializeComponent();
-            DataContext = Conversation;
+          //  DataContext = Conversation;
         }
     }
 }

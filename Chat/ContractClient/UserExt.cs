@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ContractClient
 {
-  public  class UserExt : User
+    public class UserExt : User
     {
         [DataMember]
         public int FriendsCount { get; set; }
@@ -16,7 +16,7 @@ namespace ContractClient
         public String Sity { get; set; }
 
         [DataMember]
-        public DateTime BirthDate { get; set; }
+        public DateTime? BirthDate { get; set; }
 
         [DataMember]
         public String Country { get; set; }

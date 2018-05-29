@@ -15,7 +15,7 @@ namespace AuthServiceProvider
         {
             host = new ServiceHost(typeof(ServiceImplementation.AuthService));
         }
-        public void Start()
+        public void Open()
         {
             Console.WriteLine("Auth host started");
             //host.AddServiceEndpoint(new EndpointAddress("net.tcp://localhost:4000/Auth"),)

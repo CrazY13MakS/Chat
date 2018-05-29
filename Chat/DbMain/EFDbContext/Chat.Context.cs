@@ -36,7 +36,9 @@ namespace DbMain.EFDbContext
         public virtual DbSet<ConversationType> ConversationTypes { get; set; }
         public virtual DbSet<Country> Countries { get; set; }
         public virtual DbSet<Gender> Genders { get; set; }
+        public virtual DbSet<NetworkStatus> NetworkStatuses { get; set; }
         public virtual DbSet<RelationshipType> RelationshipTypes { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<BlokedUser> BlokedUsers { get; set; }
     }
 }

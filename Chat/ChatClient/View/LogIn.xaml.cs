@@ -20,7 +20,7 @@ namespace ChatClient
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window,ChatClient.Infrastructure.ISecurePassword
+    public partial class MainWindow : Window, ChatClient.Infrastructure.ISecurePassword
     {
         public SecureString Password => GetSecureString("PassBox");
 
@@ -28,14 +28,29 @@ namespace ChatClient
 
         public MainWindow()
         {
-            InitializeComponent();  
-       
+            InitializeComponent();
+
+            this.Loaded += MainWindow_Loaded;
+        }
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            List<String> lst = new List<string>(){ "crazy13maks@gmail.com",
+                "temp@temp.com","temp2@temp.com","temp3@temp.com","temp4@temp.com","temp5@temp.com","temp6@temp.com","temp7@temp.com","temp8@temp.com", };
+            cb.ItemsSource = lst;
+            cb.SelectedIndex = 0;
+
+            var control = ContPresenter.ContentTemplate.FindName("PassBox", ContPresenter);
+            if (control is PasswordBox)
+            {
+                (control as PasswordBox).Password = "!QAZ2wsx";
+            }
         }
 
         SecureString GetSecureString(String name)
         {
-           var control=ContPresenter.ContentTemplate.FindName(name, ContPresenter);
-            if(control is PasswordBox)
+            var control = ContPresenter.ContentTemplate.FindName(name, ContPresenter);
+            if (control is PasswordBox)
             {
                 return (control as PasswordBox).SecurePassword;
             }
@@ -44,7 +59,15 @@ namespace ChatClient
 
         private void Aaa_Click(object sender, RoutedEventArgs e)
         {
-           var a = this.ContPresenter.ContentTemplate.FindName("PassBox", ContPresenter);
+            var a = this.ContPresenter.ContentTemplate.FindName("PassBox", ContPresenter);
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            dynamic d = DataContext;
+            d.Email = cb.SelectedItem.ToString();
+          //  var control = ContPresenter.ContentTemplate.FindName("logEmail", ContPresenter);
+          //  (control as TextBox).Text = cb.SelectedItem.ToString();
         }
     }
 }

@@ -60,11 +60,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="View\ChatControls\ContactPreview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ChatControls\ConversationDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\ChatControls\ConversationPreview.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\ChatMainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\FindFriends.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -76,16 +88,33 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Infrastructure\ChatTypeToVisibilityConverter.cs" />
+    <Compile Include="Infrastructure\DisplayHelper.cs" />
     <Compile Include="Infrastructure\ISecurePassword.cs" />
+    <Compile Include="Infrastructure\RelationTypeToVisibilityConverter.cs" />
     <Compile Include="Infrastructure\RelayCommand.cs" />
     <Compile Include="ViewModel\ChatMainWindowViewModel.cs" />
+    <Compile Include="ViewModel\FindFriendsVM.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="ViewModel\ViewModelLogIn.cs" />
+    <Compile Include="View\BindingProxy.cs" />
+    <Compile Include="View\ChatControls\Behaviors\ListBoxBehavior.cs" />
+    <Compile Include="View\ChatControls\ContactPreview.xaml.cs">
+      <DependentUpon>ContactPreview.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ChatControls\ConversationDialog.xaml.cs">
+      <DependentUpon>ConversationDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\ChatControls\ConversationPreview.xaml.cs">
       <DependentUpon>ConversationPreview.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\ChatControls\ListBoxExtenders.cs" />
+    <Compile Include="View\ChatControls\MessageDataTemplateSelector.cs" />
     <Compile Include="View\ChatMainWindow.xaml.cs">
       <DependentUpon>ChatMainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\FindFriends.xaml.cs">
+      <DependentUpon>FindFriends.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\LogIn.xaml.cs">
       <DependentUpon>LogIn.xaml</DependentUpon>

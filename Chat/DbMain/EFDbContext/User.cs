@@ -17,6 +17,7 @@ namespace DbMain.EFDbContext
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public User()
         {
+            this.NetworkStatusId = 1;
             this.AccessTokens = new HashSet<AccessToken>();
             this.Contacts = new HashSet<Contact>();
             this.Contacts1 = new HashSet<Contact>();
@@ -25,6 +26,9 @@ namespace DbMain.EFDbContext
             this.ConversationReplies = new HashSet<ConversationReply>();
             this.Conversations = new HashSet<Conversation>();
             this.Conversations1 = new HashSet<Conversation>();
+            this.BlokedUsers = new HashSet<BlokedUser>();
+            this.BlokedUsers1 = new HashSet<BlokedUser>();
+            this.ConversationReplies1 = new HashSet<ConversationReply>();
         }
     
         public long Id { get; set; }
@@ -41,6 +45,8 @@ namespace DbMain.EFDbContext
         public string Status { get; set; }
         public System.DateTimeOffset LastEdit { get; set; }
         public string Login { get; set; }
+        public System.DateTimeOffset RegistrationDate { get; set; }
+        public int NetworkStatusId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AccessToken> AccessTokens { get; set; }
@@ -60,5 +66,12 @@ namespace DbMain.EFDbContext
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Conversation> Conversations1 { get; set; }
         public virtual Gender Gender { get; set; }
+        public virtual NetworkStatus NetworkStatus { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<BlokedUser> BlokedUsers { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<BlokedUser> BlokedUsers1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ConversationReply> ConversationReplies1 { get; set; }
     }
 }

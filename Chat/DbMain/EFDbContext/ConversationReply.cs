@@ -21,9 +21,11 @@ namespace DbMain.EFDbContext
         public System.DateTimeOffset SendingTime { get; set; }
         public bool IsDeleted { get; set; }
         public int ConversationReplyStatusId { get; set; }
+        public Nullable<long> ReceiverId { get; set; }
     
         public virtual User User { get; set; }
         public virtual Conversation Conversation { get; set; }
         public virtual ConversationReplyStatus ConversationReplyStatus { get; set; }
+        public virtual User UserReceiver { get; set; }
     }
 }

@@ -53,9 +53,21 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AccountUpdateProvider\AccountRelationsProvider.csproj">
+      <Project>{9ea9f434-9243-4a9a-85d9-ecaa53b9c1d9}</Project>
+      <Name>AccountRelationsProvider</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AuthServiceHost\AuthServiceProvider.csproj">
       <Project>{5d77105f-7cc7-40ae-b9e1-65c9789301ea}</Project>
       <Name>AuthServiceProvider</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ChatServiceProvider\ChatServiceProvider.csproj">
+      <Project>{c65c654b-b950-44e9-9374-8f80c789aeee}</Project>
+      <Name>ChatServiceProvider</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ContractClient\ContractClient.csproj">
+      <Project>{3B8B9D05-2930-4D47-9A3E-B1BE49361D55}</Project>
+      <Name>ContractClient</Name>
     </ProjectReference>
     <ProjectReference Include="..\DbMain\DbMain.csproj">
       <Project>{83be18b1-4543-4779-9a6f-f1dbd19dd933}</Project>

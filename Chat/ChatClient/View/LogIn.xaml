@@ -61,7 +61,7 @@
                         <RowDefinition Height="AUTO"/>
                     </Grid.RowDefinitions>-->
                     <TextBlock Text="E-mail:"  Grid.ColumnSpan="2" Style="{StaticResource ResourceKey=AuthTextBlock}"></TextBlock>
-                    <TextBox Grid.Row="1" Text="{Binding Email}" Grid.ColumnSpan="2" Style="{StaticResource ResourceKey=AuthTextBox}"/>
+                    <TextBox Grid.Row="1" x:Name="logEmail" Text="{Binding Email}" Grid.ColumnSpan="2" Style="{StaticResource ResourceKey=AuthTextBox}"/>
 
                     <TextBlock Text="Password:" Grid.Row="2"  Grid.ColumnSpan="2" Style="{StaticResource ResourceKey=AuthTextBlock}"></TextBlock>
                     <PasswordBox Grid.Row="3" x:Name="PassBox" Grid.ColumnSpan="2"  Style="{StaticResource ResourceKey=AuthTextBox}"/>
@@ -146,11 +146,12 @@
     <Grid x:Name="container">
         <ToggleButton x:Name="TglBtnReg" Style="{StaticResource ResourceKey=ChangeToRegButton}" IsThreeState="False"  Panel.ZIndex="10" Width="100"></ToggleButton>
         <ContentPresenter Style="{StaticResource MyContentStyle}" x:Name="ContPresenter"  Grid.Row="0" Content="{Binding}"  />
+        <ComboBox x:Name="cb" HorizontalAlignment="Left" Margin="21,23,0,0" VerticalAlignment="Top" Width="120" RenderTransformOrigin="-0.467,-0.682" SelectionChanged="ComboBox_SelectionChanged"/>
         <!--<Button x:Name="Aaa" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="100" Height="50" Content="546" Click="Aaa_Click"/>-->
     </Grid>
-    <i:Interaction.Triggers>
+    <!--<i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">
             <i:InvokeCommandAction  Command="{Binding CloseCommand}" />
         </i:EventTrigger>
-    </i:Interaction.Triggers>
+    </i:Interaction.Triggers>-->
 </Window>

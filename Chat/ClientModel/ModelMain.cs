@@ -10,15 +10,17 @@ using System.Threading.Tasks;
 using ClientContractImplement;
 namespace ClientModel
 {
-    public class ModelMain:INotifyPropertyChanged
+    public class ModelMain : INotifyPropertyChanged
     {
         ChatCustomerCallbackService callbackService;
         ChatCustomerService chat;
         public ModelMain(String token)
         {
-            callbackService = new ChatCustomerCallbackService();
+          //  callbackService = new ChatCustomerCallbackService();
             chat = new ChatCustomerService(token, callbackService);
+           // Author = chat.Authentication();
         }
+
         public delegate void ErrorHandler(String action, string message);
         public event ErrorHandler Error;
 
@@ -34,6 +36,27 @@ namespace ClientModel
                 if (_conversations != value)
                 {
                     _conversations = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
+        ObservableCollection<User> _contacts;
+        public ObservableCollection<User> Contacts
+        {
+            get
+            {
+                if (_contacts == null)
+                {
+
+                }
+                return _contacts;
+            }
+            set
+            {
+                if (_contacts != value)
+                {
+                    _contacts = value;
                     RaisePropertyChanged();
                 }
             }
@@ -57,18 +80,18 @@ namespace ClientModel
 
         public void SendMessage(String body, long conversationId)
         {
-         var conv=   Conversations.FirstOrDefault(x => x.Id == conversationId);
-            if(conv==null)
+            var conv = Conversations.FirstOrDefault(x => x.Id == conversationId);
+            if (conv == null)
             {
                 Error.Invoke("Send message", "ConversationId not found error");
             }
             ConversationReply reply = new ConversationReply()
             {
-                AuthorLogin = Author.Login,
+                Author = Author.Login,
                 Body = body,
                 ConversationId = conversationId,
                 SendingTime = DateTime.UtcNow,
-                Status = ConversationReplyStatus.Sendidg
+                Status = ConversationReplyStatus.Sending
             };
             conv.Messages.Add(reply);
 
@@ -95,7 +118,7 @@ namespace ClientModel
 
 
         void RaisePropertyChanged([CallerMemberName]string propertyName = "")
-        { 
+        {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         public event PropertyChangedEventHandler PropertyChanged;

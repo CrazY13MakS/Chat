@@ -17,6 +17,7 @@ namespace DbMain.EFDbContext
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Conversation()
         {
+            this.ConversationTypeId = 1;
             this.Contacts = new HashSet<Contact>();
             this.ConversationMembers = new HashSet<ConversationMember>();
             this.ConversationReplies = new HashSet<ConversationReply>();

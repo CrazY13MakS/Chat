@@ -120,9 +120,10 @@ namespace ChatClient.ViewModel
 
         private void ExecuteSendVerifCodeCommand(object parametr)
         {
+            ButtonSendContent = "Sending...";
             timer = new DispatcherTimer();
             timer.Interval = new TimeSpan(0, 0, 0, 1);
-            timer.Tick += TimerForVerificationCodeSending_Tick; ;
+            timer.Tick += TimerForVerificationCodeSending_Tick;
             // timerEnd = DateTime.Now.AddSeconds(ClientAuthSercive.SecondsDelay);
             delaySendCode = ClientAuthSercive.SecondsDelay;
             timer.Start();
@@ -187,11 +188,13 @@ namespace ChatClient.ViewModel
             else
             {
                 Message = "Success";
+                App.Token = res.Response;
+                OpenMainAndCloseThis();
             }
         }
         private bool CanExecuteLogInCommand(object parametr)
         {
-            return authSercive.IsValidMail(Email);
+            return true;// authSercive.IsValidMail(Email);
         }
 
         RelayCommand _registrationCommand;
@@ -222,16 +225,24 @@ namespace ChatClient.ViewModel
             else
             {
                 Message = "Success";
+                App.Token = res.Response;
+                OpenMainAndCloseThis();
             }
-
-
         }
+
         private bool CanExecuteRegistrationCommand(object parametr)
         {
             return authSercive.IsValidMail(Email);
         }
 
+        private void OpenMainAndCloseThis()///Open new window
+        {
+            var mainvm = new ChatMainWindowViewModel();
+            App.DisplayWindowHelper.ShowPresentation(mainvm);
+           // App.DisplayWindowHelper.ShowPresentation(new FindFriendsVM(mainvm.ModelMain));
 
+            App.DisplayWindowHelper.ClosePresentation(this);
+        }
 
 
         RelayCommand _closeCommand;
