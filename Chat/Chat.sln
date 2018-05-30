@@ -21,6 +21,36 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbMain", "DbMain\DbMain.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountRelationsProvider", "AccountUpdateProvider\AccountRelationsProvider.csproj", "{9EA9F434-9243-4A9A-85D9-ECAA53B9C1D9}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Resourses", "Resourses", "{9876BC14-BBAB-4329-B2BF-4239851C8A74}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\..\Desktop\AuthService.png = ..\..\..\..\Desktop\AuthService.png
+		..\..\..\..\Desktop\Chat Client.png = ..\..\..\..\Desktop\Chat Client.png
+		..\..\..\..\Desktop\Chat Service.png = ..\..\..\..\Desktop\Chat Service.png
+		..\..\..\..\Desktop\Chat_Uml.PNG = ..\..\..\..\Desktop\Chat_Uml.PNG
+		..\..\..\..\Desktop\ClassDiagram1.png = ..\..\..\..\Desktop\ClassDiagram1.png
+		..\..\..\..\Desktop\Client Model.png = ..\..\..\..\Desktop\Client Model.png
+		..\..\..\..\Desktop\Contract.png = ..\..\..\..\Desktop\Contract.png
+		..\..\..\..\Desktop\DB.png = ..\..\..\..\Desktop\DB.png
+		..\..\..\..\Desktop\Relation Service.png = ..\..\..\..\Desktop\Relation Service.png
+		..\..\..\..\Desktop\БД.png = ..\..\..\..\Desktop\БД.png
+		..\..\..\..\Desktop\загружено (2).png = ..\..\..\..\Desktop\загружено (2).png
+		..\..\..\..\Documents\Чат на основе TCP.pptx = ..\..\..\..\Documents\Чат на основе TCP.pptx
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL", "SQL", "{996858DE-76E0-4B99-ADFF-768D7D4B0A49}"
+	ProjectSection(SolutionItems) = preProject
+		G:\SQL messanger\Chat2_mssql_create.sql = G:\SQL messanger\Chat2_mssql_create.sql
+		..\..\..\..\Desktop\ContactsTrigger.sql = ..\..\..\..\Desktop\ContactsTrigger.sql
+		G:\SQL messanger\ConversationMemberStatuses.sql = G:\SQL messanger\ConversationMemberStatuses.sql
+		..\..\..\..\Desktop\ConversationMembersTrigger.sql = ..\..\..\..\Desktop\ConversationMembersTrigger.sql
+		G:\SQL messanger\ConversationReplyStatuses.sql = G:\SQL messanger\ConversationReplyStatuses.sql
+		..\..\..\..\Desktop\ConversationTrigger.sql = ..\..\..\..\Desktop\ConversationTrigger.sql
+		G:\SQL messanger\ConversationTypes.sql = G:\SQL messanger\ConversationTypes.sql
+		G:\SQL messanger\Network.sql = G:\SQL messanger\Network.sql
+		G:\SQL messanger\RelationStatus.sql = G:\SQL messanger\RelationStatus.sql
+		..\..\..\..\Desktop\UsersTrigger.sql = ..\..\..\..\Desktop\UsersTrigger.sql
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -66,6 +96,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{996858DE-76E0-4B99-ADFF-768D7D4B0A49} = {9876BC14-BBAB-4329-B2BF-4239851C8A74}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F3A1D13D-A381-4129-A921-5E94D4233E5E}

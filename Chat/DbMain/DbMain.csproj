@@ -117,6 +117,7 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Chat.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <None Include="DB.cd" />
     <None Include="EFDbContext\Chat.edmx.diagram">
       <DependentUpon>Chat.edmx</DependentUpon>
     </None>

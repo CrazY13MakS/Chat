@@ -60,5 +60,8 @@
       <Name>DbMain</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="AuthService.cd" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -60,6 +60,8 @@
     <Compile Include="User.cs" />
     <Compile Include="UserExt.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Contract.cd" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

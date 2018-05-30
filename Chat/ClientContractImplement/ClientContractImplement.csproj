@@ -61,5 +61,8 @@
       <Name>ContractClient</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Client Model.cd" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
