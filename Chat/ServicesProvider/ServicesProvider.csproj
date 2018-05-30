@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Resourses\Чат на основе TCP.pptx" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AccountUpdateProvider\AccountRelationsProvider.csproj">
@@ -73,6 +74,29 @@
       <Project>{83be18b1-4543-4779-9a6f-f1dbd19dd933}</Project>
       <Name>DbMain</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resourses\AuthService.png" />
+    <Content Include="Resourses\Chat Client.png" />
+    <Content Include="Resourses\Chat Service.png" />
+    <Content Include="Resourses\Chat2_mssql_create.sql" />
+    <Content Include="Resourses\Chat_Uml.PNG" />
+    <Content Include="Resourses\ClassDiagram1.png" />
+    <Content Include="Resourses\Client Model.png" />
+    <Content Include="Resourses\ContactsTrigger.sql" />
+    <Content Include="Resourses\Contract.png" />
+    <Content Include="Resourses\ConversationMemberStatuses.sql" />
+    <Content Include="Resourses\ConversationMembersTrigger.sql" />
+    <Content Include="Resourses\ConversationReplyStatuses.sql" />
+    <Content Include="Resourses\ConversationTrigger.sql" />
+    <Content Include="Resourses\ConversationTypes.sql" />
+    <Content Include="Resourses\DB.png" />
+    <Content Include="Resourses\Network.sql" />
+    <Content Include="Resourses\Relation Service.png" />
+    <Content Include="Resourses\RelationStatus.sql" />
+    <Content Include="Resourses\UsersTrigger.sql" />
+    <Content Include="Resourses\БД.png" />
+    <Content Include="Resourses\загружено %282%29.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
