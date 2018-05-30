@@ -8,6 +8,7 @@ using ContractClient.Contracts;
 using AccountRelationsProvider.Model;
 using System.ServiceModel;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 
 namespace AccountRelationsProvider.ServiceImplementation
 {
@@ -45,6 +46,7 @@ namespace AccountRelationsProvider.ServiceImplementation
                     }
                     db.SaveChanges();
                     UserRelationsMain.OnlineUsers.TryAdd(curUser.Login, this);
+                    UserRelationsMain.UserNetworkStatusChange(GetContacts(db, RelationStatus.Friendship), curUser.Login, NetworkStatus.OnLine);
                     return new OperationResult<UserExt>(new UserExt()
                     {
                         BirthDate = curUser.Birthdate,
@@ -222,9 +224,34 @@ namespace AccountRelationsProvider.ServiceImplementation
 
         public OperationResult<bool> UpdateProfile(UserExt user)
         {
-            throw new NotImplementedException();
-        }
+            try
+            {
 
+                using (DbMain.EFDbContext.ChatEntities db = new DbMain.EFDbContext.ChatEntities())
+                {
+                    var userDb = db.Users.FirstOrDefault(x => x.Id == curUser.Id);
+
+                    userDb.Name = user.Name;
+                    userDb.Icon = user.Icon;
+                    userDb.Phone = user.Phone;
+                    userDb.Birthdate = user.BirthDate;
+
+                   // db.Users.AddOrUpdate(curUser);
+                    if (db.SaveChanges() > 0)
+                    {
+                        curUser = userDb;
+                        return new OperationResult<bool>(true);
+                    }
+                    return new OperationResult<bool>(false, false, "Nothing to Update");
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            return new OperationResult<bool>(false, false, "InternalError");
+
+        }
         public OperationResult<bool> ChangeRelationType(string login, RelationStatus status)
         {
             Console.WriteLine("AccountUpdateServiceprovider  ChangeRelationType");
@@ -468,7 +495,13 @@ namespace AccountRelationsProvider.ServiceImplementation
 
         public void Dispose()
         {
+            using (DbMain.EFDbContext.ChatEntities db = new DbMain.EFDbContext.ChatEntities())
+            {
+                db.Users.FirstOrDefault(x => x.Id == curUser.Id).NetworkStatusId = (int)NetworkStatus.Off;
+                db.SaveChanges();
+            }
             var res = UserRelationsMain.OnlineUsers.TryRemove(curUser.Login, out AccountRelationsServiceProvider serviceprovider);
+            UserRelationsMain.UserNetworkStatusChange(GetContacts(db, RelationStatus.Friendship), curUser.Login, NetworkStatus.Off);
             Console.WriteLine($"AccountUpdateServiceprovider Disposed id= {this.GetHashCode()}, login {curUser.Login}, result - {res}");
         }
 

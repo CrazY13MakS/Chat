@@ -17,7 +17,7 @@ namespace ClientContractImplement
         }
         public void AddingToConversation(Conversation conversation, string authorLogin)
         {
-            chatCallbackModel.Conversations.Add(conversation);
+            chatCallbackModel.Conversations.Insert(0,conversation);
         }
 
 
@@ -53,6 +53,8 @@ namespace ClientContractImplement
             {
                 conv.Messages.Add(reply);
                 conv.NewMessagesCount++;
+                chatCallbackModel.Conversations.Remove(conv);
+                 chatCallbackModel.Conversations.Insert(0,conv);
             }
         }
     }

@@ -415,6 +415,7 @@ namespace ChatServiceProvider.ServiceImplementation
                     });
                     if (db.SaveChanges() > 0)
                     {
+                        conv = db.Conversations.Include(x => x.ConversationMembers).FirstOrDefault(x => x.Id == conversationId);
                         var members = conv.ConversationMembers.Select(x => x.User.Id).ToList();
                         members.Remove(curUser.Id);
                         SendMessageToAllMembers(members, new DbMain.EFDbContext.ConversationReply()
@@ -424,13 +425,25 @@ namespace ChatServiceProvider.ServiceImplementation
                             ConversationId = conversationId,
                             ConversationReplyStatusId = (int)ConversationReplyStatus.SystemMessage
                         });
-                        ChatServiceCallbackModel.SendMessageToGroup(members, new ConversationReply()
+                        //ChatServiceCallbackModel.SendMessageToGroup(members, new ConversationReply()
+                        //{
+                        //    Author = curUser.Login,
+                        //    Body = $"{curUser.Name} Added {invitedUser.Name}",
+                        //    ConversationId = conversationId,
+                        //    SendingTime = DateTimeOffset.UtcNow,
+                        //    Status = ConversationReplyStatus.SystemMessage
+                        //});
+                        ChatServiceCallbackModel.AddingToConversation(curUser.Login, invitedUser.Id, new Conversation()
                         {
-                            Author = curUser.Login,
-                            Body = $"{curUser.Name} Added {invitedUser.Name}",
-                            ConversationId = conversationId,
-                            SendingTime = DateTimeOffset.UtcNow,
-                            Status = ConversationReplyStatus.SystemMessage
+                            ConversationType = (ConversationType)conv.ConversationTypeId,
+                            Id = conv.Id,
+                            Descriptiom = conv.Description,
+                            Icon = conv.Icon,
+                            LastChange = DateTimeOffset.UtcNow,
+                            MyStatus = ConversationMemberStatus.Active,
+                            Name = conv.Name,
+                            ParticipantsLogin = conv.ConversationMembers.Select(x => x.User.Login).ToList()
+
                         });
                         return new OperationResult<bool>(true);
                     }

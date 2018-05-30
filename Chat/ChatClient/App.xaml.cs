@@ -21,6 +21,7 @@ namespace ChatClient
             DisplayWindowHelper.RegisterWindowType<ViewModel.ViewModelLogIn, MainWindow>();
             DisplayWindowHelper.RegisterWindowType<ViewModel.ChatMainWindowViewModel, View.ChatMainWindow>();
             DisplayWindowHelper.RegisterWindowType<ViewModel.FindFriendsVM, View.FindFriends>();
+            DisplayWindowHelper.RegisterWindowType<ViewModel.UserEditViewModel, View.UserEdit>();
 
         }
         protected override void OnStartup(StartupEventArgs e)

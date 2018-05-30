@@ -24,10 +24,42 @@ namespace ContractClient
         public String Login { get; set; }
 
         [DataMember]
-        public String Name { get; set; }
+        string _name;
+        public string Name
+        {
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                if (_name != value)
+                {
+                    _name = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
 
         [DataMember]
-        public byte[] Icon { get; set; }
+        byte[] _icon;
+        public byte[] Icon
+        {
+            get
+            {
+                return _icon;
+            }
+            set
+            {
+                if (_icon != value)
+                {
+                    _icon = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
 
         [DataMember]
         public long? ConversationId { get; set; }

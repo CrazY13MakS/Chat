@@ -21,7 +21,35 @@ namespace ChatClient.ViewModel
         }
         //  public ModelMain ModelMain { get { return model; } }
 
+        RelayCommand _editUser;
+        public ICommand EditUserCommand
+        {
+            get
+            {
+                if (_editUser == null)
+                {
+                    _editUser = new RelayCommand(ExecuteEditUserCommand);
+                }
+                return _editUser;
+            }
+        }
 
+        private  void ExecuteEditUserCommand(object parametr)
+        {
+            // var window=await Task.Run(()=> App.DisplayWindowHelper.CreateWindowInstanceWithVM(new UserEditViewModel() { User = Author }));
+            var window = new  View.UserEdit();
+           //var res= App.DisplayWindowHelper.ShowModalPresentation(new UserEditViewModel() { User = Author });
+           //if( res.Result==true)
+           // {
+               
+           // }
+            window.DataContext=new UserEditViewModel() { User = Author };
+            if(window.ShowDialog()==true)
+            {
+                dynamic dyn = window.DataContext;
+                model.UpdateProfile(dyn.User as UserExt);
+            }
+        }
 
         #region Conversations
         public ObservableCollection<Conversation> Conversations
@@ -91,6 +119,7 @@ namespace ChatClient.ViewModel
         {
             var conversation = parametr as Conversation;
             model.SendMessage(Message, conversation.Id);
+            Message = String.Empty;
         }
 
         private bool CanExecuteSendMessageCommand(object parametr)
@@ -142,8 +171,12 @@ namespace ChatClient.ViewModel
 
         private void UpdateParticipantsList()
         {
-            if (SelectedConversation != null && SelectedConversation.ConversationType != ConversationType.Dialog && SelectedConversation.ParticipantsLogin != null)
+            if (SelectedConversation != null && SelectedConversation.ConversationType != ConversationType.Dialog )
             {
+                if(SelectedConversation.ParticipantsLogin==null)
+                {
+                    SelectedConversation.ParticipantsLogin = new List<string> { Author.Login };
+                }
                 ParticipantsList = new List<string>(Contacts.Select(x => x.Login).Except(SelectedConversation.ParticipantsLogin));
             }
             else
@@ -298,6 +331,8 @@ namespace ChatClient.ViewModel
         }
         #endregion
 
+
+    
 
 
 

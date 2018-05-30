@@ -23,11 +23,14 @@ namespace ClientContractImplement
         public ClientAuthSercive()
         {
             CanSendCode = true;
-            factory = new ChannelFactory<IAuthService>("ClientAuthEndPoint");
+            LoadChannel();
+        }
+        private void LoadChannel()
+        {
+   factory = new ChannelFactory<IAuthService>("ClientAuthEndPoint");
             factory.Faulted += Factory_Faulted;
             channel = factory.CreateChannel();
         }
-
         private void Factory_Faulted(object sender, EventArgs e)
         {
             try
@@ -63,6 +66,10 @@ namespace ClientContractImplement
             bool result = false;
             try
             {
+                if(factory.State!= CommunicationState.Opened&& factory.State != CommunicationState.Opening)
+                {
+                    LoadChannel();
+                }
                 //ReloadChannelIfFaulted();
                 result = channel.SendVerificationCode(email);
                 return new OperationResult<bool>(result, result);
