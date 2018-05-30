@@ -4,21 +4,26 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ChatClient.View.ChatControls"
+             xmlns:infr="clr-namespace:ChatClient.Infrastructure"
              mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="150">
     <UserControl.Resources>
-        <Style x:Key="NewMessages" TargetType="TextBlock">
+        <Style x:Key="NewMessages" TargetType="Border">
             <Setter Property="Visibility" Value="Visible"/>
             <Setter Property="Background" Value="Orange"/>
-            <Setter Property="Foreground" Value="WhiteSmoke"/>
+            <!--<Setter Property="Foreground" Value="WhiteSmoke"/>-->
             <Setter Property="HorizontalAlignment" Value="Right"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
+            <!--<Setter Property="FontSize" Value="20"/>-->
             <Style.Triggers>
                 <DataTrigger Binding="{Binding NewMessagesCount}" Value="0">
-                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Setter  Property="Visibility" Value="Collapsed"/>
                 </DataTrigger>
             </Style.Triggers>
         </Style>
+        <BitmapImage x:Key="DefaultImageChat" UriSource="/Resourses/Images/ChatDefault.png" />
+        <infr:ByteArrayToIconConverter x:Key="imageConv"></infr:ByteArrayToIconConverter>
+
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -27,12 +32,26 @@
         </Grid.ColumnDefinitions>
         <Ellipse Width="75" Height="75" >
             <Ellipse.Fill>
-                <ImageBrush ImageSource="{Binding IconPathLocal}" Stretch="Fill"/>
+                <ImageBrush ImageSource="{Binding Icon,Converter={StaticResource imageConv},TargetNullValue={StaticResource DefaultImageChat}}" Stretch="Fill"/>
             </Ellipse.Fill>
         </Ellipse>
         <TextBlock Grid.Column="1" VerticalAlignment="Center"  Text="{Binding Name}" TextWrapping="NoWrap"/>
         <TextBlock Grid.Column="1" VerticalAlignment="Bottom"  Text="{Binding Partner.NetworkStatus}"/>
 
-        <TextBlock Grid.Column="1"  Style="{StaticResource ResourceKey=NewMessages}" Text="{Binding NewMessagesCount, Mode=OneWay}"/>
+        <Border CornerRadius="50" x:Name="newMess" Grid.Column="1" Style="{StaticResource ResourceKey=NewMessages}"
+        Width="30"
+        Height="30"
+        Margin="0,0,5,0"
+        Padding="0,20,0,0"     
+        BorderBrush="Black"
+        BorderThickness="1">
+            <Border.Background>
+                <LinearGradientBrush EndPoint="1.204,0.5" StartPoint="0.056,0.5">
+                    <GradientStop Color="#ffae68" Offset="0" />
+                    <GradientStop Color="#ffae68" Offset="1" />
+                </LinearGradientBrush>
+            </Border.Background>
+            <TextBlock   Text="{Binding NewMessagesCount, Mode=OneWay}"  HorizontalAlignment="Center" Margin="0,-15,0,0" />
+        </Border>
     </Grid>
 </UserControl>

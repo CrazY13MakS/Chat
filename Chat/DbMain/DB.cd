@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="DbMain.EFDbContext.ChatEntities">
+    <Position X="11.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>FIAAACAAAAwAAAAAAAAAAQhAEAAAQABGAAAAAQAAAAA=</HashCode>
+      <FileName>EFDbContext\Chat.Context.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DbMain.EFDbContext.AccessToken">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAADAAAAAAAAAAAAEAAAAAgAAAAAAAQAAAAAAAABAAA=</HashCode>
+      <FileName>EFDbContext\AccessToken.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DbMain.EFDbContext.City">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACACAAAAAAAAAAAAAAAAQAAAIQAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EFDbContext\City.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DbMain.EFDbContext.Contact">
+    <Position X="5.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAADAAAABAAAgAAAIAAAAAAAABAACAIQAIIAAAAAAAA=</HashCode>
+      <FileName>EFDbContext\Contact.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DbMain.EFDbContext.Conversation">
+    <Position X="13.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAADAAAAAAgkAAAAIAAAAAQAAABAAAQAABAAAQEgAAA=</HashCode>
+      <FileName>EFDbContext\Conversation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DbMain.EFDbContext.ConversationMember">
+    <Position X="4" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAADEAAAAAAEAAAAIBAAAQAAABAAAAIABAAAAAAAACA=</HashCode>
+      <FileName>EFDbContext\ConversationMember.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DbMain.EFDbContext.ConversationMemberStatus">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAgAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EFDbContext\ConversationMemberStatus.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DbMain.EFDbContext.ConversationReply">
+    <Position X="0.5" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAjAAAAAAAAAAAAAAABAAAAABAAAAIAARABBQAAAAA=</HashCode>
+      <FileName>EFDbContext\ConversationReply.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DbMain.EFDbContext.ConversationReplyStatus">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>EFDbContext\ConversationReplyStatus.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DbMain.EFDbContext.ConversationType">
+    <Position X="5.75" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>EFDbContext\ConversationType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DbMain.EFDbContext.Country">
+    <Position X="7.5" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAACAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EFDbContext\Country.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DbMain.EFDbContext.Gender">
+    <Position X="2.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACACAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EFDbContext\Gender.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DbMain.EFDbContext.NetworkStatus">
+    <Position X="2.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACACAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EFDbContext\NetworkStatus.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DbMain.EFDbContext.RelationshipType">
+    <Position X="4" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAACAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EFDbContext\RelationshipType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DbMain.EFDbContext.User">
+    <Position X="9.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>HACCAAAFACgAAIiYQAAAAAQAEQAAEABCAAAYIQEAAAA=</HashCode>
+      <FileName>EFDbContext\User.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

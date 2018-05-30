@@ -13,6 +13,7 @@
     <Window.Resources>
         <cCtrl:ConversationPreview x:Key="chatPreview"></cCtrl:ConversationPreview>
         <infr:RelationTypeToVisibilityConverter x:Key="relConv" FalseValue="Collapsed"></infr:RelationTypeToVisibilityConverter>
+        <infr:ByteArrayToIconConverter x:Key="imageConv"></infr:ByteArrayToIconConverter>
         <!--<DataTemplate x:Name="relBtn" x:Key="relBtnKey">
             <StackPanel Orientation="Vertical">
 
@@ -24,7 +25,7 @@
                 <Button Content="Remove Request" Command="{Binding ElementName=mv,Path=DataContext.RemoveRelationRequestCommand}" CommandParameter="{Binding}" Grid.Column="1" Visibility="{Binding RelationStatus, Converter={StaticResource relConv}, ConverterParameter=RemoveRequest}"/>
             </StackPanel>
         </DataTemplate>-->
-
+        <BitmapImage x:Key="DefaultImage" UriSource="/Resourses/Images/UserDefault.png" />
     </Window.Resources>
     <Window.DataContext>
         <vm:ChatMainWindowViewModel></vm:ChatMainWindowViewModel>
@@ -32,27 +33,29 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto" MinWidth="100"/>
-            <ColumnDefinition Width="91*"/>
-            <ColumnDefinition Width="219*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="150"/>
             <RowDefinition Height="17*"/>
         </Grid.RowDefinitions>
+        <!--Info Author-->
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
-            <Ellipse Width="100" Height="100" >
+            <Ellipse Width="65" Height="65" >
                 <Ellipse.Fill>
-                    <ImageBrush ImageSource="{Binding IconPathLocal}" Stretch="Fill"/>
+                    <ImageBrush ImageSource="{Binding Author.Icon,Converter={StaticResource imageConv},TargetNullValue={StaticResource DefaultImage}}" Stretch="Fill"/>
                 </Ellipse.Fill>
             </Ellipse>
-            <TextBlock Text="{Binding Author.Name}" Grid.Column="2" Foreground="Aqua"/>
+            <TextBlock Text="{Binding Author.Name}" Grid.Column="2" Foreground="BlueViolet" HorizontalAlignment="Center"/>
+            <Button Content="Edit" Command="{Binding EditUserCommand}" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right"/>
         </Grid>
         <cCtrl:ConversationDialog Grid.Row="1" Grid.Column="2" DataContext="{Binding SelectedConversation}"></cCtrl:ConversationDialog>
-        <StackPanel Grid.Row="1" >
+        <!---->
+        <!--<StackPanel Grid.Row="1" >
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <ListBox>
                     <ListBox.ItemTemplate>
@@ -62,54 +65,14 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
             </ScrollViewer>
-        </StackPanel>
+        </StackPanel>-->
 
-        <TabControl Grid.Row="1" >
+        <!--Relations-->
+        <TabControl Grid.Row="0" Grid.Column="1" >
             <TabItem Header="Contacts">
                 <Grid>
                     <ListBox ItemsSource="{Binding Contacts}" x:Name="lstContacts"  Tag="{Binding DataContext, ElementName=root}">
-                        <ListBox.ContextMenu>
-                            <ContextMenu DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}">
-                                <MenuItem Header="Delete" Command="{Binding  DataContext.RemoveFromFriendsCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"/>
-                                <MenuItem Header="Block" Command="{Binding   DataContext.BlockUserCommand}" CommandParameter="{Binding PlacementTarget.DataContext, 
-                RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
 
-                                <MenuItem Header="Foo" Command="{Binding RemoveRelationRequestCommand}" 
-                              CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}},
-                                Path=PlacementTarget.SelectedItem}"/>
-                            </ContextMenu>
-                        </ListBox.ContextMenu>
-                        <!--<ListBox.Resources>
-                            <local:BindingProxy x:Key="proxy" Data="{Binding}" />
-
-
-                            <ContextMenu x:Key="MyElementMenu">
-                                <MenuItem Header="Delete"  Command="{Binding Path=DataContext.RemoveFromFriendsCommand}" CommandParameter="{Binding Path=SelectedItem}"/>
-                                <MenuItem Header="Block"  Command="{Binding  Path=DataContext.BlockUserCommand}" CommandParameter="{Binding}"/>
-                                <MenuItem Header="Delete 2" Command="{Binding DataContext.RemoveFromFriendsCommand,RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" CommandParameter="{Binding ElementName=lstContacts,Path=SelectedValue}"/>
-                                <MenuItem Header="Delete 2" Command="{Binding  DataContext.RemoveFromFriendsCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}" CommandParameter="{Binding Source={StaticResource proxy}}"/>
-
-                            </ContextMenu>
-                            <Style TargetType="{x:Type ListBoxItem}">
-                                <Setter Property="ContextMenu" Value="{StaticResource MyElementMenu}"/>
-                            </Style>
-
-                        </ListBox.Resources>-->
-                        <!--<ListBox.ItemContainerStyle>
-                            <Style TargetType="ListBoxItem">
-                                <Setter Property="ContextMenu">
-                                    <Setter.Value>
-                                        <ContextMenu DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}" >                                          
-                                            <MenuItem Header="Delete"  Command="{Binding Path=DataContext.RemoveFromFriendsCommand}" CommandParameter="{Binding Path=SelectedItem}"/>
-                                            <MenuItem Header="Block"  Command="{Binding  Path=DataContext.BlockUserCommand}" CommandParameter="{Binding}"/>
-                                            <MenuItem Header="Delete 2" Command="{Binding DataContext.RemoveFromFriendsCommand,RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" CommandParameter="{Binding Source={StaticResource proxy}}"/>
-                                            <MenuItem Header="Delete 3" Command="{Binding Path=DataContext.RemoveFromFriendsCommand,RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" CommandParameter="{Binding ElementName=lstContacts, Path=SelectedValue}"/>
-
-                                        </ContextMenu>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </ListBox.ItemContainerStyle>-->
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
@@ -127,7 +90,7 @@
                                     </Grid.ColumnDefinitions>
                                     <Ellipse Width="100" Height="100" >
                                         <Ellipse.Fill>
-                                            <ImageBrush ImageSource="{Binding IconPathLocal}" Stretch="Fill"/>
+                                            <ImageBrush ImageSource="{Binding Icon,Converter={StaticResource imageConv},TargetNullValue={StaticResource DefaultImage}}" Stretch="Fill"/>
                                         </Ellipse.Fill>
                                     </Ellipse>
                                     <TextBlock Grid.Column="1" VerticalAlignment="Center" Height="50" Text="{Binding Name, Mode=OneWay}"/>
@@ -138,9 +101,9 @@
                                         <Button Content="Block" Command="{Binding ElementName=mv,Path=DataContext.BlockUserCommand}" CommandParameter="{Binding}" Grid.Column="1" Visibility="{Binding RelationStatus, Converter={StaticResource relConv}, ConverterParameter=Block}"/>
                                         <Button Content="Remove" Command="{Binding ElementName=mv,Path=DataContext.RemoveFromFriendsCommand}" CommandParameter="{Binding}" Grid.Column="1" Visibility="{Binding RelationStatus, Converter={StaticResource relConv}, ConverterParameter=Remove}"/>
                                     </StackPanel>
-                                    
-                                    
-                                    
+
+
+
                                     <!--<Button Content="Remove"  Grid.Column="2" Command="{Binding DataContext.RemoveFromFriendsCommand,RelativeSource={RelativeSource FindAncestor, AncestorType=Window} }" CommandParameter="{Binding}"/>
                                 <Button Content="Block" Grid.Column="3" Command="{Binding DataContext.BlockUserCommand,RelativeSource={RelativeSource FindAncestor, AncestorType=Window} }" CommandParameter="{Binding}"/>-->
 
@@ -188,7 +151,7 @@
                                     <TextBlock Text="{Binding Login}"/>
                                     <StackPanel Orientation="Vertical" Grid.Column="2">
 
-                                           <Button Content="Block" Command="{Binding ElementName=mv,Path=DataContext.BlockUserCommand}" CommandParameter="{Binding}" Grid.Column="1" Visibility="{Binding RelationStatus, Converter={StaticResource relConv}, ConverterParameter=Block}"/>
+                                        <Button Content="Block" Command="{Binding ElementName=mv,Path=DataContext.BlockUserCommand}" CommandParameter="{Binding}" Grid.Column="1" Visibility="{Binding RelationStatus, Converter={StaticResource relConv}, ConverterParameter=Block}"/>
                                         <Button Content="Remove Request" Command="{Binding ElementName=mv,Path=DataContext.RemoveRelationRequestCommand}" CommandParameter="{Binding}" Grid.Column="1" Visibility="{Binding RelationStatus, Converter={StaticResource relConv}, ConverterParameter=RemoveRequest}"/>
                                     </StackPanel>
                                 </Grid>
@@ -228,14 +191,18 @@
                     </StackPanel>
                 </Grid>
 
-            </TabItem>           
+            </TabItem>
         </TabControl>
 
 
-
-        <StackPanel Grid.Column="1" Grid.Row="1">
-
-            <ToggleButton Name="btnCreateConv" Content="+" Width="auto" Height="auto">
+        <Grid Grid.Column="0" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="45"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Text="Conversations" TextAlignment="Center" FontSize="16" Margin="0,10"/>
+            <ToggleButton Grid.Row="1" Name="btnCreateConv" Content="Create Conversation" Width="auto" Height="auto">
             </ToggleButton>
             <Popup IsOpen="{Binding IsChecked, ElementName=btnCreateConv}" StaysOpen="False" PopupAnimation="Slide" Placement="Mouse" x:Name="popupCreateConv" >
                 <Border Background="DarkSlateBlue">
@@ -286,7 +253,7 @@
             </Popup>
 
 
-            <ListBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Conversations}" SelectedItem="{Binding SelectedConversation}">
+            <ListBox Grid.Row="2" ItemsSource="{Binding Conversations}" SelectedItem="{Binding SelectedConversation}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <!--<StackPanel Margin="0,10,0,0">
@@ -299,6 +266,9 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
+        </Grid>
+        <StackPanel  CanVerticallyScroll="True">
+            
         </StackPanel>
     </Grid>
 </Window>

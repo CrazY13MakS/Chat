@@ -47,7 +47,7 @@ namespace ChatClient.Infrastructure
                 throw new ArgumentException(
                     $"No registered window type for argument type {vm.GetType().FullName}");
 
-            var window = (Window)Activator.CreateInstance(windowType);
+            var window = App.Current.Dispatcher.Invoke(()=> (Window)Activator.CreateInstance(windowType));
             window.DataContext = vm;
             return window;
         }
@@ -72,11 +72,12 @@ namespace ChatClient.Infrastructure
             openWindows.Remove(vm);
         }
 
-        public async Task ShowModalPresentation(object vm)
+        public async Task<bool?> ShowModalPresentation(object vm)
         {
             var window = CreateWindowInstanceWithVM(vm);
             window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            await window.Dispatcher.InvokeAsync(() => window.ShowDialog());
+          return    await window.Dispatcher.InvokeAsync(() => window.ShowDialog());
+           
         }
     }
 }

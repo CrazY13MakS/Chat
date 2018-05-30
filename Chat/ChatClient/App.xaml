@@ -6,6 +6,11 @@
              >
              <!--StartupUri="View/LogIn.xaml"-->
     <Application.Resources>
-         
+        <!-- Resources scoped at the Application level should be defined here. -->
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Theme/MoonUICore.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

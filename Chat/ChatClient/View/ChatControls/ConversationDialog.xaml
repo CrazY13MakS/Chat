@@ -168,7 +168,13 @@
             </Style.Triggers>
         </Style>
         <!--<local:MessageDataTemplateSelector x:Key="messageTemplateSelector"></local:MessageDataTemplateSelector>-->
-
+        <Style x:Key="btnVisb">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ConversationType}" Value="Dialog">
+                    <Setter  Property="Button.Visibility" Value="Hidden"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
     <Grid Background="Azure">
         <Grid.RowDefinitions>
@@ -180,8 +186,8 @@
         <Grid>
 
             <TextBlock Text="{Binding Name}"/>
-            <ComboBox ItemsSource="{Binding ParticipantsLogin}" Margin="100,0,0,0" Width="200"></ComboBox>
-            <ToggleButton Name="btnAddPart" Content="Add participants" Width="auto" Height="auto" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            <!--<ComboBox ItemsSource="{Binding ParticipantsLogin}" Margin="100,0,0,0" Width="200"></ComboBox>-->
+            <ToggleButton Style="{StaticResource ResourceKey=btnVisb}"  Name="btnAddPart" Content="Add participants" Width="auto" Height="auto" HorizontalAlignment="Right" VerticalAlignment="Center"/>
             <Popup IsOpen="{Binding IsChecked, ElementName=btnAddPart}" StaysOpen="False" PopupAnimation="Slide" Placement="Mouse" x:Name="popupAddPart" >
                 <Border Background="DarkSlateBlue">
                     <Grid Width="250" Height="100">
@@ -227,7 +233,7 @@
                 </Border>
             </Popup>
         </Grid>
-        <ListBox ItemsSource="{Binding Messages}" ItemContainerStyle="{StaticResource MyListBoxItemStyle}"  behav:ListBoxBehavior.ScrollOnNewItem="True"  Grid.Row="1">
+        <ListBox  Background="Azure" ItemsSource="{Binding Messages}" ItemContainerStyle="{StaticResource MyListBoxItemStyle}"  behav:ListBoxBehavior.ScrollOnNewItem="True"  Grid.Row="1">
         </ListBox>
         <GridSplitter Grid.Row="2" Height="2" Background="AliceBlue"/>
         <Grid Grid.Row="3">

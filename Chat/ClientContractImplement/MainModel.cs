@@ -515,6 +515,21 @@ namespace ClientContractImplement
                 });
             }
         }
+
+        public async void UpdateProfile(UserExt user)
+        {
+            var res = await Task.Run(() => relationsCustomer.UpdateProfile(user));
+            if (res.IsOk)
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    Author.BirthDate = user.BirthDate;
+                    Author.Icon = user.Icon;
+                    Author.Phone = user.Phone;
+                    Author.Name = user.Name;
+                });
+            }
+        }
         #endregion
 
 

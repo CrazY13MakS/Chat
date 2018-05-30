@@ -101,12 +101,12 @@ namespace ClientContractImplement
             }
             catch (CommunicationException ex)
             {
-                ReloadChannel();
-                var res = ChangeNetworkStatus(status);
-                if (!res.IsOk)
-                {
-                    res = new OperationResult<bool>(false, false, ex.Message);
-                }
+                //ReloadChannel();
+                //var res = ChangeNetworkStatus(status);
+                //if (!res.IsOk)
+                //{
+                //}
+                   var  res = new OperationResult<bool>(false, false, ex.Message);
                 return res;
             }
         }
@@ -172,12 +172,12 @@ namespace ClientContractImplement
             }
             catch (CommunicationException ex)
             {
-                ReloadChannel();
-                var res = UpdateProfile(user);
-                if (!res.IsOk)
-                {
-                    res = new OperationResult<bool>(false, false, ex.Message);
-                }
+               // ReloadChannel();
+             //   var res = UpdateProfile(user);
+              //  if (!res.IsOk)
+              //  {
+              //  }
+                   var res = new OperationResult<bool>(false, false, ex.Message);
                 return res;
             }
         }
